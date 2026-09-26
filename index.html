@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+  <title>false belief</title>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <link href="https://fonts.googleapis.com" rel="preconnect" />
+  <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@600;700;900&amp;family=Nunito:wght@700;800;900&amp;display=swap"
+    rel="stylesheet" />
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background: #fbf8ff;
+      font-family: 'Comfortaa', 'Nunito', sans-serif;
+      user-select: none;
+    }
+
+    /* Ambient bear animations */
+    @keyframes bearIdle {
+
+      0%,
+      100% {
+        transform: translateY(0px) rotate(0deg);
+      }
+
+      50% {
+        transform: translateY(-4px) rotate(0.8deg);
+      }
+    }
+
+    @keyframes bearBlink {
+
+      0%,
+      46%,
+      50%,
+      96%,
+      100% {
+        transform: scaleY(1);
+      }
+
+      48%,
+      98% {
+        transform: scaleY(0.08);
+      }
+    }
+
+    @keyframes earWiggle {
+
+      0%,
+      80%,
+      100% {
+        transform: rotate(0deg);
+      }
+
+      85% {
+        transform: rotate(-5deg);
+      }
+
+      90% {
+        transform: rotate(3deg);
+      }
+    }
+
+    @keyframes bearLeanAction {
+
+      0%,
+      16% {
+        transform: translate(0, 0) rotate(0deg);
+      }
+
+      30%,
+      42% {
+        transform: translate(-10px, -4px) rotate(-1.2deg);
+      }
+
+      50%,
+      60% {
+        transform: translate(-18px, 14px) rotate(-3.5deg);
+      }
+
+      70% {
+        transform: translate(-6px, 2px) rotate(-1deg);
+      }
+
+      80%,
+      100% {
+        transform: translate(0, 0) rotate(0deg);
+      }
+    }
+
+    /* Bear lowering cookie into Left Jar (Midline X: 330) */
+    @keyframes bearArmLowering {
+
+      0%,
+      16% {
+        transform: translate(0px, 0px) rotate(0deg);
+      }
+
+      30%,
+      42% {
+        transform: translate(-76px, -65px) rotate(-16deg);
+      }
+
+      52%,
+      58% {
+        transform: translate(-104px, 45px) rotate(-34deg);
+      }
+
+      66% {
+        transform: translate(-80px, -20px) rotate(-20deg);
+      }
+
+      78%,
+      100% {
+        transform: translate(0px, 0px) rotate(0deg);
+      }
+    }
+
+    @keyframes jumboCookieDescent {
+
+      0%,
+      16% {
+        opacity: 1;
+        transform: translate(0px, 0px);
+      }
+
+      30%,
+      42% {
+        opacity: 1;
+        transform: translate(-105px, -115px);
+      }
+
+      48% {
+        opacity: 1;
+        transform: translate(-105px, -55px);
+      }
+
+      53% {
+        opacity: 1;
+        transform: translate(-105px, 0px) scale(0.96);
+      }
+
+      57% {
+        opacity: 0;
+        transform: translate(-105px, 45px) scale(0.85);
+      }
+
+      100% {
+        opacity: 0;
+        transform: translate(-105px, 45px);
+      }
+    }
+
+    @keyframes jarPopImpact {
+
+      0%,
+      53% {
+        transform: scale(1, 1);
+      }
+
+      56% {
+        transform: scale(1.08, 0.92) translateY(5px);
+      }
+
+      60% {
+        transform: scale(0.94, 1.06) translateY(-4px);
+      }
+
+      64% {
+        transform: scale(1.02, 0.98) translateY(1.5px);
+      }
+
+      68%,
+      100% {
+        transform: scale(1, 1);
+      }
+    }
+
+    @keyframes starBurstAction {
+
+      0%,
+      54% {
+        opacity: 0;
+        transform: scale(0);
+      }
+
+      57% {
+        opacity: 1;
+        transform: scale(1.3) translateY(-10px);
+      }
+
+      65% {
+        opacity: 0;
+        transform: scale(1.8) translateY(-26px);
+      }
+
+      100% {
+        opacity: 0;
+        transform: scale(0);
+      }
+    }
+
+    @keyframes bearGazeFollow {
+
+      0%,
+      16% {
+        transform: translate(0, 0);
+      }
+
+      30%,
+      42% {
+        transform: translate(-7px, -1px);
+      }
+
+      48%,
+      62% {
+        transform: translate(-8px, 6px);
+      }
+
+      72%,
+      100% {
+        transform: translate(0, 0);
+      }
+    }
+
+    .anim-idle {
+      animation: bearIdle 4s ease-in-out infinite;
+      transform-origin: 500px 380px;
+    }
+
+    .anim-blink {
+      animation: bearBlink 3.8s ease-in-out infinite;
+      transform-origin: 500px 240px;
+    }
+
+    .anim-ear-l {
+      animation: earWiggle 5s ease-in-out infinite;
+      transform-origin: 430px 170px;
+    }
+
+    .anim-ear-r {
+      animation: earWiggle 5s ease-in-out infinite 0.4s;
+      transform-origin: 570px 170px;
+    }
+
+    .intro-lean {
+      animation: bearLeanAction 4.2s cubic-bezier(0.33, 1, 0.68, 1) forwards;
+      transform-origin: 500px 440px;
+    }
+
+    .intro-arm {
+      animation: bearArmLowering 4.2s cubic-bezier(0.33, 1, 0.68, 1) forwards;
+      transform-origin: 440px 320px;
+    }
+
+    .intro-cookie {
+      animation: jumboCookieDescent 4.2s cubic-bezier(0.33, 1, 0.68, 1) forwards;
+      transform-origin: 435px 345px;
+    }
+
+    .intro-jar1 {
+      animation: jarPopImpact 4.2s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+      transform-origin: center center;
+    }
+
+    .intro-stars {
+      animation: starBurstAction 4.2s ease-out forwards;
+      transform-origin: 330px 290px;
+    }
+
+    .intro-gaze {
+      animation: bearGazeFollow 4.2s ease-in-out forwards;
+    }
+
+    /* Interactive clickable jar subtle hover without yellow glow */
+    .jar-interactive {
+      cursor: pointer;
+      transform-box: fill-box;
+      transform-origin: center center;
+      transition: filter 0.25s ease;
+    }
+
+    .jar-interactive:hover {
+      filter: drop-shadow(0 8px 12px rgba(13, 71, 161, 0.35));
+    }
+  </style>
+</head>
+
+<body class="relative flex items-center justify-center min-h-screen bg-slate-900 select-none overflow-hidden">
+  <!-- Main Game Stage Container (Maintains 1000x650 SVG Aspect Ratio seamlessly) -->
+  <div
+    class="relative w-full max-w-[1200px] h-[95vh] max-h-[780px] rounded-3xl overflow-hidden shadow-2xl bg-[#fcefdc] border-4 border-amber-900/20 flex flex-col justify-center items-center"
+    id="game-stage">
+    <!-- FULL VECTOR SCENE SVG (1000 x 650) -->
+    <svg class="w-full h-full block" id="scene-svg" viewbox="0 0 1000 650" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <!-- Gradients -->
+        <lineargradient id="wallGrad" x1="0%" x2="0%" y1="0%" y2="100%">
+          <stop offset="0%" stop-color="#fff7ed"></stop>
+          <stop offset="100%" stop-color="#f5e1cb"></stop>
+        </lineargradient>
+        <lineargradient id="tableTopGrad" x1="0%" x2="0%" y1="0%" y2="100%">
+          <stop offset="0%" stop-color="#d48b47"></stop>
+          <stop offset="100%" stop-color="#b86d2b"></stop>
+        </lineargradient>
+        <lineargradient id="bearBodyGrad" x1="0%" x2="100%" y1="0%" y2="100%">
+          <stop offset="0%" stop-color="#9d6b46"></stop>
+          <stop offset="100%" stop-color="#7a4f2f"></stop>
+        </lineargradient>
+        <lineargradient id="bearMuzzleGrad" x1="0%" x2="0%" y1="0%" y2="100%">
+          <stop offset="0%" stop-color="#fae2be"></stop>
+          <stop offset="100%" stop-color="#ecc99a"></stop>
+        </lineargradient>
+        <!-- Rich Blue Glazed Ceramic For Both Jars -->
+        <lineargradient id="jarUniformBlueGrad" x1="0%" x2="100%" y1="0%" y2="0%">
+          <stop offset="0%" stop-color="#64b5f6"></stop>
+          <stop offset="35%" stop-color="#1e88e5"></stop>
+          <stop offset="100%" stop-color="#0d47a1"></stop>
+        </lineargradient>
+        <filter height="130%" id="dropShadow" width="130%" x="-10%" y="-10%">
+          <fedropshadow dx="0" dy="8" flood-opacity="0.18" stddeviation="6"></fedropshadow>
+        </filter>
+      </defs>
+      <!-- ================= BACKGROUND ROOM ================= -->
+      <rect fill="url(#wallGrad)" height="460" width="1000" x="0" y="0"></rect>
+      <!-- Wallpaper Soft Stripes -->
+      <g opacity="0.07" stroke="#d48b47" stroke-linecap="round" stroke-width="26">
+        <line x1="70" x2="70" y1="0" y2="460"></line>
+        <line x1="200" x2="200" y1="0" y2="460"></line>
+        <line x1="330" x2="330" y1="0" y2="460"></line>
+        <line x1="460" x2="460" y1="0" y2="460"></line>
+        <line x1="590" x2="590" y1="0" y2="460"></line>
+        <line x1="720" x2="720" y1="0" y2="460"></line>
+        <line x1="850" x2="850" y1="0" y2="460"></line>
+        <line x1="970" x2="970" y1="0" y2="460"></line>
+      </g>
+      <!-- Baseboard Molding -->
+      <rect fill="#e0cbaf" height="18" stroke="#2c1e14" stroke-width="3.5" width="1000" x="0" y="445"></rect>
+      <!-- Floor -->
+      <rect fill="#5c6bc0" height="190" width="1000" x="0" y="460"></rect>
+      <!-- Floor Perspective Lines -->
+      <g opacity="0.45" stroke="#3f51b5" stroke-width="4">
+        <line x1="120" x2="0" y1="460" y2="650"></line>
+        <line x1="280" x2="180" y1="460" y2="650"></line>
+        <line x1="440" x2="380" y1="460" y2="650"></line>
+        <line x1="600" x2="580" y1="460" y2="650"></line>
+        <line x1="760" x2="780" y1="460" y2="650"></line>
+        <line x1="920" x2="980" y1="460" y2="650"></line>
+        <line x1="0" x2="1000" y1="520" y2="520"></line>
+        <line x1="0" x2="1000" y1="585" y2="585"></line>
+      </g>
+      <!-- ================= BEAR LEGS & FEET ================= -->
+      <g class="anim-idle">
+        <ellipse cx="440" cy="565" fill="#000000" opacity="0.25" rx="35" ry="12"></ellipse>
+        <ellipse cx="560" cy="565" fill="#000000" opacity="0.25" rx="35" ry="12"></ellipse>
+        <!-- Left Leg -->
+        <path d="M420 440 L415 540 C415 558, 465 558, 465 540 L460 440 Z" fill="url(#bearBodyGrad)" stroke="#2c1e14"
+          stroke-linejoin="round" stroke-width="5.5"></path>
+        <ellipse cx="438" cy="552" fill="url(#bearBodyGrad)" rx="32" ry="15" stroke="#2c1e14" stroke-width="5">
+        </ellipse>
+        <ellipse cx="438" cy="553" fill="#f8bbd0" rx="15" ry="9" stroke="#2c1e14" stroke-width="1.5"></ellipse>
+        <circle cx="423" cy="544" fill="#f8bbd0" r="4.5" stroke="#2c1e14" stroke-width="1.2"></circle>
+        <circle cx="436" cy="541" fill="#f8bbd0" r="4.5" stroke="#2c1e14" stroke-width="1.2"></circle>
+        <circle cx="449" cy="544" fill="#f8bbd0" r="4.5" stroke="#2c1e14" stroke-width="1.2"></circle>
+        <!-- Right Leg -->
+        <path d="M540 440 L535 540 C535 558, 585 558, 585 540 L580 440 Z" fill="url(#bearBodyGrad)" stroke="#2c1e14"
+          stroke-linejoin="round" stroke-width="5.5"></path>
+        <ellipse cx="562" cy="552" fill="url(#bearBodyGrad)" rx="32" ry="15" stroke="#2c1e14" stroke-width="5">
+        </ellipse>
+        <ellipse cx="562" cy="553" fill="#f8bbd0" rx="15" ry="9" stroke="#2c1e14" stroke-width="1.5"></ellipse>
+        <circle cx="551" cy="544" fill="#f8bbd0" r="4.5" stroke="#2c1e14" stroke-width="1.2"></circle>
+        <circle cx="564" cy="541" fill="#f8bbd0" r="4.5" stroke="#2c1e14" stroke-width="1.2"></circle>
+        <circle cx="577" cy="544" fill="#f8bbd0" r="4.5" stroke="#2c1e14" stroke-width="1.2"></circle>
+      </g>
+      <!-- ================= BEAR UPPER BODY ================= -->
+      <g class="anim-idle">
+        <g class="intro-lean" id="bear-lean-grp">
+          <ellipse cx="500" cy="455" fill="#000000" opacity="0.18" rx="145" ry="24"></ellipse>
+          <!-- Ears -->
+          <g class="anim-ear-l">
+            <circle cx="430" cy="180" fill="url(#bearBodyGrad)" r="34" stroke="#2c1e14" stroke-width="5"></circle>
+            <circle cx="430" cy="180" fill="#f8bbd0" r="18" stroke="#2c1e14" stroke-width="3"></circle>
+          </g>
+          <g class="anim-ear-r">
+            <circle cx="570" cy="180" fill="url(#bearBodyGrad)" r="34" stroke="#2c1e14" stroke-width="5"></circle>
+            <circle cx="570" cy="180" fill="#f8bbd0" r="18" stroke="#2c1e14" stroke-width="3"></circle>
+          </g>
+          <!-- Torso -->
+          <ellipse cx="500" cy="380" fill="url(#bearBodyGrad)" rx="122" ry="125" stroke="#2c1e14" stroke-width="6">
+          </ellipse>
+          <ellipse cx="500" cy="385" fill="url(#bearMuzzleGrad)" opacity="0.9" rx="65" ry="70" stroke="#2c1e14"
+            stroke-width="4"></ellipse>
+          <!-- Right Arm (viewer right, resting on hip) -->
+          <g>
+            <path d="M580 330 C650 345, 645 420, 585 425 C570 425, 565 385, 575 350 Z" fill="url(#bearBodyGrad)"
+              stroke="#2c1e14" stroke-linejoin="round" stroke-width="5"></path>
+            <circle cx="590" cy="415" fill="#f8bbd0" r="9"></circle>
+          </g>
+          <!-- Head -->
+          <circle cx="500" cy="240" fill="url(#bearBodyGrad)" r="88" stroke="#2c1e14" stroke-width="6"></circle>
+          <!-- Cheeks -->
+          <ellipse cx="445" cy="265" fill="#ff8a80" opacity="0.65" rx="14" ry="9"></ellipse>
+          <ellipse cx="555" cy="265" fill="#ff8a80" opacity="0.65" rx="14" ry="9"></ellipse>
+          <!-- Muzzle & Face -->
+          <ellipse cx="500" cy="265" fill="url(#bearMuzzleGrad)" rx="46" ry="34" stroke="#2c1e14" stroke-width="4.5">
+          </ellipse>
+          <path d="M485 246 C485 240, 515 240, 515 246 C515 258, 485 258, 485 246 Z" fill="#2c1e14"></path>
+          <ellipse cx="495" cy="245" fill="#ffffff" rx="4" ry="2"></ellipse>
+          <!-- Smile -->
+          <path d="M487 271 Q500 293 513 271 Z" fill="#d32f2f" id="bear-mouth" stroke="#2c1e14" stroke-width="3"></path>
+          <path d="M485 268 Q500 274 515 268" fill="none" stroke="#2c1e14" stroke-linecap="round" stroke-width="4">
+          </path>
+          <path d="M492 284 Q500 281 508 284" fill="#ff8a80"></path>
+          <!-- Eyes -->
+          <g class="anim-blink">
+            <g class="intro-gaze" id="bear-pupils">
+              <ellipse cx="468" cy="225" fill="#2c1e14" rx="11" ry="15"></ellipse>
+              <ellipse cx="465" cy="220" fill="#ffffff" rx="4.5" ry="6.5"></ellipse>
+              <circle cx="472" cy="230" fill="#ffffff" r="2.5"></circle>
+              <ellipse cx="532" cy="225" fill="#2c1e14" rx="11" ry="15"></ellipse>
+              <ellipse cx="529" cy="220" fill="#ffffff" rx="4.5" ry="6.5"></ellipse>
+              <circle cx="536" cy="230" fill="#ffffff" r="2.5"></circle>
+            </g>
+          </g>
+          <!-- Eyebrows -->
+          <path d="M455 204 Q468 196 480 203" fill="none" stroke="#2c1e14" stroke-linecap="round" stroke-width="4">
+          </path>
+          <path d="M520 203 Q532 196 545 204" fill="none" stroke="#2c1e14" stroke-linecap="round" stroke-width="4">
+          </path>
+          <path d="M492 154 Q500 138 506 153 Q512 142 516 156" fill="url(#bearBodyGrad)" stroke="#2c1e14"
+            stroke-width="4"></path>
+          <!-- Lowering Arm & Paw -->
+          <g class="intro-arm" id="bear-lowering-arm">
+            <path d="M430 330 C365 320, 345 360, 385 415 C410 430, 435 375, 445 350 Z" fill="url(#bearBodyGrad)"
+              stroke="#2c1e14" stroke-linejoin="round" stroke-width="5.5"></path>
+            <circle cx="395" cy="405" fill="url(#bearBodyGrad)" r="24" stroke="#2c1e14" stroke-width="5"></circle>
+            <ellipse cx="395" cy="405" fill="#f8bbd0" rx="13" ry="11"></ellipse>
+            <circle cx="378" cy="392" fill="#f8bbd0" r="5" stroke="#2c1e14" stroke-width="1.2"></circle>
+            <circle cx="386" cy="383" fill="#f8bbd0" r="5" stroke="#2c1e14" stroke-width="1.2"></circle>
+            <circle cx="400" cy="382" fill="#f8bbd0" r="5" stroke="#2c1e14" stroke-width="1.2"></circle>
+          </g>
+          <!-- JUMBO COOKIE -->
+          <g class="intro-cookie" id="anim-cookie">
+            <circle cx="435" cy="345" fill="#000000" opacity="0.25" r="41"></circle>
+            <circle cx="435" cy="345" fill="#e09848" filter="url(#dropShadow)" r="38" stroke="#2c1e14" stroke-width="5">
+            </circle>
+            <circle cx="433" cy="341" fill="none" opacity="0.5" r="33" stroke="#fff176" stroke-width="3"></circle>
+            <circle cx="406" cy="336" fill="#c77b2e" r="3"></circle>
+            <circle cx="462" cy="358" fill="#c77b2e" r="3.5"></circle>
+            <circle cx="420" cy="375" fill="#c77b2e" r="3"></circle>
+            <!-- Chunks -->
+            <circle cx="420" cy="330" fill="#3e2723" r="7" stroke="#2c1e14" stroke-width="1.5"></circle>
+            <circle cx="418" cy="328" fill="#8d6e63" r="2.2"></circle>
+            <circle cx="450" cy="332" fill="#3e2723" r="7.5" stroke="#2c1e14" stroke-width="1.5"></circle>
+            <circle cx="447" cy="330" fill="#8d6e63" r="2.5"></circle>
+            <circle cx="435" cy="346" fill="#311b16" r="8" stroke="#2c1e14" stroke-width="1.5"></circle>
+            <circle cx="432" cy="343" fill="#8d6e63" r="2.8"></circle>
+            <circle cx="437" cy="348" fill="#ffffff" opacity="0.6" r="1.5"></circle>
+            <circle cx="422" cy="362" fill="#3e2723" r="6.5" stroke="#2c1e14" stroke-width="1.5"></circle>
+            <circle cx="420" cy="360" fill="#8d6e63" r="2"></circle>
+            <circle cx="452" cy="360" fill="#3e2723" r="7" stroke="#2c1e14" stroke-width="1.5"></circle>
+            <circle cx="449" cy="358" fill="#8d6e63" r="2.2"></circle>
+            <circle cx="442" cy="322" fill="#ffffff" opacity="0.85" r="3"></circle>
+            <circle cx="458" cy="344" fill="#ffffff" opacity="0.75" r="2.4"></circle>
+          </g>
+        </g>
+      </g>
+      <!-- ================= TABLE IN FRONT OF BEAR ================= -->
+      <g stroke="#2c1e14" stroke-width="5">
+        <rect fill="#8d5423" height="120" rx="6" width="26" x="230" y="470"></rect>
+        <rect fill="#8d5423" height="120" rx="6" width="26" x="744" y="470"></rect>
+        <ellipse cx="500" cy="590" fill="#000000" opacity="0.22" rx="340" ry="28"></ellipse>
+        <rect fill="#a05d28" height="135" rx="8" width="32" x="180" y="480"></rect>
+        <rect fill="#a05d28" height="135" rx="8" width="32" x="788" y="480"></rect>
+      </g>
+      <rect fill="#a05d28" height="28" rx="4" stroke="#2c1e14" stroke-width="5" width="680" x="160" y="465"></rect>
+      <!-- Tabletop -->
+      <g filter="url(#dropShadow)">
+        <rect fill="#8d5423" height="30" rx="14" stroke="#2c1e14" stroke-width="5.5" width="740" x="130" y="445"></rect>
+        <polygon fill="url(#tableTopGrad)" points="120,445 160,420 840,420 880,445" stroke="#2c1e14"
+          stroke-linejoin="round" stroke-width="5.5"></polygon>
+        <path d="M190 432 L810 432" opacity="0.6" stroke="#f6be86" stroke-linecap="round" stroke-width="3"></path>
+      </g>
+      <rect fill="#fff9c4" height="14" rx="4" stroke="#2c1e14" stroke-width="3" width="520" x="240" y="430"></rect>
+      <!-- ================= TWO JARS (BOTH BLUE, NO LIDS, NO NUMBERS) ================= -->
+      <!-- 1. LEFT JAR (CENTERED AT X: 330) -> CONTAINS THE COOKIE -->
+      <g class="jar-interactive intro-jar1" id="jar-left-group">
+        <ellipse cx="330" cy="442" fill="#000000" opacity="0.25" rx="72" ry="14"></ellipse>
+        <!-- Jar Body -->
+        <path d="M264 435 C256 375, 270 325, 288 310 L372 310 C390 325, 404 375, 396 435 C392 448, 268 448, 264 435 Z"
+          fill="url(#jarUniformBlueGrad)" stroke="#2c1e14" stroke-linejoin="round" stroke-width="5.5"></path>
+        <path d="M280 330 C274 372, 280 414, 286 430" fill="none" opacity="0.65" stroke="#e1f5fe" stroke-linecap="round"
+          stroke-width="6"></path>
+        <rect fill="#1e88e5" height="20" rx="6" stroke="#2c1e14" stroke-width="4.5" width="94" x="283" y="294"></rect>
+        <!-- Rim Lip & Cavity -->
+        <ellipse cx="330" cy="296" fill="#0d47a1" rx="46" ry="13" stroke="#2c1e14" stroke-width="5"></ellipse>
+        <ellipse cx="330" cy="296" fill="#0a2a66" rx="38" ry="9"></ellipse>
+      </g>
+      <!-- 2. RIGHT JAR (CENTERED AT X: 670) -> EMPTY -->
+      <g class="jar-interactive" id="jar-right-group">
+        <ellipse cx="670" cy="442" fill="#000000" opacity="0.25" rx="72" ry="14"></ellipse>
+        <!-- Jar Body -->
+        <path d="M604 435 C596 375, 610 325, 628 310 L712 310 C730 325, 744 375, 736 435 C732 448, 608 448, 604 435 Z"
+          fill="url(#jarUniformBlueGrad)" stroke="#2c1e14" stroke-linejoin="round" stroke-width="5.5"></path>
+        <path d="M620 330 C614 372, 620 414, 626 430" fill="none" opacity="0.65" stroke="#e1f5fe" stroke-linecap="round"
+          stroke-width="6"></path>
+        <rect fill="#1e88e5" height="20" rx="6" stroke="#2c1e14" stroke-width="4.5" width="94" x="623" y="294"></rect>
+        <!-- Rim Lip & Cavity -->
+        <ellipse cx="670" cy="296" fill="#0d47a1" rx="46" ry="13" stroke="#2c1e14" stroke-width="5"></ellipse>
+        <ellipse cx="670" cy="296" fill="#0a2a66" rx="38" ry="9"></ellipse>
+      </g>
+    </svg>
+  </div>
+</body>
+
+</html>
