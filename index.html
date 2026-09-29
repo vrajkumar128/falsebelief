@@ -5,7 +5,7 @@
 <head>
   <meta charset="utf-8" />
   <meta content="width=device-width, initial-scale=1.0" name="viewport" />
-  <title>false belief</title>
+  <title>ToonFlash - Which Jar Has The Cookie?</title>
   <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
   <link href="https://fonts.googleapis.com" rel="preconnect" />
   <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
@@ -29,19 +29,7 @@
       user-select: none;
     }
 
-    /* Ambient bear animations */
-    @keyframes bearIdle {
-
-      0%,
-      100% {
-        transform: translateY(0px) rotate(0deg);
-      }
-
-      50% {
-        transform: translateY(-4px) rotate(0.8deg);
-      }
-    }
-
+    /* Ambient bear subtle facial animations (Bear body and head stay firmly stationary) */
     @keyframes bearBlink {
 
       0%,
@@ -67,51 +55,24 @@
       }
 
       85% {
-        transform: rotate(-5deg);
+        transform: rotate(-4deg);
       }
 
       90% {
-        transform: rotate(3deg);
+        transform: rotate(2deg);
       }
     }
 
-    @keyframes bearLeanAction {
-
-      0%,
-      16% {
-        transform: translate(0, 0) rotate(0deg);
-      }
-
-      30%,
-      42% {
-        transform: translate(-10px, -4px) rotate(-1.2deg);
-      }
-
-      50%,
-      60% {
-        transform: translate(-18px, 14px) rotate(-3.5deg);
-      }
-
-      70% {
-        transform: translate(-6px, 2px) rotate(-1deg);
-      }
-
-      80%,
-      100% {
-        transform: translate(0, 0) rotate(0deg);
-      }
-    }
-
-    /* Bear lowering cookie into Left Jar (Midline X: 330) */
+    /* Bear lowering arm into Left Jar (Midline X: 330) */
     @keyframes bearArmLowering {
 
       0%,
-      16% {
+      15% {
         transform: translate(0px, 0px) rotate(0deg);
       }
 
-      30%,
-      42% {
+      32%,
+      40% {
         transform: translate(-76px, -65px) rotate(-16deg);
       }
 
@@ -120,11 +81,11 @@
         transform: translate(-104px, 45px) rotate(-34deg);
       }
 
-      66% {
+      68% {
         transform: translate(-80px, -20px) rotate(-20deg);
       }
 
-      78%,
+      80%,
       100% {
         transform: translate(0px, 0px) rotate(0deg);
       }
@@ -133,13 +94,13 @@
     @keyframes jumboCookieDescent {
 
       0%,
-      16% {
+      15% {
         opacity: 1;
         transform: translate(0px, 0px);
       }
 
-      30%,
-      42% {
+      32%,
+      40% {
         opacity: 1;
         transform: translate(-105px, -115px);
       }
@@ -173,15 +134,15 @@
       }
 
       56% {
-        transform: scale(1.08, 0.92) translateY(5px);
+        transform: scale(1.06, 0.94) translateY(4px);
       }
 
       60% {
-        transform: scale(0.94, 1.06) translateY(-4px);
+        transform: scale(0.96, 1.04) translateY(-3px);
       }
 
       64% {
-        transform: scale(1.02, 0.98) translateY(1.5px);
+        transform: scale(1.02, 0.98) translateY(1px);
       }
 
       68%,
@@ -190,38 +151,40 @@
       }
     }
 
+    /* Golden star sparkles bursting outward right as cookie settles in jar rim */
     @keyframes starBurstAction {
 
       0%,
-      54% {
+      52% {
         opacity: 0;
         transform: scale(0);
       }
 
-      57% {
+      56% {
         opacity: 1;
-        transform: scale(1.3) translateY(-10px);
+        transform: scale(1.2) translateY(-6px);
       }
 
       65% {
-        opacity: 0;
-        transform: scale(1.8) translateY(-26px);
+        opacity: 0.9;
+        transform: scale(1.45) translateY(-20px);
       }
 
+      74%,
       100% {
         opacity: 0;
-        transform: scale(0);
+        transform: scale(1.8) translateY(-30px);
       }
     }
 
     @keyframes bearGazeFollow {
 
       0%,
-      16% {
+      15% {
         transform: translate(0, 0);
       }
 
-      30%,
+      32%,
       42% {
         transform: translate(-7px, -1px);
       }
@@ -231,15 +194,10 @@
         transform: translate(-8px, 6px);
       }
 
-      72%,
+      74%,
       100% {
         transform: translate(0, 0);
       }
-    }
-
-    .anim-idle {
-      animation: bearIdle 4s ease-in-out infinite;
-      transform-origin: 500px 380px;
     }
 
     .anim-blink {
@@ -255,11 +213,6 @@
     .anim-ear-r {
       animation: earWiggle 5s ease-in-out infinite 0.4s;
       transform-origin: 570px 170px;
-    }
-
-    .intro-lean {
-      animation: bearLeanAction 4.2s cubic-bezier(0.33, 1, 0.68, 1) forwards;
-      transform-origin: 500px 440px;
     }
 
     .intro-arm {
@@ -286,21 +239,30 @@
       animation: bearGazeFollow 4.2s ease-in-out forwards;
     }
 
-    /* Interactive clickable jar subtle hover without yellow glow */
+    /* Interactive clickable jar hot zones with identical origin, lift up and blue glowing shadow */
     .jar-interactive {
       cursor: pointer;
       transform-box: fill-box;
       transform-origin: center center;
-      transition: filter 0.25s ease;
+      transition: translate 0.25s ease, scale 0.25s ease, filter 0.25s ease;
     }
 
+    /* Individual translate/scale properties so the left jar's intro transform animation can't override them */
     .jar-interactive:hover {
-      filter: drop-shadow(0 8px 12px rgba(13, 71, 161, 0.35));
+      filter: drop-shadow(0 10px 18px rgba(30, 136, 229, 0.6));
+      translate: 0 -8px;
+      scale: 1.03;
+    }
+
+    .jar-interactive:active {
+      translate: 0 -2px;
+      scale: 0.98;
     }
   </style>
 </head>
 
-<body class="relative flex items-center justify-center min-h-screen bg-slate-900 select-none overflow-hidden">
+<body class="relative flex items-center justify-center min-h-screen bg-slate-900 select-none overflow-hidden"
+  onclick="unlockAudio()">
   <!-- Main Game Stage Container (Maintains 1000x650 SVG Aspect Ratio seamlessly) -->
   <div
     class="relative w-full max-w-[1200px] h-[95vh] max-h-[780px] rounded-3xl overflow-hidden shadow-2xl bg-[#fcefdc] border-4 border-amber-900/20 flex flex-col justify-center items-center"
@@ -334,6 +296,9 @@
         <filter height="130%" id="dropShadow" width="130%" x="-10%" y="-10%">
           <fedropshadow dx="0" dy="8" flood-opacity="0.18" stddeviation="6"></fedropshadow>
         </filter>
+        <filter height="140%" id="sparkleGlow" width="140%" x="-20%" y="-20%">
+          <fedropshadow dx="0" dy="0" flood-color="#ffd54f" flood-opacity="0.9" stddeviation="3"></fedropshadow>
+        </filter>
       </defs>
       <!-- ================= BACKGROUND ROOM ================= -->
       <rect fill="url(#wallGrad)" height="460" width="1000" x="0" y="0"></rect>
@@ -363,8 +328,8 @@
         <line x1="0" x2="1000" y1="520" y2="520"></line>
         <line x1="0" x2="1000" y1="585" y2="585"></line>
       </g>
-      <!-- ================= BEAR LEGS & FEET ================= -->
-      <g class="anim-idle">
+      <!-- ================= BEAR LEGS & FEET (Stationary on Ground) ================= -->
+      <g>
         <ellipse cx="440" cy="565" fill="#000000" opacity="0.25" rx="35" ry="12"></ellipse>
         <ellipse cx="560" cy="565" fill="#000000" opacity="0.25" rx="35" ry="12"></ellipse>
         <!-- Left Leg -->
@@ -386,9 +351,9 @@
         <circle cx="564" cy="541" fill="#f8bbd0" r="4.5" stroke="#2c1e14" stroke-width="1.2"></circle>
         <circle cx="577" cy="544" fill="#f8bbd0" r="4.5" stroke="#2c1e14" stroke-width="1.2"></circle>
       </g>
-      <!-- ================= BEAR UPPER BODY ================= -->
-      <g class="anim-idle">
-        <g class="intro-lean" id="bear-lean-grp">
+      <!-- ================= BEAR UPPER BODY (Stationary) ================= -->
+      <g>
+        <g id="bear-lean-grp">
           <ellipse cx="500" cy="455" fill="#000000" opacity="0.18" rx="145" ry="24"></ellipse>
           <!-- Ears -->
           <g class="anim-ear-l">
@@ -496,9 +461,13 @@
         <path d="M190 432 L810 432" opacity="0.6" stroke="#f6be86" stroke-linecap="round" stroke-width="3"></path>
       </g>
       <rect fill="#fff9c4" height="14" rx="4" stroke="#2c1e14" stroke-width="3" width="520" x="240" y="430"></rect>
-      <!-- ================= TWO JARS (BOTH BLUE, NO LIDS, NO NUMBERS) ================= -->
+      <!-- ================= TWO CLICKABLE JARS (BOTH BLUE, NO LIDS, NO NUMBERS) ================= -->
       <!-- 1. LEFT JAR (CENTERED AT X: 330) -> CONTAINS THE COOKIE -->
-      <g class="jar-interactive intro-jar1" id="jar-left-group">
+      <g class="jar-interactive intro-jar1" id="jar-left-group" onclick="handleJarChoice('left')"
+        onmouseenter="handleJarHover()">
+        <!-- Hover / Tap focus indicator ring (hidden by default) -->
+        <ellipse class="transition-opacity duration-300" cx="330" cy="370" fill="none" id="jar-left-glow" opacity="0"
+          rx="76" ry="85" stroke="#ffeb3b" stroke-width="8"></ellipse>
         <ellipse cx="330" cy="442" fill="#000000" opacity="0.25" rx="72" ry="14"></ellipse>
         <!-- Jar Body -->
         <path d="M264 435 C256 375, 270 325, 288 310 L372 310 C390 325, 404 375, 396 435 C392 448, 268 448, 264 435 Z"
@@ -510,8 +479,29 @@
         <ellipse cx="330" cy="296" fill="#0d47a1" rx="46" ry="13" stroke="#2c1e14" stroke-width="5"></ellipse>
         <ellipse cx="330" cy="296" fill="#0a2a66" rx="38" ry="9"></ellipse>
       </g>
+      <!-- Star Sparkles bursting outward gently when cookie is placed inside Left Jar -->
+      <g class="intro-stars" filter="url(#sparkleGlow)" id="drop-stars" opacity="0" pointer-events="none">
+        <!-- Center main star -->
+        <path d="M330 258 L334 274 L350 278 L334 282 L330 298 L326 282 L310 278 L326 274 Z" fill="#ffe082"
+          stroke="#ffb300" stroke-width="1.5"></path>
+        <!-- Upper left sparkle -->
+        <path d="M298 250 L301 260 L311 263 L301 266 L298 276 L295 266 L285 263 L295 260 Z" fill="#fff59d"
+          stroke="#fbc02d" stroke-width="1.2"></path>
+        <!-- Upper right sparkle -->
+        <path d="M362 252 L365 261 L374 264 L365 267 L362 276 L359 267 L350 264 L359 261 Z" fill="#fff59d"
+          stroke="#fbc02d" stroke-width="1.2"></path>
+        <!-- Little star dots -->
+        <circle cx="318" cy="242" fill="#fff9c4" r="3"></circle>
+        <circle cx="344" cy="246" fill="#ffe082" r="3.5"></circle>
+        <circle cx="282" cy="282" fill="#ffd54f" r="2.8"></circle>
+        <circle cx="378" cy="286" fill="#ffe082" r="3.2"></circle>
+      </g>
       <!-- 2. RIGHT JAR (CENTERED AT X: 670) -> EMPTY -->
-      <g class="jar-interactive" id="jar-right-group">
+      <g class="jar-interactive" id="jar-right-group" onclick="handleJarChoice('right')"
+        onmouseenter="handleJarHover()">
+        <!-- Hover / Tap focus indicator ring matching left jar -->
+        <ellipse class="transition-opacity duration-300" cx="670" cy="370" fill="none" id="jar-right-glow" opacity="0"
+          rx="76" ry="85" stroke="#ffeb3b" stroke-width="8"></ellipse>
         <ellipse cx="670" cy="442" fill="#000000" opacity="0.25" rx="72" ry="14"></ellipse>
         <!-- Jar Body -->
         <path d="M604 435 C596 375, 610 325, 628 310 L712 310 C730 325, 744 375, 736 435 C732 448, 608 448, 604 435 Z"
@@ -524,6 +514,211 @@
         <ellipse cx="670" cy="296" fill="#0a2a66" rx="38" ry="9"></ellipse>
       </g>
     </svg>
+    <!-- SOUND SYNTHESIS & INTERACTION SCRIPT -->
+    <script>
+      let canClick = false;
+      let audioCtx = null;
+      let selectedSide = null;
+
+      function getAudioContext() {
+        if (!audioCtx) {
+          const AudioContext = window.AudioContext || window.webkitAudioContext;
+          if (AudioContext) audioCtx = new AudioContext();
+        }
+        if (audioCtx && audioCtx.state === 'suspended') {
+          audioCtx.resume();
+        }
+        return audioCtx;
+      }
+
+      function unlockAudio() {
+        getAudioContext();
+      }
+
+      // Friendly cartoon Web Audio synthesis sound effects
+      function playChime(type) {
+        try {
+          const ctx = getAudioContext();
+          if (!ctx) return;
+          const now = ctx.currentTime;
+
+          if (type === 'swish') {
+            // Gentle cartoon whoosh / swish while arm swings cookie over
+            const osc = ctx.createOscillator();
+            const gain = ctx.createGain();
+            const filter = ctx.createBiquadFilter();
+            filter.type = 'lowpass';
+            filter.frequency.setValueAtTime(800, now);
+            filter.frequency.linearRampToValueAtTime(1400, now + 0.3);
+            filter.frequency.linearRampToValueAtTime(400, now + 0.7);
+
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(260, now);
+            osc.frequency.exponentialRampToValueAtTime(420, now + 0.35);
+            osc.frequency.exponentialRampToValueAtTime(220, now + 0.7);
+
+            gain.gain.setValueAtTime(0.01, now);
+            gain.gain.linearRampToValueAtTime(0.18, now + 0.3);
+            gain.gain.linearRampToValueAtTime(0.001, now + 0.7);
+
+            osc.connect(filter);
+            filter.connect(gain);
+            gain.connect(ctx.destination);
+            osc.start(now);
+            osc.stop(now + 0.71);
+          } else if (type === 'drop') {
+            // "Plop" tone + magical sparkle chime when cookie slides into jar
+            const osc = ctx.createOscillator();
+            const gain = ctx.createGain();
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(480, now);
+            osc.frequency.exponentialRampToValueAtTime(160, now + 0.28);
+            gain.gain.setValueAtTime(0.35, now);
+            gain.gain.linearRampToValueAtTime(0.01, now + 0.28);
+            osc.connect(gain);
+            gain.connect(ctx.destination);
+            osc.start(now);
+            osc.stop(now + 0.29);
+
+            // Sparkle chime overlay
+            [880, 1174.66, 1396.91, 1760].forEach((freq, idx) => {
+              const spOsc = ctx.createOscillator();
+              const spGain = ctx.createGain();
+              spOsc.type = 'triangle';
+              spOsc.frequency.setValueAtTime(freq, now + 0.05 + idx * 0.06);
+              spGain.gain.setValueAtTime(0.12, now + 0.05 + idx * 0.06);
+              spGain.gain.exponentialRampToValueAtTime(0.001, now + 0.32 + idx * 0.06);
+              spOsc.connect(spGain);
+              spGain.connect(ctx.destination);
+              spOsc.start(now + 0.05 + idx * 0.06);
+              spOsc.stop(now + 0.35 + idx * 0.06);
+            });
+          } else if (type === 'hover') {
+            // Subtle cartoon bubble-pop on jar hover
+            const osc = ctx.createOscillator();
+            const gain = ctx.createGain();
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(620, now);
+            osc.frequency.exponentialRampToValueAtTime(940, now + 0.08);
+            gain.gain.setValueAtTime(0.07, now);
+            gain.gain.linearRampToValueAtTime(0.001, now + 0.09);
+            osc.connect(gain);
+            gain.connect(ctx.destination);
+            osc.start(now);
+            osc.stop(now + 0.1);
+          } else if (type === 'select') {
+            // Neutral soft tap/select sound
+            const osc = ctx.createOscillator();
+            const gain = ctx.createGain();
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(540, now);
+            osc.frequency.exponentialRampToValueAtTime(420, now + 0.08);
+            gain.gain.setValueAtTime(0.14, now);
+            gain.gain.linearRampToValueAtTime(0.001, now + 0.08);
+            osc.connect(gain);
+            gain.connect(ctx.destination);
+            osc.start(now);
+            osc.stop(now + 0.09);
+          } else if (type === 'prompt') {
+            // Inviting attention chime
+            const notes = [523.25, 659.25, 783.99]; // C5, E5, G5
+            notes.forEach((freq, i) => {
+              const osc = ctx.createOscillator();
+              const gain = ctx.createGain();
+              osc.type = 'triangle';
+              osc.frequency.setValueAtTime(freq, now + i * 0.11);
+              gain.gain.setValueAtTime(0.18, now + i * 0.11);
+              gain.gain.exponentialRampToValueAtTime(0.01, now + i * 0.11 + 0.35);
+              osc.connect(gain);
+              gain.connect(ctx.destination);
+              osc.start(now + i * 0.11);
+              osc.stop(now + i * 0.11 + 0.36);
+            });
+          }
+        } catch (e) {
+          console.warn('Audio note prevented: ', e);
+        }
+      }
+
+      function handleJarHover() {
+        if (!canClick) return;
+        playChime('hover');
+      }
+
+      function startSequence() {
+        canClick = false;
+        selectedSide = null;
+
+        // Reset bear expressions
+        document.getElementById('bear-mouth').setAttribute('d', 'M487 271 Q500 293 513 271 Z');
+        document.getElementById('jar-left-glow').setAttribute('opacity', '0');
+        document.getElementById('jar-right-glow').setAttribute('opacity', '0');
+
+        // Restart animation classes by triggering reflow
+        const elementsToRestart = [
+          { id: 'bear-lowering-arm', cls: 'intro-arm' },
+          { id: 'anim-cookie', cls: 'intro-cookie' },
+          { id: 'jar-left-group', cls: 'intro-jar1' },
+          { id: 'drop-stars', cls: 'intro-stars' },
+          { id: 'bear-pupils', cls: 'intro-gaze' }
+        ];
+
+        elementsToRestart.forEach(item => {
+          const el = document.getElementById(item.id);
+          if (el) {
+            el.classList.remove(item.cls);
+            void el.offsetWidth; // Force CSS reflow
+            el.classList.add(item.cls);
+          }
+        });
+
+        // Swish sound when bear starts moving arm over to jar
+        setTimeout(() => {
+          playChime('swish');
+        }, 1300);
+
+        // Plop sound and sparkle burst right as cookie settles into left jar
+        setTimeout(() => {
+          playChime('drop');
+        }, 2250);
+
+        // When lowering animation settles (~3.8s), ready for child to click
+        setTimeout(() => {
+          canClick = true;
+
+          // Flash gentle guide rings around jars to invite interaction
+          document.getElementById('jar-left-glow').setAttribute('opacity', '0.7');
+          document.getElementById('jar-right-glow').setAttribute('opacity', '0.7');
+          setTimeout(() => {
+            if (!selectedSide) {
+              document.getElementById('jar-left-glow').setAttribute('opacity', '0');
+              document.getElementById('jar-right-glow').setAttribute('opacity', '0');
+            }
+          }, 800);
+
+          playChime('prompt');
+        }, 3800);
+      }
+
+      function handleJarChoice(side) {
+        if (!canClick) return;
+
+        selectedSide = side;
+        playChime('select');
+
+        // Neutral selection highlight on the chosen jar without revealing correctness
+        document.getElementById('jar-left-glow').setAttribute('opacity', side === 'left' ? '0.75' : '0');
+        document.getElementById('jar-right-glow').setAttribute('opacity', side === 'right' ? '0.75' : '0');
+
+        // Dispatch neutral custom event for external handlers or state tracking
+        window.dispatchEvent(new CustomEvent('jarSelected', { detail: { side: side } }));
+      }
+
+      // Auto start on page load
+      window.addEventListener('DOMContentLoaded', () => {
+        startSequence();
+      });
+    </script>
   </div>
 </body>
 
