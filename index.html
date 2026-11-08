@@ -431,10 +431,14 @@
        Stops shared between turtleMoveCookieAction, turtleStretch and the arm pivots must stay identical so the
        flipper paths stay straight; wrist timings live in TURTLE_WRIST_KEYS in the script.
     */
-    /* While a flipper is over or in a jar the turtle stands tall (ty -8 here plus turtleStretch -25: shoulder at
-       Y 307, well above the rim at Y 350), so his arm comes down steeply over the rim instead of cutting through
-       the rim's corner. Poses: 13% flipper above the rim, 17-19% flipper in the opening pinching the cookie,
-       23/27/31% lifting it straight up (flipper X 335); 65-88% are the mirror image at the right jar. */
+    /* While a flipper is over or in a jar the turtle stands right up (ty -8 here plus turtleStretch -49: shoulder
+       at Y 283, well above the rim at Y 350), so his arm goes down into the opening over the back of the rim and
+       never through the front lip. The flipper moves straight up and down at X 335 through four poses:
+         IN    flipper (335,368) in the jar, arm hanging straight down from a shoulder right above it
+         LOW   flipper (335,333)        MID  flipper (335,297), just above the rim
+         TOP   flipper (335,260), cookie hanging clear of the rim
+       13% MID (arm reaches over the rim), 15% LOW, 17-19% IN (pinches the cookie), 23% LOW, 27% MID, 31-36% TOP;
+       65-88% are the mirror image at the right jar (TOP, MID, LOW, IN, LOW, MID). */
     @keyframes turtleMoveCookieAction {
 
       0%,
@@ -442,23 +446,30 @@
         transform: translate(0px, 0px);
       }
 
-      13%,
+      13% {
+        transform: translate(-26.2px, -8px);
+      }
+
+      15% {
+        transform: translate(-41.3px, -8px);
+      }
+
       17%,
       19% {
-        transform: translate(-50.8px, -8px);
+        transform: translate(-110px, -8px);
       }
 
       23% {
-        transform: translate(-29.1px, -8px);
+        transform: translate(-41.3px, -8px);
       }
 
       27% {
-        transform: translate(-25.6px, -8px);
+        transform: translate(-26.2px, -8px);
       }
 
       31%,
       36% {
-        transform: translate(-39.2px, -8px);
+        transform: translate(-28.2px, -8px);
       }
 
       47%,
@@ -468,21 +479,28 @@
 
       65%,
       70% {
-        transform: translate(39.2px, -8px);
+        transform: translate(28.2px, -8px);
       }
 
       74% {
-        transform: translate(25.6px, -8px);
+        transform: translate(26.2px, -8px);
       }
 
       78% {
-        transform: translate(29.1px, -8px);
+        transform: translate(41.3px, -8px);
       }
 
       82%,
-      84%,
+      84% {
+        transform: translate(110px, -8px);
+      }
+
+      86% {
+        transform: translate(41.3px, -8px);
+      }
+
       88% {
-        transform: translate(50.8px, -8px);
+        transform: translate(26.2px, -8px);
       }
 
       100% {
@@ -490,7 +508,7 @@
       }
     }
 
-    /* Turtle stands up taller on his legs (body only; the extra leg length shows only behind the table) */
+    /* Turtle stands up taller on his legs (body only; the gap above his legs stays hidden behind the table) */
     @keyframes turtleStretch {
 
       0%,
@@ -500,7 +518,7 @@
 
       13%,
       36% {
-        transform: translateY(-25px);
+        transform: translateY(-49px);
       }
 
       47%,
@@ -510,7 +528,7 @@
 
       65%,
       88% {
-        transform: translateY(-25px);
+        transform: translateY(-49px);
       }
 
       100% {
@@ -530,28 +548,32 @@
       }
 
       13% {
-        /* Flipper above the left jar's rim */
-        transform: rotate(83.4deg);
+        /* MID: flipper just above the left jar's rim */
+        transform: rotate(53.9deg);
+      }
+
+      15% {
+        transform: rotate(27.4deg);
       }
 
       17%,
       19% {
-        /* Flipper dipped into the opening, pinching the cookie */
-        transform: rotate(17.5deg);
+        /* IN: arm straight down into the opening, pinching the cookie */
+        transform: rotate(-26.57deg);
       }
 
       23% {
-        transform: rotate(45.6deg);
+        transform: rotate(27.4deg);
       }
 
       27% {
-        transform: rotate(70.2deg);
+        transform: rotate(53.9deg);
       }
 
       31%,
       36% {
-        /* Cookie lifted clear of the left jar */
-        transform: rotate(97deg);
+        /* TOP: cookie lifted clear of the left jar */
+        transform: rotate(79.1deg);
       }
 
       47%,
@@ -580,27 +602,31 @@
 
       65%,
       70% {
-        /* Cookie held above the right jar */
-        transform: rotate(-97deg);
+        /* TOP: cookie held above the right jar */
+        transform: rotate(-79.1deg);
       }
 
       74% {
-        transform: rotate(-70.2deg);
+        transform: rotate(-53.9deg);
       }
 
       78% {
-        transform: rotate(-45.6deg);
+        transform: rotate(-27.4deg);
       }
 
       82%,
       84% {
-        /* Flipper down in the opening, cookie inside the right jar */
-        transform: rotate(-17.5deg);
+        /* IN: arm straight down into the opening, cookie at the bottom of the right jar */
+        transform: rotate(26.57deg);
+      }
+
+      86% {
+        transform: rotate(-27.4deg);
       }
 
       88% {
-        /* Flipper lifted back out above the rim */
-        transform: rotate(-83.4deg);
+        /* MID: flipper lifted back out above the rim */
+        transform: rotate(-53.9deg);
       }
 
       100% {
@@ -1785,11 +1811,39 @@
       const COOKIE_FALL_DEPTH = 100;
       let heldCookie = { mode: 'hidden' };
       let reaching = {};          // hand key -> jar layer id its arm copy is drawn in
-      let bearIntroStart = null;
       let bearPadDeg = 0;
-      let bearPadRelease = null;  // { t, deg } when the bear lets go
-      let turtleChoreoStart = null;
+      let bearPadRelease = null;  // { t, deg } when the bear lets go (bear clock)
+
+      // Everything that has to line up with the arms runs on the arm animations' own playback time rather than
+      // the wall clock, so it stays in step even when the browser starts or throttles CSS animations late.
+      const CLOCKS = {
+        bear: { elId: 'bear-lowering-arm', animation: 'bearArmLowering' },
+        turtle: { elId: 'turtle-choreography-subgroup', animation: 'turtleMoveCookieAction' },
+      };
+      // [clock ms, action]; times match the poses in bearArmLowering / turtleMoveCookieAction
+      const CLOCK_EVENTS = {
+        bear: [
+          [0, () => { grabCookie('bear', BEAR_WRIST_KEYS, 'bear'); reaching.bear = LEFT_JAR_LAYER; }],
+          [1600, () => dropCookie()],             // cookie down inside the opening: let go
+          [2000, () => { reaching.bear = null; }], // paw lifted back out above the rim
+        ],
+        turtle: [
+          [1300, () => { reaching.l = LEFT_JAR_LAYER; }],                   // flipper up above the left rim
+          [1750, () => grabCookie('l', TURTLE_WRIST_KEYS.l, 'turtle')],     // pinch the cookie at the bottom
+          [3100, () => { reaching.l = null; }],                             // cookie lifted clear of the rim
+          [4700, () => holdCookieWithBothFlippers()],
+          [5400, () => takeCookieWith('r', TURTLE_WRIST_KEYS.r, 'turtle')], // left flipper lets go
+          [6500, () => { reaching.r = RIGHT_JAR_LAYER; }],                  // flipper up above the right rim
+          [8250, () => hideCookie()],                                       // cookie at the bottom: let go
+          [8800, () => { reaching.r = null; }],                             // flipper lifted back out
+        ],
+      };
+      let clockMs = { bear: null, turtle: null };
+      let clockEventIndex = { bear: 0, turtle: 0 };
       let sceneFrame = null;
+      let sceneTimer = null;
+      let lastSceneTick = -Infinity;
+      const SCENE_TIMER_FALLBACK_MS = 40;
 
       function matrixFromTo(fromEl, toEl) {
         return toEl.getScreenCTM().inverse().multiply(fromEl.getScreenCTM());
@@ -1848,15 +1902,15 @@
       }
 
       // Bear's paw pad faces the cookie he's holding, then turns back to normal as his arm returns to rest
-      function updateBearPad(now) {
+      function updateBearPad() {
         let deg = 0;
-        if (bearIntroStart !== null) {
+        if (clockMs.bear !== null) {
           const armDeg = rotationDeg(document.getElementById('bear-lowering-arm'));
           if (heldCookie.mode === 'held' && heldCookie.hand === 'bear') {
             deg = wrapDeg(heldCookie.alpha - BEAR_PAD_REST_TOES_DEG - armDeg);
           } else if (bearPadRelease) {
-            const span = bearIntroStart + BEAR_PAD_SETTLE_MS - bearPadRelease.t;
-            const p = Math.min(Math.max((now - bearPadRelease.t) / span, 0), 1);
+            const span = BEAR_PAD_SETTLE_MS - bearPadRelease.t;
+            const p = Math.min(Math.max((clockMs.bear - bearPadRelease.t) / span, 0), 1);
             deg = bearPadRelease.deg * (1 - easeInOut(p));
           }
         }
@@ -1885,10 +1939,11 @@
         });
       }
 
-      function heldCookieCentre(now, armToSvg) {
+      function heldCookieCentre(armToSvg) {
+        const ms = clockMs[heldCookie.clock] ?? heldCookie.lastMs;
+        heldCookie.lastMs = ms;
         if (heldCookie.mode === 'held') {
           const key = heldCookie.hand;
-          const ms = now - heldCookie.timeBase;
           const alpha = keyedAngle(heldCookie.keys, ms);
           if (heldCookie.alpha !== undefined) heldCookie.rot += alpha - heldCookie.alpha;
           heldCookie.alpha = alpha;
@@ -1904,20 +1959,22 @@
           const d = Math.hypot(dx, dy) || 1;
           const sag = Math.sqrt(Math.max(0, HANDS.l.pinch * HANDS.l.pinch - (d / 2) * (d / 2)));
           const both = { x: (hl.x + hr.x) / 2 - dy / d * sag, y: (hl.y + hr.y) / 2 + dx / d * sag };
-          const w = Math.min((now - heldCookie.blendStart) / TWO_HAND_BLEND_MS, 1);
+          const w = Math.min(Math.max((ms - heldCookie.blendStart) / TWO_HAND_BLEND_MS, 0), 1);
           return {
             x: heldCookie.entry.x + (both.x - heldCookie.entry.x) * w,
             y: heldCookie.entry.y + (both.y - heldCookie.entry.y) * w,
           };
         }
-        const t = Math.min(Math.max((now - heldCookie.fallStart) / COOKIE_FALL_MS, 0), 1);
+        const t = Math.min(Math.max((ms - heldCookie.fallStart) / COOKIE_FALL_MS, 0), 1);
         return { x: heldCookie.fallX, y: heldCookie.fallY + COOKIE_FALL_DEPTH * t * t };
       }
 
-      function advanceCookie(now, armToSvg) {
-        if (heldCookie.mode === 'falling' && now - heldCookie.fallStart >= COOKIE_FALL_MS) hideCookie();
+      function advanceCookie(armToSvg) {
+        if (heldCookie.mode === 'falling' && clockMs[heldCookie.clock] - heldCookie.fallStart >= COOKIE_FALL_MS) {
+          hideCookie();
+        }
         if (heldCookie.mode === 'hidden') return;
-        const c = heldCookieCentre(now, armToSvg);
+        const c = heldCookieCentre(armToSvg);
         heldCookie.x = c.x;
         heldCookie.y = c.y;
       }
@@ -1964,38 +2021,66 @@
         });
       }
 
-      function sceneTick(now) {
-        sceneFrame = requestAnimationFrame(sceneTick);
+      function updateClocks() {
+        Object.entries(CLOCKS).forEach(([name, clock]) => {
+          const anim = document.getElementById(clock.elId).getAnimations()
+            .find(a => a.animationName === clock.animation);
+          clockMs[name] = anim && anim.currentTime !== null ? anim.currentTime : null;
+          if (clockMs[name] === null) return;
+          const events = CLOCK_EVENTS[name];
+          while (clockEventIndex[name] < events.length && events[clockEventIndex[name]][0] <= clockMs[name]) {
+            events[clockEventIndex[name]++][1]();
+          }
+        });
+      }
+
+      function sceneTick() {
+        lastSceneTick = performance.now();
+        updateClocks();
         const svg = document.getElementById('scene-svg');
         const armToSvg = {};
         Object.entries(HANDS).forEach(([key, hand]) => {
           armToSvg[key] = matrixFromTo(document.getElementById(hand.armId), svg);
         });
-        advanceCookie(now, armToSvg);
-        updateBearPad(now); // before anything copies the pad's pose
+        advanceCookie(armToSvg);
+        updateBearPad(); // before anything copies the pad's pose
         renderCookie(svg, armToSvg);
         updateReachCopies(svg, armToSvg);
       }
 
-      function startSceneTicks() {
-        if (sceneFrame) cancelAnimationFrame(sceneFrame);
-        sceneFrame = requestAnimationFrame(sceneTick);
+      function sceneFrameLoop() {
+        sceneFrame = requestAnimationFrame(sceneFrameLoop);
+        sceneTick();
       }
 
-      function grabCookie(handKey, keys, timeBase) {
-        heldCookie = { mode: 'held', hand: handKey, keys, timeBase, rot: heldCookie.rot || 0 };
+      // Some embedded browsers keep playing CSS animations but stop delivering animation frames; without frames
+      // the cookie and the arm copies would freeze while the characters move on. A timer takes over until frames
+      // arrive again.
+      function startSceneTicks() {
+        if (sceneFrame) cancelAnimationFrame(sceneFrame);
+        sceneFrame = requestAnimationFrame(sceneFrameLoop);
+        if (!sceneTimer) {
+          sceneTimer = setInterval(() => {
+            if (performance.now() - lastSceneTick > SCENE_TIMER_FALLBACK_MS) sceneTick();
+          }, 16);
+        }
+      }
+
+      // clock: which CLOCKS entry the wrist keys are timed against
+      function grabCookie(handKey, keys, clock) {
+        heldCookie = { mode: 'held', hand: handKey, keys, clock, rot: heldCookie.rot || 0 };
       }
 
       // The turtle's right flipper joins the left: the cookie is now pinched between both
       function holdCookieWithBothFlippers() {
         heldCookie = {
-          mode: 'both', hand: 'l', rot: heldCookie.rot,
-          entry: { x: heldCookie.x, y: heldCookie.y }, blendStart: performance.now(),
+          mode: 'both', hand: 'l', clock: 'turtle', rot: heldCookie.rot,
+          entry: { x: heldCookie.x, y: heldCookie.y }, blendStart: clockMs.turtle,
         };
       }
 
       // The left flipper lets go; the right flipper keeps its pinch where it is and carries on
-      function takeCookieWith(handKey, keys, timeBase) {
+      function takeCookieWith(handKey, keys, clock) {
         const svg = document.getElementById('scene-svg');
         const h = handPoint(handKey, { [handKey]: matrixFromTo(document.getElementById(HANDS[handKey].armId), svg) });
         const start = Math.atan2(heldCookie.y - h.y, heldCookie.x - h.x) * 180 / Math.PI;
@@ -2004,15 +2089,16 @@
         for (let i = 2; i < keys.length; i++) {
           resolved.push([keys[i][0], resolved[i - 1][1] + (keys[i][1] - keys[i - 1][1])]);
         }
-        heldCookie = { mode: 'held', hand: handKey, keys: resolved, timeBase, rot: heldCookie.rot, alpha: start };
+        heldCookie = { mode: 'held', hand: handKey, keys: resolved, clock, rot: heldCookie.rot, alpha: start };
       }
 
       // Let go: the cookie falls straight down from where it was held, then is hidden
       function dropCookie() {
-        if (heldCookie.hand === 'bear') bearPadRelease = { t: performance.now(), deg: bearPadDeg };
+        const clock = heldCookie.clock;
+        if (heldCookie.hand === 'bear') bearPadRelease = { t: clockMs.bear, deg: bearPadDeg };
         heldCookie = {
-          mode: 'falling', x: heldCookie.x, y: heldCookie.y, fallX: heldCookie.x, fallY: heldCookie.y,
-          rot: heldCookie.rot, fallStart: performance.now(),
+          mode: 'falling', clock, x: heldCookie.x, y: heldCookie.y, fallX: heldCookie.x, fallY: heldCookie.y,
+          rot: heldCookie.rot, fallStart: clockMs[clock],
         };
       }
 
@@ -2076,7 +2162,7 @@
         hideCookie();
         reaching = {};
         bearPadRelease = null;
-        turtleChoreoStart = null;
+        clockEventIndex = { bear: 0, turtle: 0 };
         leftJar.classList.remove('left-jar-lift-pop-active');
         leftStarsLift.classList.remove('left-lift-stars-active');
         rightJar.classList.remove('right-jar-pop-active');
@@ -2106,10 +2192,8 @@
         });
 
         // ================= CHOREOGRAPHY TIMELINE =================
-        // 0. Bear starts out holding the cookie up in his right paw; his arm reaches over the left jar's rim
-        bearIntroStart = performance.now();
-        grabCookie('bear', BEAR_WRIST_KEYS, bearIntroStart);
-        reaching.bear = LEFT_JAR_LAYER;
+        // 0. Bear starts out holding the cookie up in his right paw. Grabbing, letting go and the arm copies in the
+        //    jars follow the arm animations' own clocks (CLOCK_EVENTS); this timeline handles sounds and classes.
         startSceneTicks();
 
         // 1. Swish sound as the bear lowers the cookie into the left jar
@@ -2117,20 +2201,10 @@
           playChime('swish');
         }, 1200);
 
-        // Bear lets go with the cookie down inside the opening (intro-arm 44.4%); it drops to the bottom
-        schedule(() => {
-          dropCookie();
-        }, 1600);
-
         // 2. Plop & stars chime as the cookie sinks out of sight
         schedule(() => {
           playChime('drop');
         }, 1750);
-
-        // Bear's paw is lifted back out above the rim (intro-arm ~56%); his arm now drops behind the jar
-        schedule(() => {
-          reaching.bear = null;
-        }, 2000);
 
         // 3. Bear starts walking directly towards the left door (t = 2650ms)
         schedule(() => {
@@ -2201,7 +2275,6 @@
         // ================= TURTLE COOKIE RELOCATION CHOREOGRAPHY =================
         // 10. Turtle's left flipper rises behind the left jar (t = 12000ms, start of 10s choreography)
         schedule(() => {
-          turtleChoreoStart = performance.now();
           turtleChoreo.classList.add('turtle-move-cookie');
           turtleStretch.classList.add('turtle-stretch-active');
           turtleArmL.classList.add('turtle-left-arm-active');
@@ -2212,24 +2285,13 @@
           rightStars.classList.add('right-stars-active');
         }, 12000);
 
-        // Flipper is up above the rim: from here it reaches over the rim and dips into the opening (~13300ms)
-        schedule(() => {
-          reaching.l = LEFT_JAR_LAYER;
-        }, 13300);
-
-        // 11. Flipper pinches the cookie at the bottom of the jar (~13750ms)
-        schedule(() => {
-          grabCookie('l', TURTLE_WRIST_KEYS.l, turtleChoreoStart);
-        }, 13750);
-
-        // Turtle lifts the cookie straight up out of the opening (~13900ms)
+        // 11. Flipper pinches the cookie at the bottom of the jar (~13750ms); turtle lifts it straight up (~13900ms)
         schedule(() => {
           playChime('liftSwish');
         }, 13900);
 
-        // Cookie is clear of the rim; the arm is no longer over the opening (~15100ms)
+        // Cookie is clear of the rim (~15100ms)
         schedule(() => {
-          reaching.l = null;
           playChime('cookieLift');
         }, 15100);
 
@@ -2246,12 +2308,10 @@
         // Both flippers pinch the cookie (~16700ms)
         schedule(() => {
           turtle.classList.remove('turtle-walking');
-          holdCookieWithBothFlippers();
         }, 16700);
 
         // 13. Left flipper lets go; the right flipper carries the cookie over to the right jar (~17400ms)
         schedule(() => {
-          takeCookieWith('r', TURTLE_WRIST_KEYS.r, turtleChoreoStart);
           turtle.classList.add('turtle-walking');
           playChime('carryGlide');
         }, 17400);
@@ -2263,7 +2323,6 @@
         // Right flipper is above the right jar's rim and reaches over it (~18500ms)
         schedule(() => {
           turtle.classList.remove('turtle-walking');
-          reaching.r = RIGHT_JAR_LAYER;
         }, 18500);
 
         // 14. Right flipper lowers the cookie straight down into the right jar, plop + sparkle as it goes in
@@ -2275,15 +2334,8 @@
           playChime('drop');
         }, 19300);
 
-        // Cookie is at the bottom of the right jar; the flipper lets go and lifts back out (~20250ms)
-        schedule(() => {
-          hideCookie();
-        }, 20250);
-
-        // Flipper is back up above the rim; the arm drops behind the jar to rest (~20800ms)
-        schedule(() => {
-          reaching.r = null;
-        }, 20800);
+        // Cookie is at the bottom of the right jar (~20250ms); the flipper lets go and lifts back out, then the arm
+        // drops behind the jar to rest (~20800ms)
 
         // 15. Turtle is back at center pose with arms at rest (~22000ms)
         schedule(() => {
