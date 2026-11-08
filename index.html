@@ -63,72 +63,33 @@
       }
     }
 
-    /* Bear lowering arm into Left Jar (Midline X: 330) during intro */
+    /* Bear's right arm (screen left) during intro (3.6s), pivoting only at the shoulder (418, 330); rest
+       direction 115.3deg. Holds the cookie up beside his head (12%), reaches over the left jar's rim (32%), lowers
+       the cookie into the opening (42%), lets go at 44.4% (1.6s), lifts his paw back out above the rim (56%), then
+       lowers the arm behind the jar to rest. Stops at 12/32/42% must match BEAR_WRIST_KEYS in the script. */
     @keyframes bearArmLowering {
 
       0%,
       12% {
-        transform: translate(0px, 0px) rotate(0deg);
+        transform: rotate(129.7deg);
       }
 
-      28%,
-      36% {
-        transform: translate(-76px, -65px) rotate(-16deg);
+      32% {
+        transform: rotate(99.7deg);
       }
 
-      48%,
+      42%,
+      44.4% {
+        transform: rotate(59.7deg);
+      }
+
       56% {
-        transform: translate(-104px, 45px) rotate(-34deg);
+        transform: rotate(124.7deg);
       }
 
-      68% {
-        transform: translate(-70px, -10px) rotate(-15deg);
-      }
-
-      80%,
+      85%,
       100% {
-        transform: translate(0px, 0px) rotate(0deg);
-      }
-    }
-
-    /* Initial Bear Cookie descent into Left Jar */
-    @keyframes bearCookieDescent {
-
-      0%,
-      12% {
-        opacity: 1;
-        transform: translate(0px, 0px);
-      }
-
-      28%,
-      36% {
-        opacity: 1;
-        transform: translate(-105px, -115px);
-      }
-
-      44% {
-        opacity: 1;
-        transform: translate(-105px, -55px);
-      }
-
-      50% {
-        opacity: 1;
-        transform: translate(-105px, -2px) scale(0.97);
-      }
-
-      58% {
-        opacity: 1;
-        transform: translate(-105px, 60px) scale(0.88);
-      }
-
-      62% {
-        opacity: 0;
-        transform: translate(-105px, 75px) scale(0.84);
-      }
-
-      100% {
-        opacity: 0;
-        transform: translate(-105px, 75px);
+        transform: rotate(0deg);
       }
     }
 
@@ -242,7 +203,14 @@
       }
     }
 
-    /* Bear Departure (7.5s cubic-bezier) */
+    /* Walk path poses through the 200px doorways (left doorway X 35-235, right 765-965, threshold Y 450).
+       Characters' feet sit at local Y 565 and scale about (500, 440), so world feet Y = 440 + 125*scale + ty.
+         DOORWAY  scale 0.70, centre X 135 / 865, feet Y 446  -> fits fully inside the opening
+         OUTSIDE  scale 0.50, feet Y 400 (walking up the outdoor path)
+         FAR      scale 0.38, feet Y 375 (far end of the path)
+       Script moves a character behind its door exactly at the DOORWAY pose (see setCharacterOutside). */
+
+    /* Bear Departure (7.5s): walks to left doorway (70%), steps through, heads off up the path */
     @keyframes bearDepartureFull {
 
       0%,
@@ -251,57 +219,36 @@
         opacity: 1;
       }
 
-      45% {
-        transform: translate(-90px, -20px) scale(0.94, 0.94);
+      70% {
+        transform: translate(-365px, -81.5px) scale(0.70, 0.70);
         opacity: 1;
       }
 
-      57% {
-        transform: translate(-195px, -38px) scale(0.87, 0.87);
+      85% {
+        transform: translate(-365px, -102.5px) scale(0.50, 0.50);
         opacity: 1;
       }
 
-      68% {
-        transform: translate(-290px, -48px) scale(0.81, 0.81);
-        opacity: 1;
-      }
-
-      76% {
-        transform: translate(-345px, -52px) scale(0.76, 0.76);
-        opacity: 0.85;
-      }
-
-      82%,
       100% {
-        transform: translate(-350px, -52px) scale(0.72, 0.72);
-        opacity: 0;
+        transform: translate(-365px, -112.5px) scale(0.38, 0.38);
+        opacity: 1;
       }
     }
 
-    /* Bear Return Walk: mirrors departure back from left door to center table (5.2s) */
+    /* Bear Return Walk (5.2s): comes back down the path, through the left doorway (32%), to center table */
     @keyframes bearReturnFull {
       0% {
-        transform: translate(-350px, -52px) scale(0.72, 0.72);
-        opacity: 0;
-      }
-
-      10% {
-        transform: translate(-345px, -52px) scale(0.76, 0.76);
-        opacity: 0.9;
-      }
-
-      26% {
-        transform: translate(-290px, -48px) scale(0.81, 0.81);
+        transform: translate(-365px, -112.5px) scale(0.38, 0.38);
         opacity: 1;
       }
 
-      45% {
-        transform: translate(-195px, -38px) scale(0.87, 0.87);
+      15% {
+        transform: translate(-365px, -102.5px) scale(0.50, 0.50);
         opacity: 1;
       }
 
-      65% {
-        transform: translate(-90px, -20px) scale(0.94, 0.94);
+      32% {
+        transform: translate(-365px, -81.5px) scale(0.70, 0.70);
         opacity: 1;
       }
 
@@ -312,51 +259,24 @@
       }
     }
 
-    /* Left Door Swing Keyframes (Bear Exit) */
+    /* Left Door Swing (Bear Exit, 7.5s): open by 63%, bear behind door at 70%, closes 73-84% */
     @keyframes doorLeftOpenClose {
 
       0%,
-      50% {
+      52% {
         transform: scaleX(1);
       }
 
-      56% {
-        transform: scaleX(0.18) skewY(-6deg);
-      }
-
-      61%,
-      67% {
-        transform: scaleX(0.06) skewY(-10deg);
-      }
-
-      74% {
-        transform: scaleX(0.75);
-      }
-
-      80%,
-      100% {
-        transform: scaleX(1);
-      }
-    }
-
-    /* Left Door Swing Keyframes (Bear Re-entrance) */
-    @keyframes doorLeftReturnSwing {
-
-      0%,
-      8% {
-        transform: scaleX(1);
-      }
-
-      22% {
-        transform: scaleX(0.18) skewY(-6deg);
-      }
-
-      32%,
       58% {
-        transform: scaleX(0.06) skewY(-10deg);
+        transform: scaleX(0.18) skewY(-5deg);
       }
 
-      74% {
+      63%,
+      73% {
+        transform: scaleX(0.05) skewY(-8deg);
+      }
+
+      79% {
         transform: scaleX(0.75);
       }
 
@@ -366,7 +286,36 @@
       }
     }
 
-    /* Right Door Swing Keyframes (Entrance) */
+    /* Left Door Swing (Bear Re-entrance, 5.5s, starts 0.5s before bear): open by 20%, closes 46-62%
+       after the bear is back inside */
+    @keyframes doorLeftReturnSwing {
+
+      0%,
+      5% {
+        transform: scaleX(1);
+      }
+
+      14% {
+        transform: scaleX(0.18) skewY(-5deg);
+      }
+
+      20%,
+      46% {
+        transform: scaleX(0.05) skewY(-8deg);
+      }
+
+      56% {
+        transform: scaleX(0.75);
+      }
+
+      62%,
+      100% {
+        transform: scaleX(1);
+      }
+    }
+
+    /* Right Door Swing (Turtle Entrance, 4.5s, starts 0.6s before turtle): open by 36%, closes 78-90%
+       after the turtle is inside */
     @keyframes doorRightOpenClose {
 
       0%,
@@ -374,78 +323,70 @@
         transform: scaleX(1);
       }
 
-      28% {
-        transform: scaleX(0.18) skewY(6deg);
+      26% {
+        transform: scaleX(0.18) skewY(5deg);
       }
 
-      38%,
-      50% {
-        transform: scaleX(0.06) skewY(10deg);
+      36%,
+      78% {
+        transform: scaleX(0.05) skewY(8deg);
       }
 
-      65% {
+      85% {
         transform: scaleX(0.75);
       }
 
-      75%,
+      90%,
       100% {
         transform: scaleX(1);
       }
     }
 
-    /* Right Door Swing Keyframes (Exit: opens for turtle exit then snaps shut) */
+    /* Right Door Swing (Turtle Exit, 4.5s, starts 0.8s before turtle): open by 28%, closes 50-64%
+       after the turtle is behind it */
     @keyframes doorRightExitSwing {
 
       0%,
-      10% {
+      8% {
         transform: scaleX(1);
       }
 
-      25% {
-        transform: scaleX(0.18) skewY(6deg);
+      20% {
+        transform: scaleX(0.18) skewY(5deg);
       }
 
-      35%,
-      65% {
-        transform: scaleX(0.06) skewY(10deg);
+      28%,
+      50% {
+        transform: scaleX(0.05) skewY(8deg);
       }
 
-      78% {
+      58% {
         transform: scaleX(0.75);
       }
 
-      88%,
+      64%,
       100% {
         transform: scaleX(1);
       }
     }
 
-    /* Turtle Entrance: walks from right door to center (5.2s) */
+    /* Turtle Entrance (5.2s): waits far up the path until the door is open, walks in through the
+       right doorway (52%) to center */
     @keyframes turtleEntranceKeyframes {
 
       0%,
       20% {
-        transform: translate(345px, -50px) scale(0.74, 0.74);
-        opacity: 0;
-      }
-
-      25% {
-        transform: translate(345px, -50px) scale(0.74, 0.74);
+        transform: translate(365px, -112.5px) scale(0.38, 0.38);
         opacity: 1;
       }
 
-      40% {
-        transform: translate(280px, -45px) scale(0.80, 0.80);
+      35% {
+        transform: translate(365px, -102.5px) scale(0.50, 0.50);
         opacity: 1;
       }
 
-      55% {
-        transform: translate(185px, -32px) scale(0.87, 0.87);
-        opacity: 1;
-      }
-
-      75% {
-        transform: translate(80px, -15px) scale(0.94, 0.94);
+      52% {
+        transform: translate(365px, -81.5px) scale(0.70, 0.70);
         opacity: 1;
       }
 
@@ -456,81 +397,124 @@
       }
     }
 
-    /* Turtle Exit: walks in reverse along exact path back to right door (5.2s) */
+    /* Turtle Exit (5.2s): walks to right doorway (48%), steps through, heads off up the path */
     @keyframes turtleExitKeyframes {
       0% {
         transform: translate(0px, 0px) scale(1, 1);
         opacity: 1;
       }
 
-      20% {
-        transform: translate(80px, -15px) scale(0.94, 0.94);
+      48% {
+        transform: translate(365px, -81.5px) scale(0.70, 0.70);
         opacity: 1;
       }
 
-      40% {
-        transform: translate(185px, -32px) scale(0.87, 0.87);
+      65% {
+        transform: translate(365px, -102.5px) scale(0.50, 0.50);
         opacity: 1;
-      }
-
-      60% {
-        transform: translate(280px, -45px) scale(0.80, 0.80);
-        opacity: 1;
-      }
-
-      75% {
-        transform: translate(345px, -50px) scale(0.74, 0.74);
-        opacity: 0.9;
       }
 
       85%,
       100% {
-        transform: translate(350px, -50px) scale(0.72, 0.72);
-        opacity: 0;
+        transform: translate(365px, -112.5px) scale(0.38, 0.38);
+        opacity: 1;
       }
     }
 
-    /* Turtle Choreography after arriving at center (Duration: 7.2s):
-       - Lean and body translation towards left jar, holding cookie, carrying across to right jar, lowering, then returning center
+    /* Turtle Choreography after arriving at center (Duration: 10s), mirrored left/right about X=500:
+       left flipper rises behind the left jar to above its rim (0.4-1.3s), dips over the rim into the opening
+       (1.3-1.7s), pinches the cookie (1.75s), lifts it straight up out of the opening (1.9-3.1s), turns its wrist
+       so the cookie swings up clear of the rim (3.1-3.6s), brings it to center while the right flipper rises to meet
+       it (3.6-4.7s), both hold it (4.7-5.4s), right flipper carries it above the right jar (5.4-6.5s), turns its
+       wrist so it hangs over the opening (6.5-7.0s), lowers it straight down inside (7.0-8.2s), lets go (8.25s),
+       lifts out above the rim (8.4-8.8s) and drops back behind the jar to rest (8.8-10s).
+       Stops shared between turtleMoveCookieAction, turtleStretch and the arm pivots must stay identical so the
+       flipper paths stay straight; wrist timings live in TURTLE_WRIST_KEYS in the script.
     */
+    /* While a flipper is over or in a jar the turtle stands tall (ty -8 here plus turtleStretch -25: shoulder at
+       Y 307, well above the rim at Y 350), so his arm comes down steeply over the rim instead of cutting through
+       the rim's corner. Poses: 13% flipper above the rim, 17-19% flipper in the opening pinching the cookie,
+       23/27/31% lifting it straight up (flipper X 335); 65-88% are the mirror image at the right jar. */
     @keyframes turtleMoveCookieAction {
 
       0%,
-      8% {
-        transform: translate(0px, 0px) rotate(0deg);
+      4% {
+        transform: translate(0px, 0px);
       }
 
-      16% {
-        transform: translate(-70px, -2px) rotate(-3deg);
+      13%,
+      17%,
+      19% {
+        transform: translate(-50.8px, -8px);
       }
 
-      22%,
-      35% {
-        transform: translate(-105px, 6px) rotate(-5deg);
+      23% {
+        transform: translate(-29.1px, -8px);
       }
 
-      38%,
-      43% {
-        transform: translate(-88px, -2px) rotate(-3deg);
+      27% {
+        transform: translate(-25.6px, -8px);
       }
 
-      52% {
-        transform: translate(0px, -2px) rotate(0deg);
+      31%,
+      36% {
+        transform: translate(-39.2px, -8px);
       }
 
-      64%,
-      73% {
-        transform: translate(92px, -2px) rotate(2deg);
+      47%,
+      54% {
+        transform: translate(0px, 0px);
       }
 
-      78%,
-      84% {
-        transform: translate(96px, 6px) rotate(3deg);
+      65%,
+      70% {
+        transform: translate(39.2px, -8px);
       }
 
-      94%,
+      74% {
+        transform: translate(25.6px, -8px);
+      }
+
+      78% {
+        transform: translate(29.1px, -8px);
+      }
+
+      82%,
+      84%,
+      88% {
+        transform: translate(50.8px, -8px);
+      }
+
       100% {
-        transform: translate(0px, 0px) rotate(0deg);
+        transform: translate(0px, 0px);
+      }
+    }
+
+    /* Turtle stands up taller on his legs (body only; the extra leg length shows only behind the table) */
+    @keyframes turtleStretch {
+
+      0%,
+      4% {
+        transform: translateY(0px);
+      }
+
+      13%,
+      36% {
+        transform: translateY(-25px);
+      }
+
+      47%,
+      54% {
+        transform: translateY(0px);
+      }
+
+      65%,
+      88% {
+        transform: translateY(-25px);
+      }
+
+      100% {
+        transform: translateY(0px);
       }
     }
 
@@ -541,51 +525,42 @@
     @keyframes turtleLeftArmPivot {
 
       0%,
-      8% {
+      4% {
         transform: rotate(0deg);
       }
 
-      15% {
-        transform: rotate(-18deg);
+      13% {
+        /* Flipper above the left jar's rim */
+        transform: rotate(83.4deg);
       }
 
-      20%,
-      25% {
-        /* Reaching down into left jar */
-        transform: rotate(-36deg);
+      17%,
+      19% {
+        /* Flipper dipped into the opening, pinching the cookie */
+        transform: rotate(17.5deg);
       }
 
-      30%,
-      34% {
-        /* Lifting upward */
-        transform: rotate(-16deg);
+      23% {
+        transform: rotate(45.6deg);
       }
 
-      37%,
-      43% {
-        /* Holding proudly upward in front */
-        transform: rotate(24deg);
+      27% {
+        transform: rotate(70.2deg);
       }
 
-      49%,
-      63% {
-        /* Carrying across */
-        transform: rotate(18deg);
+      31%,
+      36% {
+        /* Cookie lifted clear of the left jar */
+        transform: rotate(97deg);
       }
 
-      66%,
-      74% {
-        /* Paused above right jar */
-        transform: rotate(26deg);
+      47%,
+      54% {
+        /* Both flippers holding the cookie up in front of the chin */
+        transform: rotate(171.95deg);
       }
 
-      78%,
-      84% {
-        /* Lowering straight down into right jar */
-        transform: rotate(-32deg);
-      }
-
-      94%,
+      65%,
       100% {
         transform: rotate(0deg);
       }
@@ -594,132 +569,42 @@
     @keyframes turtleRightArmPivot {
 
       0%,
-      8% {
+      36% {
         transform: rotate(0deg);
       }
 
-      15% {
-        transform: rotate(-22deg);
+      47%,
+      54% {
+        transform: rotate(-171.95deg);
       }
 
-      20%,
-      25% {
-        /* Reaching down along with left arm */
-        transform: rotate(-44deg);
+      65%,
+      70% {
+        /* Cookie held above the right jar */
+        transform: rotate(-97deg);
       }
 
-      30%,
-      34% {
-        /* Lifting cookie straight up */
-        transform: rotate(-20deg);
-      }
-
-      37%,
-      43% {
-        /* Holding together with left arm */
-        transform: rotate(18deg);
-      }
-
-      49%,
-      63% {
-        /* Carrying */
-        transform: rotate(12deg);
-      }
-
-      66%,
       74% {
-        /* Pausing over right jar */
-        transform: rotate(22deg);
+        transform: rotate(-70.2deg);
       }
 
-      78%,
+      78% {
+        transform: rotate(-45.6deg);
+      }
+
+      82%,
       84% {
-        /* Lowering into right jar */
-        transform: rotate(-38deg);
+        /* Flipper down in the opening, cookie inside the right jar */
+        transform: rotate(-17.5deg);
       }
 
-      94%,
+      88% {
+        /* Flipper lifted back out above the rim */
+        transform: rotate(-83.4deg);
+      }
+
       100% {
         transform: rotate(0deg);
-      }
-    }
-
-    /* Cookie Transfer Path */
-    @keyframes cookieTransferPath {
-
-      0%,
-      19% {
-        opacity: 0;
-        transform: translate(330px, 345px) scale(0.84);
-      }
-
-      20% {
-        opacity: 0.2;
-        transform: translate(330px, 345px) scale(0.84);
-      }
-
-      23% {
-        opacity: 0.9;
-        transform: translate(330px, 335px) scale(0.88);
-      }
-
-      27% {
-        opacity: 1;
-        transform: translate(330px, 296px) scale(0.94);
-      }
-
-      32% {
-        opacity: 1;
-        transform: translate(330px, 260px) scale(0.98);
-      }
-
-      /* Exact mirrored hold-above peak height over left jar midline (X: 330, Y: 230) */
-      37%,
-      43% {
-        opacity: 1;
-        transform: translate(330px, 230px) scale(1);
-      }
-
-      51% {
-        opacity: 1;
-        transform: translate(440px, 220px) scale(1.02);
-      }
-
-      60% {
-        opacity: 1;
-        transform: translate(580px, 225px) scale(1);
-      }
-
-      /* Midline alignment (X: 670) and clear HOLD-ABOVE moment */
-      66%,
-      74% {
-        opacity: 1;
-        transform: translate(670px, 230px) scale(1);
-      }
-
-      /* Straight vertical descent matching into right jar rim */
-      76.5% {
-        opacity: 1;
-        transform: translate(670px, 260px) scale(0.98);
-      }
-
-      79.5% {
-        /* Passing rim lip (Y: 296) */
-        opacity: 1;
-        transform: translate(670px, 296px) scale(0.94);
-      }
-
-      82% {
-        /* Deep inside cavity */
-        opacity: 1;
-        transform: translate(670px, 335px) scale(0.88);
-      }
-
-      84%,
-      100% {
-        /* Settled inside right jar, fully clipped */
-        opacity: 0;
-        transform: translate(670px, 345px) scale(0.84);
       }
     }
 
@@ -727,19 +612,19 @@
     @keyframes leftJarLiftPop {
 
       0%,
-      25% {
+      27.5% {
         transform: scale(1, 1);
       }
 
-      28% {
+      30% {
         transform: scale(0.97, 1.03) translateY(-2px);
       }
 
-      32% {
+      33% {
         transform: scale(1.03, 0.97) translateY(2px);
       }
 
-      36%,
+      36.5%,
       100% {
         transform: scale(1, 1);
       }
@@ -749,22 +634,22 @@
     @keyframes leftJarLiftStarsAction {
 
       0%,
-      24% {
+      27% {
         opacity: 0;
         transform: scale(0);
       }
 
-      27% {
+      29.5% {
         opacity: 1;
         transform: scale(1.15) translateY(-4px);
       }
 
-      32% {
+      34% {
         opacity: 0.85;
         transform: scale(1.35) translateY(-14px);
       }
 
-      38%,
+      39.5%,
       100% {
         opacity: 0;
         transform: scale(1.6) translateY(-24px);
@@ -775,23 +660,23 @@
     @keyframes rightJarReceivePop {
 
       0%,
-      78% {
+      72% {
         transform: scale(1, 1);
       }
 
-      80.5% {
+      74.5% {
         transform: scale(1.06, 0.94) translateY(4px);
       }
 
-      83% {
+      77% {
         transform: scale(0.96, 1.04) translateY(-3px);
       }
 
-      86% {
+      80% {
         transform: scale(1.02, 0.98) translateY(1px);
       }
 
-      89%,
+      83%,
       100% {
         transform: scale(1, 1);
       }
@@ -801,22 +686,22 @@
     @keyframes rightJarStarsAction {
 
       0%,
-      78% {
+      72% {
         opacity: 0;
         transform: scale(0);
       }
 
-      80.5% {
+      74.5% {
         opacity: 1;
         transform: scale(1.2) translateY(-6px);
       }
 
-      85% {
+      79% {
         opacity: 0.9;
         transform: scale(1.45) translateY(-20px);
       }
 
-      92%,
+      86%,
       100% {
         opacity: 0;
         transform: scale(1.8) translateY(-30px);
@@ -868,13 +753,8 @@
     }
 
     .intro-arm {
-      animation: bearArmLowering 3.6s cubic-bezier(0.33, 1, 0.68, 1) forwards;
-      transform-origin: 440px 320px;
-    }
-
-    .intro-cookie {
-      animation: bearCookieDescent 3.6s cubic-bezier(0.33, 1, 0.68, 1) forwards;
-      transform-origin: 435px 345px;
+      animation: bearArmLowering 3.6s ease-in-out forwards;
+      transform-origin: 418px 330px;
     }
 
     .intro-jar1 {
@@ -903,22 +783,22 @@
 
     .anim-door-swing {
       animation: doorLeftOpenClose 7.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-      transform-origin: 92px 300px;
+      transform-origin: 35px 257.5px;
     }
 
     .anim-door-left-return {
       animation: doorLeftReturnSwing 5.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-      transform-origin: 92px 300px;
+      transform-origin: 35px 257.5px;
     }
 
     .anim-door-right-active {
       animation: doorRightOpenClose 4.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-      transform-origin: 896px 300px;
+      transform-origin: 965px 257.5px;
     }
 
     .anim-door-right-exit {
       animation: doorRightExitSwing 4.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-      transform-origin: 896px 300px;
+      transform-origin: 965px 257.5px;
     }
 
     .anim-turtle-active {
@@ -932,41 +812,41 @@
     }
 
     .turtle-move-cookie {
-      animation: turtleMoveCookieAction 7.2s cubic-bezier(0.42, 0, 0.3, 1) forwards;
+      animation: turtleMoveCookieAction 10s ease-in-out forwards;
       transform-origin: 500px 440px;
     }
 
+    .turtle-stretch-active {
+      animation: turtleStretch 10s ease-in-out forwards;
+    }
+
     .turtle-left-arm-active {
-      animation: turtleLeftArmPivot 7.2s ease-in-out forwards;
+      animation: turtleLeftArmPivot 10s ease-in-out forwards;
       transform-origin: 790px 340px;
     }
 
     .turtle-right-arm-active {
-      animation: turtleRightArmPivot 7.2s ease-in-out forwards;
+      animation: turtleRightArmPivot 10s ease-in-out forwards;
       transform-origin: 900px 340px;
     }
 
-    .cookie-moving-active {
-      animation: cookieTransferPath 7.2s cubic-bezier(0.4, 0, 0.25, 1) forwards;
-    }
-
     .left-jar-lift-pop-active {
-      animation: leftJarLiftPop 7.2s ease-out forwards;
+      animation: leftJarLiftPop 10s ease-out forwards;
       transform-origin: center center;
     }
 
     .left-lift-stars-active {
-      animation: leftJarLiftStarsAction 7.2s ease-out forwards;
+      animation: leftJarLiftStarsAction 10s ease-out forwards;
       transform-origin: 330px 290px;
     }
 
     .right-jar-pop-active {
-      animation: rightJarReceivePop 7.2s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+      animation: rightJarReceivePop 10s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
       transform-origin: center center;
     }
 
     .right-stars-active {
-      animation: rightJarStarsAction 7.2s ease-out forwards;
+      animation: rightJarStarsAction 10s ease-out forwards;
       transform-origin: 670px 290px;
     }
 
@@ -1027,14 +907,61 @@
         <filter height="140%" id="sparkleGlow" width="140%" x="-20%" y="-20%">
           <fedropshadow dx="0" dy="0" flood-color="#ffd54f" flood-opacity="0.9" stddeviation="3"></fedropshadow>
         </filter>
-        <!-- Clipping Path for Left Jar: clips cookie inside interior beneath rim lip -->
+        <!-- Clipping Path for Left Jar (rim at Y 350): what sits inside the opening or reaches over the rim is
+             clipped to everything above the rim plus the opening; the front lip and wall are drawn over it -->
         <clippath id="jarCookieClip">
-          <path d="M 150 -100 L 550 -100 L 550 296 A 46 13 0 0 1 284 296 L 150 296 Z"></path>
+          <path d="M 150 -100 L 550 -100 L 550 350 A 46 13 0 0 1 284 350 L 150 350 Z"></path>
         </clippath>
-        <!-- Clipping Path for Right Jar: identical geometry centered on X=670 -->
+        <!-- Clipping Path for Right Jar: mirror image of the left jar clip about X=500 -->
         <clippath id="jarRightCookieClip">
-          <path d="M 490 -100 L 890 -100 L 890 296 A 46 13 0 0 1 624 296 L 490 296 Z"></path>
+          <path d="M 850 -100 L 450 -100 L 450 350 A 46 13 0 0 0 716 350 L 850 350 Z"></path>
         </clippath>
+        <!-- Doorway openings (200 x 385): outdoor scenery and characters who have stepped outside are clipped to these -->
+        <clippath id="left-door-clip">
+          <rect height="385" rx="6" width="200" x="35" y="65"></rect>
+        </clippath>
+        <clippath id="right-door-clip">
+          <rect height="385" rx="6" width="200" x="765" y="65"></rect>
+        </clippath>
+        <lineargradient id="outdoorSkyGrad" x1="0%" x2="0%" y1="0%" y2="100%">
+          <stop offset="0%" stop-color="#60a5fa"></stop>
+          <stop offset="55%" stop-color="#93c5fd"></stop>
+          <stop offset="100%" stop-color="#e0f2fe"></stop>
+        </lineargradient>
+        <lineargradient id="outdoorHillGrad1" x1="0%" x2="0%" y1="0%" y2="100%">
+          <stop offset="0%" stop-color="#86efac"></stop>
+          <stop offset="100%" stop-color="#4ade80"></stop>
+        </lineargradient>
+        <lineargradient id="outdoorHillGrad2" x1="0%" x2="0%" y1="0%" y2="100%">
+          <stop offset="0%" stop-color="#4ade80"></stop>
+          <stop offset="100%" stop-color="#22c55e"></stop>
+        </lineargradient>
+        <lineargradient id="pathGrad" x1="0%" x2="0%" y1="0%" y2="100%">
+          <stop offset="0%" stop-color="#fed7aa"></stop>
+          <stop offset="100%" stop-color="#fcd34d"></stop>
+        </lineargradient>
+        <!-- Door leaf artwork (hinged at outer edge). Each leaf is drawn twice: behind the characters, and in
+             front of them for whenever a character is outside that door. -->
+        <g id="door-left-leaf-art">
+          <rect fill="#e89b4f" height="385" rx="7" stroke="#2c1e14" stroke-width="4.5" width="200" x="35" y="65"></rect>
+          <rect fill="#c9732b" height="155" rx="6" stroke="#2c1e14" stroke-width="3.5" width="168" x="51" y="85"></rect>
+          <rect fill="#df8d41" height="143" rx="4" width="156" x="57" y="91"></rect>
+          <rect fill="#c9732b" height="175" rx="6" stroke="#2c1e14" stroke-width="3.5" width="168" x="51" y="255"></rect>
+          <rect fill="#df8d41" height="163" rx="4" width="156" x="57" y="261"></rect>
+          <circle cx="210" cy="256" fill="#ffd54f" r="9.5" stroke="#2c1e14" stroke-width="3.5"></circle>
+          <circle cx="207" cy="253" fill="#fff9c4" r="3"></circle>
+          <rect fill="#2c1e14" height="4.5" rx="1.5" width="7" x="216" y="254"></rect>
+        </g>
+        <g id="door-right-leaf-art">
+          <rect fill="#e89b4f" height="385" rx="7" stroke="#2c1e14" stroke-width="4.5" width="200" x="765" y="65"></rect>
+          <rect fill="#c9732b" height="155" rx="6" stroke="#2c1e14" stroke-width="3.5" width="168" x="781" y="85"></rect>
+          <rect fill="#df8d41" height="143" rx="4" width="156" x="787" y="91"></rect>
+          <rect fill="#c9732b" height="175" rx="6" stroke="#2c1e14" stroke-width="3.5" width="168" x="781" y="255"></rect>
+          <rect fill="#df8d41" height="163" rx="4" width="156" x="787" y="261"></rect>
+          <circle cx="790" cy="256" fill="#ffd54f" r="9.5" stroke="#2c1e14" stroke-width="3.5"></circle>
+          <circle cx="787" cy="253" fill="#fff9c4" r="3"></circle>
+          <rect fill="#2c1e14" height="4.5" rx="1.5" width="7" x="777" y="254"></rect>
+        </g>
         <lineargradient id="turtleSkinGrad" x1="0%" x2="100%" y1="0%" y2="100%">
           <stop offset="0%" stop-color="#8bc34a"></stop>
           <stop offset="100%" stop-color="#558b2f"></stop>
@@ -1075,6 +1002,49 @@
           <circle cx="7" cy="-23" fill="#ffffff" opacity="0.85" r="3"></circle>
           <circle cx="23" cy="-1" fill="#ffffff" opacity="0.75" r="2.4"></circle>
         </g>
+        <!-- Reaching arms, each in its own arm-group coordinates. Used by the real arms and by the copies drawn
+             inside a jar's layer (in front of the jar's back rim, behind its front lip) while reaching into it. -->
+        <g id="turtle-arm-l-art">
+          <path d="M 790 330 C 765 330, 725 365, 746 418 C 758 438, 786 426, 796 392 C 804 362, 804 332, 790 330 Z"
+            fill="url(#turtleSkinGrad)" stroke="#2c1e14" stroke-linejoin="round" stroke-width="5"></path>
+          <circle cx="752" cy="416" fill="url(#turtleSkinGrad)" r="16" stroke="#2c1e14" stroke-width="3.5"></circle>
+          <circle cx="744" cy="414" fill="#ffffff" opacity="0.4" r="2.5"></circle>
+        </g>
+        <g id="turtle-arm-r-art">
+          <path d="M 900 330 C 925 330, 965 365, 944 418 C 932 438, 904 426, 894 392 C 886 362, 886 332, 900 330 Z"
+            fill="url(#turtleSkinGrad)" stroke="#2c1e14" stroke-linejoin="round" stroke-width="5"></path>
+          <circle cx="938" cy="416" fill="url(#turtleSkinGrad)" r="16" stroke="#2c1e14" stroke-width="3.5"></circle>
+          <circle cx="946" cy="414" fill="#ffffff" opacity="0.4" r="2.5"></circle>
+        </g>
+        <!-- Turtle shoulder caps (in #turtle-body-grp coordinates), drawn over the arm roots -->
+        <circle id="turtle-shoulder-l-symbol" cx="788" cy="342" fill="url(#turtleSkinGrad)" r="16" stroke="#2c1e14"
+          stroke-width="4"></circle>
+        <circle id="turtle-shoulder-r-symbol" cx="902" cy="342" fill="url(#turtleSkinGrad)" r="16" stroke="#2c1e14"
+          stroke-width="4"></circle>
+        <g id="bear-arm-r-art">
+          <path d="M 442.4 341.5 A 27 27 0 0 0 393.6 318.5 C 383 345, 368 368, 361.3 393.7 L 404.7 414.3 C 414 390, 430 365, 442.4 341.5 Z"
+            fill="url(#bearBodyGrad)" stroke="#2c1e14" stroke-linejoin="round" stroke-width="5"></path>
+          <use href="#bear-paw-circle-symbol"></use>
+        </g>
+        <circle id="bear-paw-circle-symbol" cx="383" cy="404" fill="url(#bearBodyGrad)" r="24" stroke="#2c1e14"
+          stroke-width="5"></circle>
+        <!-- Copies of the turtle's flippers (in #turtle-arm-l / #turtle-arm-r coordinates), drawn over a held cookie -->
+        <g id="turtle-grip-l-symbol">
+          <circle cx="752" cy="416" fill="url(#turtleSkinGrad)" r="16" stroke="#2c1e14" stroke-width="3.5"></circle>
+          <circle cx="744" cy="414" fill="#ffffff" opacity="0.4" r="2.5"></circle>
+        </g>
+        <g id="turtle-grip-r-symbol">
+          <circle cx="938" cy="416" fill="url(#turtleSkinGrad)" r="16" stroke="#2c1e14" stroke-width="3.5"></circle>
+          <circle cx="946" cy="414" fill="#ffffff" opacity="0.4" r="2.5"></circle>
+        </g>
+        <!-- Bear's right paw pad & toe beans (in #bear-paw-grip coordinates, toes pointing up at rest; the script
+             turns #bear-paw-grip so the toes face the cookie he's holding) -->
+        <g id="bear-paw-r-pad-symbol">
+          <ellipse cx="383" cy="404" fill="#f8bbd0" rx="13" ry="11"></ellipse>
+          <circle cx="366" cy="391" fill="#f8bbd0" r="5" stroke="#2c1e14" stroke-width="1.2"></circle>
+          <circle cx="374" cy="382" fill="#f8bbd0" r="5" stroke="#2c1e14" stroke-width="1.2"></circle>
+          <circle cx="388" cy="381" fill="#f8bbd0" r="5" stroke="#2c1e14" stroke-width="1.2"></circle>
+        </g>
       </defs>
       <!-- ================= 1. BACKGROUND ROOM ================= -->
       <rect fill="url(#wallGrad)" height="460" width="1000" x="0" y="0"></rect>
@@ -1091,46 +1061,55 @@
       </g>
       <!-- Baseboard Molding behind doors & characters -->
       <rect fill="#e0cbaf" height="18" stroke="#2c1e14" stroke-width="3.5" width="1000" x="0" y="445"></rect>
-      <!-- ================= 2. BACKGROUND DOORS (Left & Right) ================= -->
+      <!-- ================= 2. DOORWAYS (200px openings onto a sunny outdoor path) ================= -->
       <g id="background-doors">
-        <!-- Left Door Frame, Doorway Cavity, and Hinged Door Panel -->
-        <g id="door-left-container">
-          <rect fill="#d98236" height="300" rx="10" stroke="#2c1e14" stroke-width="5" width="150" x="80" y="150"></rect>
-          <rect fill="#1e1b2e" height="288" rx="4" width="126" x="92" y="162"></rect>
-          <polygon fill="#312e48" opacity="0.6" points="92,448 218,448 200,420 110,420"></polygon>
-          <g class="anim-door-swing" id="door-left-leaf" style="transform-origin: 92px 300px;">
-            <rect fill="#e89b4f" height="288" rx="6" stroke="#2c1e14" stroke-width="4" width="126" x="92" y="162">
-            </rect>
-            <rect fill="#c9732b" height="110" rx="6" stroke="#2c1e14" stroke-width="3.5" width="102" x="104" y="178">
-            </rect>
-            <rect fill="#df8d41" height="102" rx="4" width="94" x="108" y="182"></rect>
-            <rect fill="#c9732b" height="132" rx="6" stroke="#2c1e14" stroke-width="3.5" width="102" x="104" y="304">
-            </rect>
-            <rect fill="#df8d41" height="124" rx="4" width="94" x="108" y="308"></rect>
-            <circle cx="198" cy="305" fill="#ffd54f" r="8" stroke="#2c1e14" stroke-width="3.5"></circle>
-            <circle cx="196" cy="303" fill="#fff9c4" r="2.5"></circle>
-            <rect fill="#2c1e14" height="4" rx="1.5" width="6" x="203" y="303"></rect>
-          </g>
+        <!-- LEFT DOORWAY OUTDOORS (X 35-235, Y 65-450) -->
+        <g clip-path="url(#left-door-clip)">
+          <rect fill="url(#outdoorSkyGrad)" height="385" width="200" x="35" y="65"></rect>
+          <circle cx="75" cy="115" fill="#fde047" opacity="0.9" r="32"></circle>
+          <circle cx="75" cy="115" fill="#fef08a" opacity="0.4" r="48"></circle>
+          <ellipse cx="160" cy="120" fill="#ffffff" opacity="0.85" rx="30" ry="12"></ellipse>
+          <ellipse cx="145" cy="115" fill="#ffffff" opacity="0.9" rx="18" ry="15"></ellipse>
+          <ellipse cx="175" cy="118" fill="#ffffff" opacity="0.85" rx="20" ry="12"></ellipse>
+          <path d="M 30 310 Q 120 250 240 295 L 240 450 L 30 450 Z" fill="url(#outdoorHillGrad1)"></path>
+          <path d="M 30 350 Q 130 315 240 360 L 240 450 L 30 450 Z" fill="url(#outdoorHillGrad2)"></path>
+          <circle cx="65" cy="370" fill="#15803d" r="18"></circle>
+          <circle cx="85" cy="375" fill="#16a34a" r="15"></circle>
+          <circle cx="58" cy="368" fill="#fbbf24" r="4.5"></circle>
+          <circle cx="195" cy="375" fill="#15803d" r="16"></circle>
+          <circle cx="205" cy="370" fill="#f43f5e" r="4"></circle>
+          <path d="M 85 450 L 185 450 L 155 365 L 115 365 Z" fill="url(#pathGrad)" stroke="#d97706" stroke-width="1.5"></path>
+          <path d="M 35 65 L 48 78 L 48 438 L 35 450 Z" fill="#000000" opacity="0.15"></path>
+          <path d="M 35 65 L 235 65 L 222 78 L 48 78 Z" fill="#000000" opacity="0.2"></path>
         </g>
-        <!-- Right Door Frame, Doorway Cavity, and Hinged Door Leaf -->
-        <g id="door-right-container">
-          <rect fill="#d98236" height="300" rx="10" stroke="#2c1e14" stroke-width="5" width="150" x="770" y="150">
-          </rect>
-          <rect fill="#1e1b2e" height="288" rx="4" width="126" x="782" y="162"></rect>
-          <polygon fill="#312e48" opacity="0.6" points="908,448 782,448 800,420 890,420"></polygon>
-          <g id="door-right-leaf" style="transform-origin: 896px 300px;">
-            <rect fill="#e89b4f" height="288" rx="6" stroke="#2c1e14" stroke-width="4" width="126" x="782" y="162">
-            </rect>
-            <rect fill="#c9732b" height="110" rx="6" stroke="#2c1e14" stroke-width="3.5" width="102" x="794" y="178">
-            </rect>
-            <rect fill="#df8d41" height="102" rx="4" width="94" x="798" y="182"></rect>
-            <rect fill="#c9732b" height="132" rx="6" stroke="#2c1e14" stroke-width="3.5" width="102" x="794" y="304">
-            </rect>
-            <rect fill="#df8d41" height="124" rx="4" width="94" x="798" y="308"></rect>
-            <circle cx="802" cy="305" fill="#ffd54f" r="8" stroke="#2c1e14" stroke-width="3.5"></circle>
-            <circle cx="800" cy="303" fill="#fff9c4" r="2.5"></circle>
-            <rect fill="#2c1e14" height="4" rx="1.5" width="6" x="791" y="303"></rect>
-          </g>
+        <!-- RIGHT DOORWAY OUTDOORS (X 765-965, Y 65-450) -->
+        <g clip-path="url(#right-door-clip)">
+          <rect fill="url(#outdoorSkyGrad)" height="385" width="200" x="765" y="65"></rect>
+          <ellipse cx="840" cy="120" fill="#ffffff" opacity="0.85" rx="30" ry="12"></ellipse>
+          <ellipse cx="825" cy="115" fill="#ffffff" opacity="0.9" rx="18" ry="15"></ellipse>
+          <ellipse cx="855" cy="118" fill="#ffffff" opacity="0.85" rx="20" ry="12"></ellipse>
+          <path d="M 760 295 Q 880 250 970 310 L 970 450 L 760 450 Z" fill="url(#outdoorHillGrad1)"></path>
+          <path d="M 760 360 Q 870 315 970 350 L 970 450 L 760 450 Z" fill="url(#outdoorHillGrad2)"></path>
+          <circle cx="935" cy="370" fill="#15803d" r="18"></circle>
+          <circle cx="915" cy="375" fill="#16a34a" r="15"></circle>
+          <circle cx="942" cy="368" fill="#f43f5e" r="4.5"></circle>
+          <circle cx="805" cy="375" fill="#15803d" r="16"></circle>
+          <circle cx="795" cy="370" fill="#fbbf24" r="4"></circle>
+          <path d="M 815 450 L 915 450 L 885 365 L 845 365 Z" fill="url(#pathGrad)" stroke="#d97706" stroke-width="1.5"></path>
+          <path d="M 965 65 L 952 78 L 952 438 L 965 450 Z" fill="#000000" opacity="0.15"></path>
+          <path d="M 765 65 L 965 65 L 952 78 L 778 78 Z" fill="#000000" opacity="0.2"></path>
+        </g>
+        <!-- Door frame casings around the openings -->
+        <path d="M 18 48 L 252 48 L 252 455 L 18 455 Z M 35 65 L 35 450 L 235 450 L 235 65 Z" fill="#d98236"
+          fill-rule="evenodd" stroke="#2c1e14" stroke-width="5.5"></path>
+        <path d="M 748 48 L 982 48 L 982 455 L 748 455 Z M 765 65 L 765 450 L 965 450 L 965 65 Z" fill="#d98236"
+          fill-rule="evenodd" stroke="#2c1e14" stroke-width="5.5"></path>
+        <!-- Door leaves seen behind characters who are inside the room -->
+        <g class="anim-door-swing door-left-leaf" id="door-left-leaf" style="transform-origin: 35px 257.5px;">
+          <use href="#door-left-leaf-art"></use>
+        </g>
+        <g class="door-right-leaf" id="door-right-leaf" style="transform-origin: 965px 257.5px;">
+          <use href="#door-right-leaf-art"></use>
         </g>
       </g>
       <!-- Floor -->
@@ -1147,6 +1126,8 @@
         <line x1="0" x2="1000" y1="585" y2="585"></line>
       </g>
       <!-- ================= 3. BEAR CHARACTER GROUP (Starts Center, Exits Left, Returns Left) ================= -->
+      <!-- Slot gets clip-path="url(#left-door-clip)" while the bear is outside the left door -->
+      <g id="bear-door-slot">
       <g class="anim-bear-departure" id="bear-character-wrapper">
         <g id="bear-legs-group">
           <ellipse cx="440" cy="565" fill="#000000" opacity="0.25" rx="35" ry="12"></ellipse>
@@ -1191,12 +1172,6 @@
           </ellipse>
           <ellipse cx="500" cy="385" fill="url(#bearMuzzleGrad)" opacity="0.9" rx="65" ry="70" stroke="#2c1e14"
             stroke-width="4"></ellipse>
-          <!-- Right Arm (resting on hip) -->
-          <g>
-            <path d="M580 330 C650 345, 645 420, 585 425 C570 425, 565 385, 575 350 Z" fill="url(#bearBodyGrad)"
-              stroke="#2c1e14" stroke-linejoin="round" stroke-width="5"></path>
-            <circle cx="590" cy="415" fill="#f8bbd0" r="9"></circle>
-          </g>
           <!-- Head -->
           <circle cx="500" cy="240" fill="url(#bearBodyGrad)" r="88" stroke="#2c1e14" stroke-width="6"></circle>
           <!-- Cheeks -->
@@ -1230,19 +1205,31 @@
           </path>
           <path d="M492 154 Q500 138 506 153 Q512 142 516 156" fill="url(#bearBodyGrad)" stroke="#2c1e14"
             stroke-width="4"></path>
-          <!-- Left Arm & Paw -->
+          <!-- Arms & Paws: mirror images about X=500. Each arm is a chunky tapered limb whose rounded shoulder is a
+               semicircle centred on its pivot (his right 418,330 / his left 582,330), so rotating keeps it attached -->
+          <!-- Bear's Right Arm & Paw (screen left): holds the cookie -->
           <g class="intro-arm" id="bear-lowering-arm">
-            <path d="M430 330 C365 320, 345 360, 385 415 C410 430, 435 375, 445 350 Z" fill="url(#bearBodyGrad)"
-              stroke="#2c1e14" stroke-linejoin="round" stroke-width="5.5"></path>
-            <circle cx="395" cy="405" fill="url(#bearBodyGrad)" r="24" stroke="#2c1e14" stroke-width="5"></circle>
-            <ellipse cx="395" cy="405" fill="#f8bbd0" rx="13" ry="11"></ellipse>
-            <circle cx="378" cy="392" fill="#f8bbd0" r="5" stroke="#2c1e14" stroke-width="1.2"></circle>
-            <circle cx="386" cy="383" fill="#f8bbd0" r="5" stroke="#2c1e14" stroke-width="1.2"></circle>
-            <circle cx="400" cy="382" fill="#f8bbd0" r="5" stroke="#2c1e14" stroke-width="1.2"></circle>
+            <use href="#bear-arm-r-art"></use>
+            <g id="bear-paw-grip">
+              <use href="#bear-paw-r-pad-symbol"></use>
+            </g>
+          </g>
+          <!-- Bear's Left Arm & Paw (screen right) -->
+          <g>
+            <path d="M 557.6 341.5 A 27 27 0 0 1 606.4 318.5 C 617 345, 632 368, 638.7 393.7 L 595.3 414.3 C 586 390, 570 365, 557.6 341.5 Z"
+              fill="url(#bearBodyGrad)" stroke="#2c1e14" stroke-linejoin="round" stroke-width="5"></path>
+            <circle cx="617" cy="404" fill="url(#bearBodyGrad)" r="24" stroke="#2c1e14" stroke-width="5"></circle>
+            <ellipse cx="617" cy="404" fill="#f8bbd0" rx="13" ry="11"></ellipse>
+            <circle cx="634" cy="391" fill="#f8bbd0" r="5" stroke="#2c1e14" stroke-width="1.2"></circle>
+            <circle cx="626" cy="382" fill="#f8bbd0" r="5" stroke="#2c1e14" stroke-width="1.2"></circle>
+            <circle cx="612" cy="381" fill="#f8bbd0" r="5" stroke="#2c1e14" stroke-width="1.2"></circle>
           </g>
         </g>
       </g>
+      </g>
       <!-- ================= 3B. TURTLE CHARACTER GROUP ================= -->
+      <!-- Slot gets clip-path="url(#right-door-clip)" while the turtle is outside the right door -->
+      <g id="turtle-door-slot">
       <g id="turtle-character-wrapper" opacity="0" style="transform-origin: 500px 440px;">
         <g id="turtle-choreography-subgroup">
           <!-- Base coords centered around X=500 -->
@@ -1267,6 +1254,8 @@
                   fill="none" stroke="#2c1e14" stroke-linecap="round" stroke-width="2.5"></path>
               </g>
             </g>
+            <!-- Stretch group: lifts the body (not the legs) when the turtle stands up taller to reach -->
+            <g id="turtle-stretch-grp">
             <g id="turtle-body-grp">
               <ellipse cx="845" cy="465" fill="#000000" opacity="0.18" rx="115" ry="20"></ellipse>
               <!-- Back Carapace (Behind arms and torso) -->
@@ -1282,40 +1271,12 @@
               <line stroke="#223717" stroke-width="3.5" x1="845" x2="845" y1="425" y2="475"></line>
               <line stroke="#223717" stroke-width="3.5" x1="805" x2="755" y1="395" y2="415"></line>
               <line stroke="#223717" stroke-width="3.5" x1="805" x2="755" y1="340" y2="325"></line>
-              <!-- Continuous, Anatomically Anchored Turtle Arms (Pivoting at shoulders) -->
-              <g id="turtle-arms-pair">
-                <!-- Left Arm anchored to left shoulder at (790, 340) -->
-                <g id="turtle-arm-l" style="transform-origin: 790px 340px;">
-                  <!-- Upper arm extending cleanly from shoulder inside carapace -->
-                  <path
-                    d="M 790 330 C 765 330, 725 365, 746 418 C 758 438, 786 426, 796 392 C 804 362, 804 332, 790 330 Z"
-                    fill="url(#turtleSkinGrad)" stroke="#2c1e14" stroke-linejoin="round" stroke-width="5"></path>
-                  <!-- Hand / flipper with soft highlight -->
-                  <circle cx="752" cy="416" fill="url(#turtleSkinGrad)" r="16" stroke="#2c1e14" stroke-width="3.5">
-                  </circle>
-                  <circle cx="744" cy="414" fill="#ffffff" opacity="0.4" r="2.5"></circle>
-                </g>
-                <!-- Right Arm anchored to right shoulder at (900, 340) -->
-                <g id="turtle-arm-r" style="transform-origin: 900px 340px;">
-                  <!-- Upper arm extending cleanly from shoulder inside carapace -->
-                  <path
-                    d="M 900 330 C 925 330, 965 365, 944 418 C 932 438, 904 426, 894 392 C 886 362, 886 332, 900 330 Z"
-                    fill="url(#turtleSkinGrad)" stroke="#2c1e14" stroke-linejoin="round" stroke-width="5"></path>
-                  <!-- Hand / flipper with soft highlight -->
-                  <circle cx="938" cy="416" fill="url(#turtleSkinGrad)" r="16" stroke="#2c1e14" stroke-width="3.5">
-                  </circle>
-                  <circle cx="946" cy="414" fill="#ffffff" opacity="0.4" r="2.5"></circle>
-                </g>
-              </g>
-              <!-- Front Plastron & Overlapping Shoulder Sockets: ensures zero detachment gaps -->
+              <!-- Front Plastron -->
               <ellipse cx="845" cy="382" fill="url(#turtleBellyGrad)" rx="68" ry="78" stroke="#2c1e14"
                 stroke-width="4.5"></ellipse>
               <line stroke="#d4c46a" stroke-width="3.5" x1="845" x2="845" y1="308" y2="456"></line>
               <line stroke="#d4c46a" stroke-width="3" x1="785" x2="905" y1="355" y2="355"></line>
               <line stroke="#d4c46a" stroke-width="3" x1="785" x2="905" y1="410" y2="410"></line>
-              <!-- Overlapping anatomical shoulder caps anchored securely to the torso margin -->
-              <circle cx="788" cy="342" fill="url(#turtleSkinGrad)" r="16" stroke="#2c1e14" stroke-width="4"></circle>
-              <circle cx="902" cy="342" fill="url(#turtleSkinGrad)" r="16" stroke="#2c1e14" stroke-width="4"></circle>
               <!-- Neck & Head -->
               <path d="M 825 280 L 825 320 L 865 320 L 865 280 Z" fill="url(#turtleSkinGrad)" stroke="#2c1e14"
                 stroke-width="5"></path>
@@ -1345,9 +1306,35 @@
                 stroke-width="3.5"></path>
               <path d="M 860 207 Q 871 201 882 208" fill="none" stroke="#2c1e14" stroke-linecap="round"
                 stroke-width="3.5"></path>
+              <!-- Continuous, Anatomically Anchored Turtle Arms (Pivoting at shoulders), in front of head so
+                   both flippers can hold the cookie up together -->
+              <g id="turtle-arms-pair">
+                <!-- Left Arm anchored to left shoulder at (790, 340) -->
+                <g id="turtle-arm-l" style="transform-origin: 790px 340px;">
+                  <use href="#turtle-arm-l-art"></use>
+                </g>
+                <!-- Right Arm anchored to right shoulder at (900, 340) -->
+                <g id="turtle-arm-r" style="transform-origin: 900px 340px;">
+                  <use href="#turtle-arm-r-art"></use>
+                </g>
+              </g>
+              <!-- Shoulder caps cover the arm pivots -->
+              <use href="#turtle-shoulder-l-symbol"></use>
+              <use href="#turtle-shoulder-r-symbol"></use>
+            </g>
             </g>
           </g>
         </g>
+      </g>
+      </g>
+      <!-- Door leaves in front of the characters: shown only while a character is outside that door,
+           animated in lockstep with the leaves behind the characters -->
+      <g class="anim-door-swing door-left-leaf" id="door-left-leaf-front" style="transform-origin: 35px 257.5px;"
+        visibility="hidden">
+        <use href="#door-left-leaf-art"></use>
+      </g>
+      <g class="door-right-leaf" id="door-right-leaf-front" style="transform-origin: 965px 257.5px;">
+        <use href="#door-right-leaf-art"></use>
       </g>
       <!-- ================= 4. TABLE IN FRONT OF CHARACTERS ================= -->
       <g id="table-group">
@@ -1377,34 +1364,44 @@
       <g class="jar-interactive intro-jar1" id="jar-left-group" onclick="handleJarChoice('left')"
         onmouseenter="handleJarHover()">
         <!-- Hover / Tap focus indicator ring -->
-        <ellipse class="transition-opacity duration-300" cx="330" cy="370" fill="none" id="jar-left-glow" opacity="0"
-          rx="76" ry="85" stroke="#ffeb3b" stroke-width="8"></ellipse>
+        <ellipse class="transition-opacity duration-300" cx="330" cy="396" fill="none" id="jar-left-glow" opacity="0"
+          rx="76" ry="62" stroke="#ffeb3b" stroke-width="8"></ellipse>
         <ellipse cx="330" cy="442" fill="#000000" opacity="0.25" rx="72" ry="14"></ellipse>
-        <!-- Jar Back Cavity -->
-        <ellipse cx="330" cy="296" fill="#0d47a1" rx="46" ry="13" stroke="#2c1e14" stroke-width="5"></ellipse>
-        <ellipse cx="330" cy="296" fill="#061838" rx="40" ry="10"></ellipse>
-        <!-- BEAR INITIAL DESCENT COOKIE (Inside Left Jar opening) -->
+        <!-- Jar Back Cavity (opening at rim Y 350, below both characters' shoulders) -->
+        <ellipse cx="330" cy="350" fill="#0d47a1" rx="46" ry="13" stroke="#2c1e14" stroke-width="5"></ellipse>
+        <ellipse cx="330" cy="350" fill="#061838" rx="40" ry="10"></ellipse>
         <g clip-path="url(#jarCookieClip)">
-          <g class="intro-cookie" id="anim-cookie">
-            <use href="#cookie-art-symbol" x="435" y="345"></use>
-          </g>
-          <!-- TURTLE LIFT-OUT COOKIE PASSAGE (Starts clipped deep inside left jar, rises straight up through cavity) -->
-          <g class="cookie-moving-active" id="anim-turtle-lift-cookie" opacity="0">
-            <use href="#cookie-art-symbol" x="0" y="0"></use>
+          <!-- INSIDE LEFT JAR: arms reaching over the rim, then the cookie, then the hands holding it (all placed by
+               script); in front of the back rim, behind the front lip and wall -->
+          <g id="anim-turtle-lift-cookie">
+            <use class="held-arm-bear" href="#bear-arm-r-art" visibility="hidden"></use>
+            <use class="held-pad-bear" href="#bear-paw-r-pad-symbol" visibility="hidden"></use>
+            <use class="held-arm-l" href="#turtle-arm-l-art" visibility="hidden"></use>
+            <use class="held-shoulder-l" href="#turtle-shoulder-l-symbol" visibility="hidden"></use>
+            <use class="held-arm-r" href="#turtle-arm-r-art" visibility="hidden"></use>
+            <use class="held-shoulder-r" href="#turtle-shoulder-r-symbol" visibility="hidden"></use>
+            <use class="held-cookie" href="#cookie-art-symbol" visibility="hidden"></use>
+            <use class="held-grip-bear" href="#bear-paw-circle-symbol" visibility="hidden"></use>
+            <use class="held-grip-bear-pad" href="#bear-paw-r-pad-symbol" visibility="hidden"></use>
+            <use class="held-grip-l" href="#turtle-grip-l-symbol" visibility="hidden"></use>
+            <use class="held-grip-r" href="#turtle-grip-r-symbol" visibility="hidden"></use>
           </g>
         </g>
         <!-- Front Jar Wall & Front Rim Lip (Layered over the descending and emerging cookie) -->
-        <path d="M264 435 C256 375, 270 325, 288 310 L372 310 C390 325, 404 375, 396 435 C392 448, 268 448, 264 435 Z"
+        <path d="M264 438 C258 408, 266 378, 288 364 L372 364 C394 378, 402 408, 396 438 C392 450, 268 450, 264 438 Z"
           fill="url(#jarUniformBlueGrad)" stroke="#2c1e14" stroke-linejoin="round" stroke-width="5.5"></path>
-        <path d="M280 330 C274 372, 280 414, 286 430" fill="none" opacity="0.65" stroke="#e1f5fe" stroke-linecap="round"
+        <path d="M280 384 C275 402, 278 420, 285 432" fill="none" opacity="0.65" stroke="#e1f5fe" stroke-linecap="round"
           stroke-width="6"></path>
-        <rect fill="#1e88e5" height="18" rx="5" stroke="#2c1e14" stroke-width="4.5" width="94" x="283" y="296"></rect>
-        <path d="M 284 296 A 46 13 0 0 0 376 296" fill="none" stroke="#2c1e14" stroke-linecap="round" stroke-width="5">
+        <!-- Rim lip: a curved band whose top edge follows the front edge of the opening, so the whole opening stays open -->
+        <path d="M 284 350 A 46 13 0 0 0 376 350 L 376 368 A 46 13 0 0 1 284 368 Z" fill="#1e88e5" stroke="#2c1e14"
+          stroke-linejoin="round" stroke-width="4.5"></path>
+        <path d="M 284 350 A 46 13 0 0 0 376 350" fill="none" stroke="#2c1e14" stroke-linecap="round" stroke-width="5">
         </path>
-        <path d="M 287 296 A 43 11 0 0 0 373 296" fill="none" stroke="#64b5f6" stroke-linecap="round"
+        <path d="M 290 356 A 41 10 0 0 0 370 356" fill="none" stroke="#64b5f6" stroke-linecap="round"
           stroke-width="2.5"></path>
       </g>
-      <!-- Star Sparkles on Left Jar (Intro) -->
+      <!-- Star Sparkles on Left Jar (Intro), moved down to the rim at Y 350 -->
+      <g transform="translate(0 54)">
       <g class="intro-stars" filter="url(#sparkleGlow)" id="drop-stars" opacity="0" pointer-events="none">
         <path d="M330 258 L334 274 L350 278 L334 282 L330 298 L326 282 L310 278 L326 274 Z" fill="#ffe082"
           stroke="#ffb300" stroke-width="1.5"></path>
@@ -1417,7 +1414,9 @@
         <circle cx="282" cy="282" fill="#ffd54f" r="2.8"></circle>
         <circle cx="378" cy="286" fill="#ffe082" r="3.2"></circle>
       </g>
+      </g>
       <!-- Star Sparkles on Left Jar (Turtle Lift-Out) -->
+      <g transform="translate(0 54)">
       <g class="left-lift-stars-active" filter="url(#sparkleGlow)" id="drop-stars-left-lift" opacity="0"
         pointer-events="none">
         <path d="M330 258 L334 274 L350 278 L334 282 L330 298 L326 282 L310 278 L326 274 Z" fill="#ffe082"
@@ -1431,38 +1430,46 @@
         <circle cx="282" cy="282" fill="#ffd54f" r="2.8"></circle>
         <circle cx="378" cy="286" fill="#ffe082" r="3.2"></circle>
       </g>
-      <!-- ================= FREE MOVING COOKIE LAYER (Above jars during air travel) ================= -->
-      <g class="cookie-moving-active" id="anim-carried-cookie" opacity="0" pointer-events="none">
-        <use href="#cookie-art-symbol" x="0" y="0"></use>
       </g>
       <!-- 2. RIGHT JAR (CENTERED AT X: 670) WITH IDENTICAL RIM LAYERING AS LEFT JAR -->
       <g class="jar-interactive" id="jar-right-group" onclick="handleJarChoice('right')"
         onmouseenter="handleJarHover()">
         <!-- Hover / Tap focus indicator ring -->
-        <ellipse class="transition-opacity duration-300" cx="670" cy="370" fill="none" id="jar-right-glow" opacity="0"
-          rx="76" ry="85" stroke="#ffeb3b" stroke-width="8"></ellipse>
+        <ellipse class="transition-opacity duration-300" cx="670" cy="396" fill="none" id="jar-right-glow" opacity="0"
+          rx="76" ry="62" stroke="#ffeb3b" stroke-width="8"></ellipse>
         <ellipse cx="670" cy="442" fill="#000000" opacity="0.25" rx="72" ry="14"></ellipse>
         <!-- Jar Back Cavity (Behind descending cookie) -->
-        <ellipse cx="670" cy="296" fill="#0d47a1" rx="46" ry="13" stroke="#2c1e14" stroke-width="5"></ellipse>
-        <ellipse cx="670" cy="296" fill="#061838" rx="40" ry="10"></ellipse>
-        <!-- RIGHT JAR INTERIOR CLIP LAYER: Holds the transferred cookie as it sinks behind front rim -->
+        <ellipse cx="670" cy="350" fill="#0d47a1" rx="46" ry="13" stroke="#2c1e14" stroke-width="5"></ellipse>
+        <ellipse cx="670" cy="350" fill="#061838" rx="40" ry="10"></ellipse>
+        <!-- INSIDE RIGHT JAR: arms reaching over the rim, the cookie, the hands holding it (placed by script) -->
         <g clip-path="url(#jarRightCookieClip)">
-          <g class="cookie-moving-active" id="anim-right-jar-cookie" opacity="0">
-            <use href="#cookie-art-symbol" x="0" y="0"></use>
+          <g id="anim-right-jar-cookie">
+            <use class="held-arm-l" href="#turtle-arm-l-art" visibility="hidden"></use>
+            <use class="held-shoulder-l" href="#turtle-shoulder-l-symbol" visibility="hidden"></use>
+            <use class="held-arm-r" href="#turtle-arm-r-art" visibility="hidden"></use>
+            <use class="held-shoulder-r" href="#turtle-shoulder-r-symbol" visibility="hidden"></use>
+            <use class="held-cookie" href="#cookie-art-symbol" visibility="hidden"></use>
+            <use class="held-grip-bear" href="#bear-paw-circle-symbol" visibility="hidden"></use>
+            <use class="held-grip-bear-pad" href="#bear-paw-r-pad-symbol" visibility="hidden"></use>
+            <use class="held-grip-l" href="#turtle-grip-l-symbol" visibility="hidden"></use>
+            <use class="held-grip-r" href="#turtle-grip-r-symbol" visibility="hidden"></use>
           </g>
         </g>
         <!-- Front Jar Wall & Front Rim Lip (Layered strictly over interior clipped cookie) -->
-        <path d="M604 435 C596 375, 610 325, 628 310 L712 310 C730 325, 744 375, 736 435 C732 448, 608 448, 604 435 Z"
+        <path d="M604 438 C598 408, 606 378, 628 364 L712 364 C734 378, 742 408, 736 438 C732 450, 608 450, 604 438 Z"
           fill="url(#jarUniformBlueGrad)" stroke="#2c1e14" stroke-linejoin="round" stroke-width="5.5"></path>
-        <path d="M620 330 C614 372, 620 414, 626 430" fill="none" opacity="0.65" stroke="#e1f5fe" stroke-linecap="round"
+        <path d="M620 384 C615 402, 618 420, 625 432" fill="none" opacity="0.65" stroke="#e1f5fe" stroke-linecap="round"
           stroke-width="6"></path>
-        <rect fill="#1e88e5" height="18" rx="5" stroke="#2c1e14" stroke-width="4.5" width="94" x="623" y="296"></rect>
-        <path d="M 624 296 A 46 13 0 0 0 716 296" fill="none" stroke="#2c1e14" stroke-linecap="round" stroke-width="5">
+        <!-- Rim lip: a curved band whose top edge follows the front edge of the opening, so the whole opening stays open -->
+        <path d="M 624 350 A 46 13 0 0 0 716 350 L 716 368 A 46 13 0 0 1 624 368 Z" fill="#1e88e5" stroke="#2c1e14"
+          stroke-linejoin="round" stroke-width="4.5"></path>
+        <path d="M 624 350 A 46 13 0 0 0 716 350" fill="none" stroke="#2c1e14" stroke-linecap="round" stroke-width="5">
         </path>
-        <path d="M 627 296 A 43 11 0 0 0 713 296" fill="none" stroke="#64b5f6" stroke-linecap="round"
+        <path d="M 630 356 A 41 10 0 0 0 710 356" fill="none" stroke="#64b5f6" stroke-linecap="round"
           stroke-width="2.5"></path>
       </g>
-      <!-- Star Sparkles on Right Jar (when turtle puts cookie into right jar) -->
+      <!-- Star Sparkles on Right Jar (when turtle puts cookie into right jar), moved down to the rim at Y 350 -->
+      <g transform="translate(0 54)">
       <g class="right-stars-active" filter="url(#sparkleGlow)" id="drop-stars-right" opacity="0" pointer-events="none">
         <path d="M670 258 L674 274 L690 278 L674 282 L670 298 L666 282 L650 278 L666 274 Z" fill="#ffe082"
           stroke="#ffb300" stroke-width="1.5"></path>
@@ -1474,6 +1481,16 @@
         <circle cx="684" cy="246" fill="#ffe082" r="3.5"></circle>
         <circle cx="622" cy="282" fill="#ffd54f" r="2.8"></circle>
         <circle cx="718" cy="286" fill="#ffe082" r="3.2"></circle>
+      </g>
+      </g>
+      <!-- ================= FREE MOVING COOKIE LAYER (only used once the cookie is clear of both jar rims, so it
+           can sit above both jars, and above any arm reaching into a jar) ================= -->
+      <g id="anim-carried-cookie" pointer-events="none">
+        <use class="held-cookie" href="#cookie-art-symbol" visibility="hidden"></use>
+        <use class="held-grip-bear" href="#bear-paw-circle-symbol" visibility="hidden"></use>
+        <use class="held-grip-bear-pad" href="#bear-paw-r-pad-symbol" visibility="hidden"></use>
+        <use class="held-grip-l" href="#turtle-grip-l-symbol" visibility="hidden"></use>
+        <use class="held-grip-r" href="#turtle-grip-r-symbol" visibility="hidden"></use>
       </g>
     </svg>
     <!-- SOUND SYNTHESIS & INTERACTION SCRIPT -->
@@ -1729,6 +1746,306 @@
         playChime('hover');
       }
 
+      // ================= HANDS IN JARS & THE HELD COOKIE =================
+      // Placed every frame from the characters' real (CSS-animated) arm transforms.
+      // - A held cookie is pinched at its rim: its centre sits `pinch` from the hand in a wrist direction (world
+      //   angle; 0deg = right, 90deg = straight down) keyframed in *_WRIST_KEYS. The cookie art turns with the
+      //   wrist, and keeps still while the turtle holds it between both flippers.
+      // - While an arm reaches over a jar's rim, a copy of it is drawn inside that jar's layer (in front of the back
+      //   rim, behind the front lip) so it reads as going into the opening rather than behind the jar. Reaches are
+      //   switched on/off only while the arm is clear of the opening, so the swap can't be seen.
+      // - The cookie and the hands holding it go in a jar's layer when near/inside its opening, and in the free
+      //   layer (above the left jar, below the right) once clear of both rims.
+      const HANDS = {
+        bear: { armId: 'bear-lowering-arm', hand: { x: 383, y: 404 }, pinch: 34, gripDist: 62 },
+        l: { armId: 'turtle-arm-l', hand: { x: 752, y: 416 }, pinch: 34.4, gripDist: 54 },
+        r: { armId: 'turtle-arm-r', hand: { x: 938, y: 416 }, pinch: 34.4, gripDist: 54 },
+      };
+      const HAND_OWNERS = { bear: ['bear'], l: ['l', 'r'], r: ['l', 'r'] };
+      // [ms since the animation started, wrist angle]; segments line up with the arm keyframes so paths stay true
+      const BEAR_WRIST_KEYS = [[0, 245], [432, 245], [1152, 118], [1512, 92]];
+      const TURTLE_WRIST_KEYS = {
+        // Wrist turns swing the cookie round the side away from the forearm: over the jar and up (left), and up
+        // and over before hanging down (right); angles keep increasing so they turn the long way on purpose.
+        l: [[1750, 90], [3100, 90], [3600, 300], [4700, 395.5]],
+        r: [[5400, null], [6500, 240], [7000, 450]], // null: wherever the cookie is when the right flipper takes it
+      };
+      const BEAR_PAD_REST_TOES_DEG = 247.7; // toe beans' direction in #bear-paw-grip coordinates
+      const BEAR_PAD_SETTLE_MS = 3060;      // pad back to normal as the arm reaches rest (bearArmLowering 85%)
+      const LEFT_JAR_LAYER = 'anim-turtle-lift-cookie';
+      const FREE_LAYER = 'anim-carried-cookie';
+      const RIGHT_JAR_LAYER = 'anim-right-jar-cookie';
+      const COOKIE_LAYER_IDS = [LEFT_JAR_LAYER, FREE_LAYER, RIGHT_JAR_LAYER];
+      const COOKIE_RADIUS = 41;
+      const FREE_LAYER_MAX_Y = 290; // above this the cookie clears both jar rims (back rim top at Y 337)
+      const LEFT_JAR_RIGHT_EDGE = 401;
+      const RIGHT_JAR_LEFT_EDGE = 599;
+      const TWO_HAND_BLEND_MS = 150;
+      const COOKIE_FALL_MS = 300;
+      const COOKIE_FALL_DEPTH = 100;
+      let heldCookie = { mode: 'hidden' };
+      let reaching = {};          // hand key -> jar layer id its arm copy is drawn in
+      let bearIntroStart = null;
+      let bearPadDeg = 0;
+      let bearPadRelease = null;  // { t, deg } when the bear lets go
+      let turtleChoreoStart = null;
+      let sceneFrame = null;
+
+      function matrixFromTo(fromEl, toEl) {
+        return toEl.getScreenCTM().inverse().multiply(fromEl.getScreenCTM());
+      }
+
+      function setMatrix(el, m) {
+        el.setAttribute('transform', `matrix(${m.a} ${m.b} ${m.c} ${m.d} ${m.e} ${m.f})`);
+        el.setAttribute('visibility', 'visible');
+      }
+
+      function hide(el) {
+        el.setAttribute('visibility', 'hidden');
+      }
+
+      function easeInOut(p) {
+        // cubic-bezier(0.42, 0, 0.58, 1), the CSS `ease-in-out` the arm keyframes use
+        let lo = 0, hi = 1, t = p;
+        for (let i = 0; i < 20; i++) {
+          t = (lo + hi) / 2;
+          const x = 3 * (1 - t) * (1 - t) * t * 0.42 + 3 * (1 - t) * t * t * 0.58 + t * t * t;
+          if (x < p) lo = t; else hi = t;
+        }
+        return 3 * (1 - t) * t * t + t * t * t;
+      }
+
+      function keyedAngle(keys, ms) {
+        if (ms <= keys[0][0]) return keys[0][1];
+        for (let i = 1; i < keys.length; i++) {
+          if (ms <= keys[i][0]) {
+            const [t0, a0] = keys[i - 1];
+            const [t1, a1] = keys[i];
+            return a0 + (a1 - a0) * easeInOut((ms - t0) / (t1 - t0));
+          }
+        }
+        return keys[keys.length - 1][1];
+      }
+
+      function rotationDeg(el) {
+        const m = new DOMMatrix(getComputedStyle(el).transform);
+        return Math.atan2(m.b, m.a) * 180 / Math.PI;
+      }
+
+      function wrapDeg(d) {
+        return ((d + 540) % 360) - 180;
+      }
+
+      function pickCookieLayer(x, y) {
+        if (y > FREE_LAYER_MAX_Y && x - COOKIE_RADIUS < LEFT_JAR_RIGHT_EDGE) return LEFT_JAR_LAYER;
+        if (y > FREE_LAYER_MAX_Y && x + COOKIE_RADIUS > RIGHT_JAR_LEFT_EDGE) return RIGHT_JAR_LAYER;
+        return FREE_LAYER;
+      }
+
+      function handPoint(key, armToSvg) {
+        const p = HANDS[key].hand;
+        return new DOMPoint(p.x, p.y).matrixTransform(armToSvg[key]);
+      }
+
+      // Bear's paw pad faces the cookie he's holding, then turns back to normal as his arm returns to rest
+      function updateBearPad(now) {
+        let deg = 0;
+        if (bearIntroStart !== null) {
+          const armDeg = rotationDeg(document.getElementById('bear-lowering-arm'));
+          if (heldCookie.mode === 'held' && heldCookie.hand === 'bear') {
+            deg = wrapDeg(heldCookie.alpha - BEAR_PAD_REST_TOES_DEG - armDeg);
+          } else if (bearPadRelease) {
+            const span = bearIntroStart + BEAR_PAD_SETTLE_MS - bearPadRelease.t;
+            const p = Math.min(Math.max((now - bearPadRelease.t) / span, 0), 1);
+            deg = bearPadRelease.deg * (1 - easeInOut(p));
+          }
+        }
+        bearPadDeg = deg;
+        document.getElementById('bear-paw-grip').setAttribute('transform', `rotate(${deg} 383 404)`);
+      }
+
+      // Copies of reaching arms inside the jar layers
+      function updateReachCopies(svg, armToSvg) {
+        COOKIE_LAYER_IDS.forEach(layerId => {
+          const layer = document.getElementById(layerId);
+          const svgToLayer = matrixFromTo(svg, layer);
+          ['bear', 'l', 'r'].forEach(key => {
+            const arm = layer.querySelector(`.held-arm-${key}`);
+            if (!arm) return;
+            const extra = layer.querySelector(key === 'bear' ? '.held-pad-bear' : `.held-shoulder-${key}`);
+            if (reaching[key] !== layerId) {
+              hide(arm);
+              hide(extra);
+              return;
+            }
+            setMatrix(arm, svgToLayer.multiply(armToSvg[key]));
+            const extraSource = document.getElementById(key === 'bear' ? 'bear-paw-grip' : 'turtle-body-grp');
+            setMatrix(extra, svgToLayer.multiply(matrixFromTo(extraSource, svg)));
+          });
+        });
+      }
+
+      function heldCookieCentre(now, armToSvg) {
+        if (heldCookie.mode === 'held') {
+          const key = heldCookie.hand;
+          const ms = now - heldCookie.timeBase;
+          const alpha = keyedAngle(heldCookie.keys, ms);
+          if (heldCookie.alpha !== undefined) heldCookie.rot += alpha - heldCookie.alpha;
+          heldCookie.alpha = alpha;
+          const h = handPoint(key, armToSvg);
+          const a = alpha * Math.PI / 180;
+          return { x: h.x + HANDS[key].pinch * Math.cos(a), y: h.y + HANDS[key].pinch * Math.sin(a) };
+        }
+        if (heldCookie.mode === 'both') {
+          // Pinched between both flippers: on both rims, hanging below the line between them
+          const hl = handPoint('l', armToSvg);
+          const hr = handPoint('r', armToSvg);
+          const dx = hr.x - hl.x, dy = hr.y - hl.y;
+          const d = Math.hypot(dx, dy) || 1;
+          const sag = Math.sqrt(Math.max(0, HANDS.l.pinch * HANDS.l.pinch - (d / 2) * (d / 2)));
+          const both = { x: (hl.x + hr.x) / 2 - dy / d * sag, y: (hl.y + hr.y) / 2 + dx / d * sag };
+          const w = Math.min((now - heldCookie.blendStart) / TWO_HAND_BLEND_MS, 1);
+          return {
+            x: heldCookie.entry.x + (both.x - heldCookie.entry.x) * w,
+            y: heldCookie.entry.y + (both.y - heldCookie.entry.y) * w,
+          };
+        }
+        const t = Math.min(Math.max((now - heldCookie.fallStart) / COOKIE_FALL_MS, 0), 1);
+        return { x: heldCookie.fallX, y: heldCookie.fallY + COOKIE_FALL_DEPTH * t * t };
+      }
+
+      function advanceCookie(now, armToSvg) {
+        if (heldCookie.mode === 'falling' && now - heldCookie.fallStart >= COOKIE_FALL_MS) hideCookie();
+        if (heldCookie.mode === 'hidden') return;
+        const c = heldCookieCentre(now, armToSvg);
+        heldCookie.x = c.x;
+        heldCookie.y = c.y;
+      }
+
+      function renderCookie(svg, armToSvg) {
+        if (heldCookie.mode === 'hidden') {
+          COOKIE_LAYER_IDS.forEach(id => {
+            document.getElementById(id).querySelectorAll('.held-cookie, [class^="held-grip"]').forEach(hide);
+          });
+          return;
+        }
+
+        const c = { x: heldCookie.x, y: heldCookie.y };
+        const holders = heldCookie.mode === 'falling' ? [] : HAND_OWNERS[heldCookie.hand];
+        const targetId = pickCookieLayer(c.x, c.y);
+
+        COOKIE_LAYER_IDS.forEach(id => {
+          const layer = document.getElementById(id);
+          const cookie = layer.querySelector('.held-cookie');
+          const grips = {
+            bear: [layer.querySelector('.held-grip-bear'), layer.querySelector('.held-grip-bear-pad')],
+            l: [layer.querySelector('.held-grip-l')],
+            r: [layer.querySelector('.held-grip-r')],
+          };
+          if (id !== targetId) {
+            hide(cookie);
+            Object.values(grips).flat().forEach(hide);
+            return;
+          }
+          const svgToLayer = matrixFromTo(svg, layer);
+          const p = new DOMPoint(c.x, c.y).matrixTransform(svgToLayer);
+          cookie.setAttribute('transform', `translate(${p.x} ${p.y}) rotate(${heldCookie.rot})`);
+          cookie.setAttribute('visibility', 'visible');
+
+          Object.entries(grips).forEach(([key, els]) => {
+            const h = holders.includes(key) && handPoint(key, armToSvg);
+            if (!h || Math.hypot(h.x - c.x, h.y - c.y) >= HANDS[key].gripDist) {
+              els.forEach(hide);
+              return;
+            }
+            setMatrix(els[0], svgToLayer.multiply(armToSvg[key]));
+            if (els[1]) setMatrix(els[1], svgToLayer.multiply(matrixFromTo(document.getElementById('bear-paw-grip'), svg)));
+          });
+        });
+      }
+
+      function sceneTick(now) {
+        sceneFrame = requestAnimationFrame(sceneTick);
+        const svg = document.getElementById('scene-svg');
+        const armToSvg = {};
+        Object.entries(HANDS).forEach(([key, hand]) => {
+          armToSvg[key] = matrixFromTo(document.getElementById(hand.armId), svg);
+        });
+        advanceCookie(now, armToSvg);
+        updateBearPad(now); // before anything copies the pad's pose
+        renderCookie(svg, armToSvg);
+        updateReachCopies(svg, armToSvg);
+      }
+
+      function startSceneTicks() {
+        if (sceneFrame) cancelAnimationFrame(sceneFrame);
+        sceneFrame = requestAnimationFrame(sceneTick);
+      }
+
+      function grabCookie(handKey, keys, timeBase) {
+        heldCookie = { mode: 'held', hand: handKey, keys, timeBase, rot: heldCookie.rot || 0 };
+      }
+
+      // The turtle's right flipper joins the left: the cookie is now pinched between both
+      function holdCookieWithBothFlippers() {
+        heldCookie = {
+          mode: 'both', hand: 'l', rot: heldCookie.rot,
+          entry: { x: heldCookie.x, y: heldCookie.y }, blendStart: performance.now(),
+        };
+      }
+
+      // The left flipper lets go; the right flipper keeps its pinch where it is and carries on
+      function takeCookieWith(handKey, keys, timeBase) {
+        const svg = document.getElementById('scene-svg');
+        const h = handPoint(handKey, { [handKey]: matrixFromTo(document.getElementById(HANDS[handKey].armId), svg) });
+        const start = Math.atan2(heldCookie.y - h.y, heldCookie.x - h.x) * 180 / Math.PI;
+        // first turn goes the short way from wherever the cookie is; later turns go exactly as keyed
+        const resolved = [[keys[0][0], start], [keys[1][0], start + wrapDeg(keys[1][1] - start)]];
+        for (let i = 2; i < keys.length; i++) {
+          resolved.push([keys[i][0], resolved[i - 1][1] + (keys[i][1] - keys[i - 1][1])]);
+        }
+        heldCookie = { mode: 'held', hand: handKey, keys: resolved, timeBase, rot: heldCookie.rot, alpha: start };
+      }
+
+      // Let go: the cookie falls straight down from where it was held, then is hidden
+      function dropCookie() {
+        if (heldCookie.hand === 'bear') bearPadRelease = { t: performance.now(), deg: bearPadDeg };
+        heldCookie = {
+          mode: 'falling', x: heldCookie.x, y: heldCookie.y, fallX: heldCookie.x, fallY: heldCookie.y,
+          rot: heldCookie.rot, fallStart: performance.now(),
+        };
+      }
+
+      function hideCookie() {
+        heldCookie = { mode: 'hidden' };
+      }
+
+      // ================= DOORWAYS =================
+      // A character who has stepped through a doorway is clipped to the opening and drawn behind that
+      // door's front leaf, so the door closing hides them. Switch only at the DOORWAY walk pose, where the
+      // character fits entirely inside the opening, so the change is invisible.
+      const DOORWAYS = {
+        left: { clip: 'left-door-clip', frontLeaf: 'door-left-leaf-front' },
+        right: { clip: 'right-door-clip', frontLeaf: 'door-right-leaf-front' },
+      };
+      const DOOR_ANIMATION_CLASSES = ['anim-door-swing', 'anim-door-left-return', 'anim-door-right-active', 'anim-door-right-exit'];
+
+      function setCharacterOutside(slotId, side, outside) {
+        const slot = document.getElementById(slotId);
+        if (outside) slot.setAttribute('clip-path', `url(#${DOORWAYS[side].clip})`);
+        else slot.removeAttribute('clip-path');
+        document.getElementById(DOORWAYS[side].frontLeaf).setAttribute('visibility', outside ? 'visible' : 'hidden');
+      }
+
+      // Applies a swing animation to both copies of a door leaf at once so they stay in lockstep
+      function setDoorAnimation(leafClass, animationClass) {
+        document.querySelectorAll(`.${leafClass}`).forEach(leaf => {
+          leaf.classList.remove(...DOOR_ANIMATION_CLASSES);
+          void leaf.getBoundingClientRect();
+          if (animationClass) leaf.classList.add(animationClass);
+        });
+      }
+
       function startSequence() {
         clearAllTimeouts();
         canClick = false;
@@ -1739,11 +2056,7 @@
         const turtleChoreo = document.getElementById('turtle-choreography-subgroup');
         const turtleArmL = document.getElementById('turtle-arm-l');
         const turtleArmR = document.getElementById('turtle-arm-r');
-        const doorLeft = document.getElementById('door-left-leaf');
-        const doorRight = document.getElementById('door-right-leaf');
-        const cookieInRightJar = document.getElementById('anim-right-jar-cookie');
-        const cookieInLeftJar = document.getElementById('anim-turtle-lift-cookie');
-        const carriedCookie = document.getElementById('anim-carried-cookie');
+        const turtleStretch = document.getElementById('turtle-stretch-grp');
         const leftJar = document.getElementById('jar-left-group');
         const leftStarsLift = document.getElementById('drop-stars-left-lift');
         const rightJar = document.getElementById('jar-right-group');
@@ -1757,49 +2070,67 @@
         bear.style.opacity = '1';
         turtle.classList.remove('turtle-walking', 'anim-turtle-active', 'anim-turtle-exit-active');
         turtleChoreo.classList.remove('turtle-move-cookie');
+        turtleStretch.classList.remove('turtle-stretch-active');
         turtleArmL.classList.remove('turtle-left-arm-active');
         turtleArmR.classList.remove('turtle-right-arm-active');
-        cookieInRightJar.classList.remove('cookie-moving-active');
-        cookieInLeftJar.classList.remove('cookie-moving-active');
-        carriedCookie.classList.remove('cookie-moving-active');
+        hideCookie();
+        reaching = {};
+        bearPadRelease = null;
+        turtleChoreoStart = null;
         leftJar.classList.remove('left-jar-lift-pop-active');
         leftStarsLift.classList.remove('left-lift-stars-active');
         rightJar.classList.remove('right-jar-pop-active');
         rightStars.classList.remove('right-stars-active');
-        doorRight.classList.remove('anim-door-right-active', 'anim-door-right-exit');
-        doorLeft.classList.remove('anim-door-swing', 'anim-door-left-return');
+        setDoorAnimation('door-right-leaf', null);
+        setDoorAnimation('door-left-leaf', 'anim-door-swing');
+        setCharacterOutside('bear-door-slot', 'left', false);
+        setCharacterOutside('turtle-door-slot', 'right', true);
         turtle.setAttribute('opacity', '0');
 
         // Restart intro & bear animation classes cleanly by triggering reflow
         const elementsToRestart = [
           { id: 'bear-lowering-arm', cls: 'intro-arm' },
-          { id: 'anim-cookie', cls: 'intro-cookie' },
           { id: 'jar-left-group', cls: 'intro-jar1' },
           { id: 'drop-stars', cls: 'intro-stars' },
           { id: 'bear-pupils', cls: 'intro-gaze' },
-          { id: 'bear-character-wrapper', cls: 'anim-bear-departure' },
-          { id: 'door-left-leaf', cls: 'anim-door-swing' }
+          { id: 'bear-character-wrapper', cls: 'anim-bear-departure' }
         ];
 
         elementsToRestart.forEach(item => {
           const el = document.getElementById(item.id);
           if (el) {
             el.classList.remove(item.cls);
-            void el.offsetWidth;
+            void el.getBoundingClientRect();
             el.classList.add(item.cls);
           }
         });
 
         // ================= CHOREOGRAPHY TIMELINE =================
-        // 1. Swish sound when bear lowers cookie toward left jar
+        // 0. Bear starts out holding the cookie up in his right paw; his arm reaches over the left jar's rim
+        bearIntroStart = performance.now();
+        grabCookie('bear', BEAR_WRIST_KEYS, bearIntroStart);
+        reaching.bear = LEFT_JAR_LAYER;
+        startSceneTicks();
+
+        // 1. Swish sound as the bear lowers the cookie into the left jar
         schedule(() => {
           playChime('swish');
         }, 1200);
 
-        // 2. Plop & stars chime when cookie drops into the left jar opening
+        // Bear lets go with the cookie down inside the opening (intro-arm 44.4%); it drops to the bottom
+        schedule(() => {
+          dropCookie();
+        }, 1600);
+
+        // 2. Plop & stars chime as the cookie sinks out of sight
         schedule(() => {
           playChime('drop');
-        }, 1900);
+        }, 1750);
+
+        // Bear's paw is lifted back out above the rim (intro-arm ~56%); his arm now drops behind the jar
+        schedule(() => {
+          reaching.bear = null;
+        }, 2000);
 
         // 3. Bear starts walking directly towards the left door (t = 2650ms)
         schedule(() => {
@@ -1808,30 +2139,38 @@
         }, 2650);
 
         // Bear footsteps along path to door
-        [3000, 3350, 3700, 4050, 4400, 4750, 5100, 5450].forEach(t => {
+        [3000, 3350, 3700, 4050, 4400, 4750, 5100, 5450, 5800, 6100].forEach(t => {
           schedule(() => {
             playChime('footstep');
           }, t);
         });
 
-        // 4. Left Door opens smoothly as the bear approaches the doorway (~4000ms)
+        // 4. Left Door opens smoothly as the bear approaches the doorway (~3900ms)
         schedule(() => {
           playChime('doorCreak');
-        }, 4000);
+        }, 3900);
 
-        // 5. Left Door swings shut behind the bear (~6000ms)
+        // Bear is standing in the doorway (departure 70% = 5250ms): from here on he is outside, behind the door
+        schedule(() => {
+          setCharacterOutside('bear-door-slot', 'left', true);
+        }, 5310);
+
+        // 5. Left Door swings shut behind the bear as he walks off up the path (~6300ms)
+        schedule(() => {
+          playChime('doorShut');
+        }, 6300);
+
         schedule(() => {
           bear.classList.remove('bear-walking');
-          playChime('doorShut');
-        }, 6000);
+        }, 6400);
 
         // 6. Right door begins swinging open for Turtle entrance (~6500ms)
         schedule(() => {
           playChime('doorCreak');
-          doorRight.classList.add('anim-door-right-active');
+          setDoorAnimation('door-right-leaf', 'anim-door-right-active');
         }, 6500);
 
-        // 7. Turtle emerges through right doorway and walks toward table center (~7100ms)
+        // 7. Turtle walks down the outdoor path, through the right doorway and toward table center (~7100ms)
         schedule(() => {
           turtle.classList.add('anim-turtle-active', 'turtle-walking');
           playChime('turtleStep');
@@ -1844,10 +2183,15 @@
           }, t);
         });
 
-        // 8. Right door shuts behind turtle (~8200ms)
+        // Turtle is standing in the doorway (entrance 52% = 9804ms): from here on he is inside the room
+        schedule(() => {
+          setCharacterOutside('turtle-door-slot', 'right', false);
+        }, 9740);
+
+        // 8. Right door shuts behind turtle (~10550ms)
         schedule(() => {
           playChime('doorShut');
-        }, 8200);
+        }, 10550);
 
         // 9. Turtle reaches center behind table (~11500ms) and pauses
         schedule(() => {
@@ -1855,131 +2199,175 @@
         }, 11500);
 
         // ================= TURTLE COOKIE RELOCATION CHOREOGRAPHY =================
-        // 10. Turtle starts turning/reaching toward left jar (t = 12000ms, start of 7.2s choreography)
+        // 10. Turtle's left flipper rises behind the left jar (t = 12000ms, start of 10s choreography)
         schedule(() => {
+          turtleChoreoStart = performance.now();
           turtleChoreo.classList.add('turtle-move-cookie');
+          turtleStretch.classList.add('turtle-stretch-active');
           turtleArmL.classList.add('turtle-left-arm-active');
           turtleArmR.classList.add('turtle-right-arm-active');
-          cookieInLeftJar.classList.add('cookie-moving-active');
-          carriedCookie.classList.add('cookie-moving-active');
-          cookieInRightJar.classList.add('cookie-moving-active');
           leftJar.classList.add('left-jar-lift-pop-active');
           leftStarsLift.classList.add('left-lift-stars-active');
           rightJar.classList.add('right-jar-pop-active');
           rightStars.classList.add('right-stars-active');
         }, 12000);
 
-        // Turtle foot shuffle toward left jar
-        [12500, 12900].forEach(t => {
-          schedule(() => { playChime('turtleStep'); }, t);
-        });
+        // Flipper is up above the rim: from here it reaches over the rim and dips into the opening (~13300ms)
+        schedule(() => {
+          reaching.l = LEFT_JAR_LAYER;
+        }, 13300);
 
-        // 11. MIRRORED REVERSE: Ascending cartoon slide whistle as cookie rises straight out of left jar (~13600ms)
+        // 11. Flipper pinches the cookie at the bottom of the jar (~13750ms)
+        schedule(() => {
+          grabCookie('l', TURTLE_WRIST_KEYS.l, turtleChoreoStart);
+        }, 13750);
+
+        // Turtle lifts the cookie straight up out of the opening (~13900ms)
         schedule(() => {
           playChime('liftSwish');
-        }, 13600);
+        }, 13900);
 
-        // Pop / sparkle chime when cookie reaches the mirrored peak hold-above position above left jar (~14500ms)
+        // Cookie is clear of the rim; the arm is no longer over the opening (~15100ms)
         schedule(() => {
+          reaching.l = null;
           playChime('cookieLift');
-        }, 14500);
+        }, 15100);
 
-        // 12. Turtle carries cookie across table toward right jar
+        // 12. Turtle steps back to center bringing the cookie in front of him; right flipper rises to meet it (~15600ms)
         schedule(() => {
+          turtle.classList.add('turtle-walking');
           playChime('carryGlide');
-        }, 15500);
+        }, 15600);
 
-        [15600, 16000, 16400, 16800].forEach(t => {
+        [15800, 16200, 16600].forEach(t => {
           schedule(() => { playChime('turtleStep'); }, t);
         });
 
-        // 13. EXACT MATCH: Slide whistle/swish as turtle initiates vertical descent into right jar (t = 17300ms)
+        // Both flippers pinch the cookie (~16700ms)
+        schedule(() => {
+          turtle.classList.remove('turtle-walking');
+          holdCookieWithBothFlippers();
+        }, 16700);
+
+        // 13. Left flipper lets go; the right flipper carries the cookie over to the right jar (~17400ms)
+        schedule(() => {
+          takeCookieWith('r', TURTLE_WRIST_KEYS.r, turtleChoreoStart);
+          turtle.classList.add('turtle-walking');
+          playChime('carryGlide');
+        }, 17400);
+
+        [17600, 18000, 18400].forEach(t => {
+          schedule(() => { playChime('turtleStep'); }, t);
+        });
+
+        // Right flipper is above the right jar's rim and reaches over it (~18500ms)
+        schedule(() => {
+          turtle.classList.remove('turtle-walking');
+          reaching.r = RIGHT_JAR_LAYER;
+        }, 18500);
+
+        // 14. Right flipper lowers the cookie straight down into the right jar, plop + sparkle as it goes in
         schedule(() => {
           playChime('swish');
-        }, 17300);
+        }, 19000);
 
-        // 14. EXACT MATCH: Cookie enters right jar opening - trigger plop sound and sparkle burst (t = 18000ms)
         schedule(() => {
           playChime('drop');
-        }, 18000);
+        }, 19300);
 
-        // 15. Turtle finishes lowering, arms rest naturally against torso, returns to center pose (~19200ms)
+        // Cookie is at the bottom of the right jar; the flipper lets go and lifts back out (~20250ms)
         schedule(() => {
+          hideCookie();
+        }, 20250);
+
+        // Flipper is back up above the rim; the arm drops behind the jar to rest (~20800ms)
+        schedule(() => {
+          reaching.r = null;
+        }, 20800);
+
+        // 15. Turtle is back at center pose with arms at rest (~22000ms)
+        schedule(() => {
+          turtle.classList.remove('turtle-walking');
           turtleChoreo.classList.remove('turtle-move-cookie');
+          turtleStretch.classList.remove('turtle-stretch-active');
           turtleArmL.classList.remove('turtle-left-arm-active');
           turtleArmR.classList.remove('turtle-right-arm-active');
-        }, 19200);
+        }, 22000);
 
         // ================= EXIT SEQUENCE FOR MR. TURTLE =================
-        // 16. Mr. Turtle starts walking along exact reverse path back to the right door (~19600ms)
+        // 16. Mr. Turtle starts walking along exact reverse path back to the right door (~22400ms)
         schedule(() => {
           turtle.classList.remove('anim-turtle-active');
           void turtle.offsetWidth;
           turtle.classList.add('anim-turtle-exit-active', 'turtle-walking');
           playChime('turtleStep');
-        }, 19600);
+        }, 22400);
 
         // Footsteps during exit walk back towards the right door
-        [20000, 20400, 20800, 21200, 21600, 22000, 22400, 22800, 23200].forEach(t => {
+        [22800, 23200, 23600, 24000, 24400, 24800, 25200, 25600, 26000].forEach(t => {
           schedule(() => {
             playChime('turtleStep');
           }, t);
         });
 
-        // 17. Right door swings open as Turtle approaches (~22200ms)
+        // 17. Right door swings open as Turtle approaches (~23200ms)
         schedule(() => {
           playChime('doorCreak');
-          doorRight.classList.remove('anim-door-right-active');
-          void doorRight.offsetWidth;
-          doorRight.classList.add('anim-door-right-exit');
-        }, 22200);
+          setDoorAnimation('door-right-leaf', 'anim-door-right-exit');
+        }, 23200);
 
-        // 18. Turtle steps fully through doorway and is completely hidden (~24000ms)
+        // Turtle is standing in the doorway (exit 48% = 24896ms): from here on he is outside, behind the door
         schedule(() => {
-          turtle.classList.remove('turtle-walking');
-          turtle.setAttribute('opacity', '0');
-        }, 24000);
+          setCharacterOutside('turtle-door-slot', 'right', true);
+        }, 24960);
 
-        // 19. Right door clicks shut behind Turtle (~24800ms)
+        // 18. Right door clicks shut behind Turtle as he walks off up the path (~26080ms)
         schedule(() => {
           playChime('doorShut');
-        }, 24800);
+        }, 26080);
+
+        schedule(() => {
+          turtle.classList.remove('turtle-walking');
+        }, 26800);
 
         // ================= MR. BEAR RE-ENTRANCE SEQUENCE =================
-        // 20. Left door begins swinging open for Mr. Bear's return (~25400ms)
+        // 20. Left door begins swinging open for Mr. Bear's return (~28200ms)
         schedule(() => {
           playChime('doorCreak');
-          doorLeft.classList.remove('anim-door-swing');
-          void doorLeft.offsetWidth;
-          doorLeft.classList.add('anim-door-left-return');
-        }, 25400);
+          setDoorAnimation('door-left-leaf', 'anim-door-left-return');
+        }, 28200);
 
-        // 21. Mr. Bear steps through left door and begins walking back to center table (~25900ms)
+        // 21. Mr. Bear walks back down the outdoor path toward the left doorway (~28700ms)
         schedule(() => {
           bear.classList.remove('anim-bear-departure');
           void bear.offsetWidth;
           bear.classList.add('anim-bear-return', 'bear-walking');
           playChime('footstep');
-        }, 25900);
+        }, 28700);
+
+        // Bear is standing in the doorway (return 32% = 30364ms): from here on he is inside the room
+        schedule(() => {
+          setCharacterOutside('bear-door-slot', 'left', false);
+        }, 30300);
 
         // Bear footsteps mirroring his walk back from left door to center table
-        [26300, 26700, 27100, 27500, 27900, 28300, 28700, 29100, 29500, 29900].forEach(t => {
+        [29100, 29500, 29900, 30300, 30700, 31100, 31500, 31900, 32300, 32700].forEach(t => {
           schedule(() => {
             playChime('footstep');
           }, t);
         });
 
-        // 22. Left door shuts behind Mr. Bear (~28800ms)
+        // 22. Left door shuts behind Mr. Bear (~31600ms)
         schedule(() => {
           playChime('doorShut');
-        }, 28800);
+        }, 31600);
 
-        // 23. Mr. Bear firmly resumes his exact original position standing behind the table (~31100ms)
+        // 23. Mr. Bear firmly resumes his exact original position standing behind the table (~33900ms)
         schedule(() => {
           bear.classList.remove('bear-walking');
-        }, 31100);
+        }, 33900);
 
-        // ================= 24. ONLY ONCE MR. BEAR IS FIRMLY IN POSITION: JARS BECOME CLICKABLE (~31600ms) =================
+        // ================= 24. ONLY ONCE MR. BEAR IS FIRMLY IN POSITION: JARS BECOME CLICKABLE (~34400ms) =================
         schedule(() => {
           canClick = true;
 
@@ -1994,7 +2382,7 @@
           }, 750);
 
           playChime('prompt');
-        }, 31600);
+        }, 34400);
       }
 
       function handleJarChoice(side) {
