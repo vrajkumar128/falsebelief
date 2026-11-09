@@ -953,6 +953,9 @@
         <filter height="130%" id="dropShadow" width="130%" x="-10%" y="-10%">
           <fedropshadow dx="0" dy="8" flood-opacity="0.18" stddeviation="6"></fedropshadow>
         </filter>
+        <filter height="160%" id="tableShadowBlur" width="120%" x="-10%" y="-30%">
+          <fegaussianblur stddeviation="5"></fegaussianblur>
+        </filter>
         <filter height="140%" id="sparkleGlow" width="140%" x="-20%" y="-20%">
           <fedropshadow dx="0" dy="0" flood-color="#ffd54f" flood-opacity="0.9" stddeviation="3"></fedropshadow>
         </filter>
@@ -1065,11 +1068,6 @@
           <circle cx="938" cy="416" fill="url(#turtleSkinGrad)" r="16" stroke="#2c1e14" stroke-width="3.5"></circle>
           <circle cx="946" cy="414" fill="#ffffff" opacity="0.4" r="2.5"></circle>
         </g>
-        <!-- Turtle shoulder caps (in #turtle-body-grp coordinates), drawn over the arm roots -->
-        <circle id="turtle-shoulder-l-symbol" cx="788" cy="342" fill="url(#turtleSkinGrad)" r="16" stroke="#2c1e14"
-          stroke-width="4"></circle>
-        <circle id="turtle-shoulder-r-symbol" cx="902" cy="342" fill="url(#turtleSkinGrad)" r="16" stroke="#2c1e14"
-          stroke-width="4"></circle>
         <g id="bear-arm-r-art">
           <path d="M 442.4 341.5 A 27 27 0 0 0 393.6 318.5 C 383 345, 368 368, 361.3 393.7 L 404.7 414.3 C 414 390, 430 365, 442.4 341.5 Z"
             fill="url(#bearBodyGrad)" stroke="#2c1e14" stroke-linejoin="round" stroke-width="5"></path>
@@ -1367,9 +1365,6 @@
                   <use href="#turtle-arm-r-art"></use>
                 </g>
               </g>
-              <!-- Shoulder caps cover the arm pivots -->
-              <use href="#turtle-shoulder-l-symbol"></use>
-              <use href="#turtle-shoulder-r-symbol"></use>
             </g>
             </g>
           </g>
@@ -1391,7 +1386,10 @@
         <g stroke="#2c1e14" stroke-width="5">
           <rect fill="#8d5423" height="120" rx="6" width="26" x="230" y="470"></rect>
           <rect fill="#8d5423" height="120" rx="6" width="26" x="744" y="470"></rect>
-          <ellipse cx="500" cy="590" fill="#000000" opacity="0.22" rx="340" ry="28"></ellipse>
+          <!-- Floor shadow: a soft trapezoid under the rectangular top, from the back legs' feet (Y 590) to the front
+               legs' feet (Y 615), widening toward the viewer like the tabletop itself -->
+          <polygon fill="#000000" filter="url(#tableShadowBlur)" opacity="0.22" points="165,580 835,580 872,622 128,622"
+            stroke="none"></polygon>
           <rect fill="#a05d28" height="135" rx="8" width="32" x="180" y="480"></rect>
           <rect fill="#a05d28" height="135" rx="8" width="32" x="788" y="480"></rect>
         </g>
@@ -1426,9 +1424,7 @@
             <use class="held-arm-bear" href="#bear-arm-r-art" visibility="hidden"></use>
             <use class="held-pad-bear" href="#bear-paw-r-pad-symbol" visibility="hidden"></use>
             <use class="held-arm-l" href="#turtle-arm-l-art" visibility="hidden"></use>
-            <use class="held-shoulder-l" href="#turtle-shoulder-l-symbol" visibility="hidden"></use>
             <use class="held-arm-r" href="#turtle-arm-r-art" visibility="hidden"></use>
-            <use class="held-shoulder-r" href="#turtle-shoulder-r-symbol" visibility="hidden"></use>
             <use class="held-cookie" href="#cookie-art-symbol" visibility="hidden"></use>
             <use class="held-grip-bear" href="#bear-paw-circle-symbol" visibility="hidden"></use>
             <use class="held-grip-bear-pad" href="#bear-paw-r-pad-symbol" visibility="hidden"></use>
@@ -1446,8 +1442,6 @@
           stroke-linejoin="round" stroke-width="4.5"></path>
         <path d="M 284 350 A 46 13 0 0 0 376 350" fill="none" stroke="#2c1e14" stroke-linecap="round" stroke-width="5">
         </path>
-        <path d="M 290 356 A 41 10 0 0 0 370 356" fill="none" stroke="#64b5f6" stroke-linecap="round"
-          stroke-width="2.5"></path>
       </g>
       <!-- Star Sparkles on Left Jar (Intro), moved down to the rim at Y 350 -->
       <g transform="translate(0 54)">
@@ -1494,9 +1488,7 @@
         <g clip-path="url(#jarRightCookieClip)">
           <g id="anim-right-jar-cookie">
             <use class="held-arm-l" href="#turtle-arm-l-art" visibility="hidden"></use>
-            <use class="held-shoulder-l" href="#turtle-shoulder-l-symbol" visibility="hidden"></use>
             <use class="held-arm-r" href="#turtle-arm-r-art" visibility="hidden"></use>
-            <use class="held-shoulder-r" href="#turtle-shoulder-r-symbol" visibility="hidden"></use>
             <use class="held-cookie" href="#cookie-art-symbol" visibility="hidden"></use>
             <use class="held-grip-bear" href="#bear-paw-circle-symbol" visibility="hidden"></use>
             <use class="held-grip-bear-pad" href="#bear-paw-r-pad-symbol" visibility="hidden"></use>
@@ -1514,8 +1506,6 @@
           stroke-linejoin="round" stroke-width="4.5"></path>
         <path d="M 624 350 A 46 13 0 0 0 716 350" fill="none" stroke="#2c1e14" stroke-linecap="round" stroke-width="5">
         </path>
-        <path d="M 630 356 A 41 10 0 0 0 710 356" fill="none" stroke="#64b5f6" stroke-linecap="round"
-          stroke-width="2.5"></path>
       </g>
       <!-- Star Sparkles on Right Jar (when turtle puts cookie into right jar), moved down to the rim at Y 350 -->
       <g transform="translate(0 54)">
@@ -1820,8 +1810,7 @@
         r: [[5400, null], [6500, 240], [7000, 450]], // null: wherever the cookie is when the right flipper takes it
       };
       const BEAR_PAD_REST_TOES_DEG = 247.7; // toe beans' direction in #bear-paw-grip coordinates
-      const BEAR_PAD_RELAX_START_MS = 2016; // pad keeps its grip pose while the paw lifts out (bearArmLowering 56%)...
-      const BEAR_PAD_SETTLE_MS = 3060;      // ...then turns back to normal as the arm lowers to rest (85%)
+      const BEAR_PAD_SETTLE_MS = 3060;      // pad back to normal as the arm reaches rest (bearArmLowering 85%)
       const LEFT_JAR_LAYER = 'anim-turtle-lift-cookie';
       const FREE_LAYER = 'anim-carried-cookie';
       const RIGHT_JAR_LAYER = 'anim-right-jar-cookie';
@@ -1932,9 +1921,9 @@
           if (heldCookie.mode === 'held' && heldCookie.hand === 'bear') {
             deg = wrapDeg(heldCookie.alpha - BEAR_PAD_REST_TOES_DEG - armDeg);
           } else if (bearPadRelease) {
-            // The toes keep facing where he let go while the paw lifts out, then carry on turning the same way they
-            // turned while he lowered the cookie (counterclockwise) until they're back at rest
-            const relaxFrom = Math.max(bearPadRelease.t, BEAR_PAD_RELAX_START_MS);
+            // Lowering the cookie turned the toes counterclockwise; bringing the paw back out and up to rest turns
+            // them back clockwise
+            const relaxFrom = bearPadRelease.t;
             const p = Math.min(Math.max((clockMs.bear - relaxFrom) / (BEAR_PAD_SETTLE_MS - relaxFrom), 0), 1);
             const toes = bearPadRelease.toes + (bearPadRelease.restToes - bearPadRelease.toes) * easeInOut(p);
             deg = toes - BEAR_PAD_REST_TOES_DEG - armDeg;
@@ -1951,15 +1940,17 @@
           ['bear', 'l', 'r'].forEach(key => {
             const arm = layer.querySelector(`.held-arm-${key}`);
             if (!arm) return;
-            const extra = layer.querySelector(key === 'bear' ? '.held-pad-bear' : `.held-shoulder-${key}`);
+            const extra = key === 'bear' ? layer.querySelector('.held-pad-bear') : null;
             if (reaching[key] !== layerId) {
               hide(arm);
-              hide(extra);
+              if (extra) hide(extra);
               return;
             }
             setMatrix(arm, svgToLayer.multiply(armToSvg[key]));
-            const extraSource = document.getElementById(key === 'bear' ? 'bear-paw-grip' : 'turtle-body-grp');
-            setMatrix(extra, svgToLayer.multiply(matrixFromTo(extraSource, svg)));
+            if (extra) {
+              const extraSource = document.getElementById('bear-paw-grip');
+              setMatrix(extra, svgToLayer.multiply(matrixFromTo(extraSource, svg)));
+            }
           });
         });
       }
@@ -2121,10 +2112,10 @@
       function dropCookie() {
         const clock = heldCookie.clock;
         if (heldCookie.hand === 'bear') {
-          // toes' on-screen direction when he lets go, and the rest direction reached by turning counterclockwise
+          // toes' on-screen direction when he lets go, and the rest direction reached by turning clockwise
           const toes = heldCookie.alpha;
           let restToes = BEAR_PAD_REST_TOES_DEG;
-          while (restToes > toes) restToes -= 360;
+          while (restToes < toes) restToes += 360;
           bearPadRelease = { t: clockMs.bear, toes, restToes };
         }
         heldCookie = {
