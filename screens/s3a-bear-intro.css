@@ -1,0 +1,185 @@
+/* ---------- S3a: Mr. Bear between the red and blue schools (bear art uses the S4 bear's coordinates) ---------- */
+.s3-bear {
+  opacity: 0;
+  transform-origin: 500px 567px;
+}
+
+.s3-bear.is-entering {
+  animation: s3BearPop 0.7s ease-out both;
+}
+
+@keyframes s3BearPop {
+  0% {
+    opacity: 0;
+    transform: translateY(70px) scale(0.55);
+  }
+
+  55% {
+    opacity: 1;
+    transform: translateY(-12px) scale(1.04, 0.97);
+  }
+
+  78% {
+    transform: translateY(0) scale(0.97, 1.03);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Wave with his right arm (screen left), pivoting at the shoulder like the S4 arm; the paw pad turns the
+   other way so his toe beans keep pointing up */
+.s3-wave-arm {
+  transform-origin: 418px 330px;
+}
+
+.s3-wave-pad {
+  transform-origin: 383px 404px;
+}
+
+.s3-bear.is-waving .s3-wave-arm {
+  animation: s3WaveArm 2.6s ease-in-out both;
+}
+
+.s3-bear.is-waving .s3-wave-pad {
+  animation: s3WavePad 2.6s ease-in-out both;
+}
+
+@keyframes s3WaveArm {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  16% {
+    transform: rotate(122deg);
+  }
+
+  28%,
+  52% {
+    transform: rotate(100deg);
+  }
+
+  40%,
+  64% {
+    transform: rotate(126deg);
+  }
+
+  76% {
+    transform: rotate(112deg);
+  }
+
+  92%,
+  100% {
+    transform: rotate(0deg);
+  }
+}
+
+@keyframes s3WavePad {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  16% {
+    transform: rotate(-122deg);
+  }
+
+  28%,
+  52% {
+    transform: rotate(-100deg);
+  }
+
+  40%,
+  64% {
+    transform: rotate(-126deg);
+  }
+
+  76% {
+    transform: rotate(-112deg);
+  }
+
+  92%,
+  100% {
+    transform: rotate(0deg);
+  }
+}
+
+/* Schools: tappable once the question is asked (school-local coordinates, ground at Y 0) */
+.s3-choice {
+  transform-origin: 0px -170px;
+  transition: transform 0.25s ease, filter 0.25s ease;
+}
+
+.s3-scene.is-asking .s3-choice {
+  cursor: pointer;
+}
+
+.s3-scene.is-asking .s3-choice:hover {
+  filter: drop-shadow(0 10px 14px rgba(44, 30, 20, 0.28));
+  transform: translateY(-6px) scale(1.02);
+}
+
+/* Answer buttons: appear with the question, face presses down onto its dark ledge */
+.s3-answer-reveal {
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(18px);
+  transition: opacity 0.3s ease, transform 0.45s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.s3-answers.is-shown .s3-answer-reveal {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(0);
+}
+
+.s3-answer {
+  transition: opacity 0.3s ease;
+}
+
+.s3-answer:focus {
+  outline: none;
+}
+
+.s3-scene .s3-answer {
+  cursor: default;
+}
+
+.s3-scene.is-asking .s3-answer {
+  cursor: pointer;
+}
+
+.s3-answer-top {
+  transition: transform 0.12s ease;
+}
+
+.s3-scene.is-asking .s3-answer:hover .s3-answer-top {
+  transform: translateY(-2px);
+}
+
+.s3-scene.is-asking .s3-answer:active .s3-answer-top,
+.s3-answer.is-chosen .s3-answer-top {
+  transform: translateY(7px);
+}
+
+.s3-scene.is-answered .s3-answer:not(.is-chosen) {
+  opacity: 0.4;
+}
+
+.s3-answer-focus {
+  fill: none;
+  stroke: #ffffff;
+  stroke-width: 6;
+  opacity: 0;
+}
+
+.s3-answer:focus-visible .s3-answer-focus {
+  opacity: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .s3-scene.is-asking .s3-choice:hover {
+    transform: none;
+  }
+}
