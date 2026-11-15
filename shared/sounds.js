@@ -1,10 +1,12 @@
 // Sound effects for every screen, made with the Web Audio API (no sound files). Play one with
 // Sounds.play('<name>'). Names: swish and liftSwish (cookie into / out of a jar), cookieLift (pop with sparkle),
-// carryGlide, drop (plop with bell notes), footstep, turtleStep, doorCreak, doorShut, hover, select, and prompt
-// (the three-note "your turn" chime). Browsers only allow sound once the page has been clicked or tapped, so the
-// first click unlocks it.
+// carryGlide, drop (plop), footstep (Mr. Bear) and turtleStep (Mr. Turtle), doorCreak, doorShut,
+// hover, select, and prompt (the three-note "your turn" chime). The two steps take the ground underfoot:
+// Sounds.play('footstep', { surface: 'tile' }) indoors or { surface: 'path' } on the sandy path outside.
+// Browsers only allow sound once the page has been clicked or tapped, so the first click unlocks it.
 const Sounds = (() => {
   let audioCtx = null;
+  const noiseBuffers = new WeakMap(); // one second of white noise per audio context, for footstep textures
 
   function getAudioContext() {
     if (!audioCtx) {
@@ -21,8 +23,86 @@ const Sounds = (() => {
     getAudioContext();
   }
 
+  // ---------- footstep building blocks ----------
+  function noise(ctx) {
+    if (!noiseBuffers.has(ctx)) {
+      const buffer = ctx.createBuffer(1, ctx.sampleRate, ctx.sampleRate);
+      const data = buffer.getChannelData(0);
+      for (let i = 0; i < data.length; i++) data[i] = Math.random() * 2 - 1;
+      noiseBuffers.set(ctx, buffer);
+    }
+    return noiseBuffers.get(ctx);
+  }
+
+  // Each step varies a little, so a walk doesn't sound like one sample on repeat
+  function vary(value, amount) {
+    return value * (1 + (Math.random() * 2 - 1) * amount);
+  }
+
+  // A short burst of filtered noise: the slap, click or crunch of a foot meeting the ground
+  function noiseBurst(ctx, start, { filter, freq, q = 1, peak, attack, decay }) {
+    const source = ctx.createBufferSource();
+    source.buffer = noise(ctx);
+    const shape = ctx.createBiquadFilter();
+    shape.type = filter;
+    shape.frequency.value = vary(freq, 0.08);
+    shape.Q.value = q;
+    const gain = ctx.createGain();
+    gain.gain.setValueAtTime(0.0001, start);
+    gain.gain.exponentialRampToValueAtTime(vary(peak, 0.15), start + attack);
+    gain.gain.exponentialRampToValueAtTime(0.0001, start + attack + decay);
+    source.connect(shape);
+    shape.connect(gain);
+    gain.connect(ctx.destination);
+    source.start(start, Math.random() * 0.8);
+    source.stop(start + attack + decay + 0.02);
+  }
+
+  // A low, falling tone: the weight of the body landing on that foot
+  function thump(ctx, start, { from, to, peak, length }) {
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(vary(from, 0.05), start);
+    osc.frequency.exponentialRampToValueAtTime(to, start + length);
+    gain.gain.setValueAtTime(vary(peak, 0.1), start);
+    gain.gain.exponentialRampToValueAtTime(0.0001, start + length);
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+    osc.start(start);
+    osc.stop(start + length + 0.01);
+  }
+
+  // Mr. Bear: a heavy, soft-padded paw. On the tiled floor, a muffled pat with a short slap off the hard tile;
+  // on the sandy path, a duller landing that crunches grit underfoot.
+  function bearStep(ctx, now, surface) {
+    if (surface === 'path') {
+      thump(ctx, now, { from: 110, to: 60, peak: 0.07, length: 0.09 });
+      noiseBurst(ctx, now, { filter: 'lowpass', freq: 1100, q: 0.7, peak: 0.075, attack: 0.012, decay: 0.15 });
+      noiseBurst(ctx, now + 0.025, { filter: 'bandpass', freq: 2600, q: 3, peak: 0.03, attack: 0.004, decay: 0.03 });
+      noiseBurst(ctx, now + 0.06, { filter: 'bandpass', freq: 2200, q: 3, peak: 0.022, attack: 0.004, decay: 0.03 });
+    } else {
+      thump(ctx, now, { from: 150, to: 70, peak: 0.12, length: 0.075 });
+      noiseBurst(ctx, now, { filter: 'bandpass', freq: 1800, q: 0.9, peak: 0.07, attack: 0.002, decay: 0.045 });
+    }
+  }
+
+  // Mr. Turtle: a small, light foot with claws. On the tiled floor, a soft tap and two quick claw clicks; on the
+  // sandy path, a light scuff.
+  function turtleStep(ctx, now, surface) {
+    if (surface === 'path') {
+      thump(ctx, now, { from: 180, to: 100, peak: 0.065, length: 0.06 });
+      noiseBurst(ctx, now, { filter: 'lowpass', freq: 1000, q: 0.7, peak: 0.08, attack: 0.01, decay: 0.11 });
+      noiseBurst(ctx, now + 0.03, { filter: 'bandpass', freq: 2400, q: 3, peak: 0.02, attack: 0.003, decay: 0.025 });
+    } else {
+      thump(ctx, now, { from: 260, to: 150, peak: 0.08, length: 0.05 });
+      noiseBurst(ctx, now + 0.004, { filter: 'bandpass', freq: 3800, q: 4, peak: 0.085, attack: 0.001, decay: 0.018 });
+      noiseBurst(ctx, now + 0.026, { filter: 'bandpass', freq: 4300, q: 4, peak: 0.065, attack: 0.001, decay: 0.016 });
+    }
+  }
+
   // Friendly cartoon Web Audio synthesis sound effects
-  function play(type) {
+  function play(type, options = {}) {
     try {
       const ctx = getAudioContext();
       if (!ctx) return;
@@ -119,7 +199,7 @@ const Sounds = (() => {
         osc.start(now);
         osc.stop(now + 1.22);
       } else if (type === 'drop') {
-        // Cartoon plop with resonant chime harmonics
+        // Cartoon plop
         const osc = ctx.createOscillator();
         const gain = ctx.createGain();
         osc.type = 'sine';
@@ -131,43 +211,10 @@ const Sounds = (() => {
         gain.connect(ctx.destination);
         osc.start(now);
         osc.stop(now + 0.29);
-
-        [880, 1174.66, 1396.91, 1760].forEach((freq, idx) => {
-          const spOsc = ctx.createOscillator();
-          const spGain = ctx.createGain();
-          spOsc.type = 'triangle';
-          spOsc.frequency.setValueAtTime(freq, now + 0.05 + idx * 0.06);
-          spGain.gain.setValueAtTime(0.12, now + 0.05 + idx * 0.06);
-          spGain.gain.exponentialRampToValueAtTime(0.001, now + 0.32 + idx * 0.06);
-          spOsc.connect(spGain);
-          spGain.connect(ctx.destination);
-          spOsc.start(now + 0.05 + idx * 0.06);
-          spOsc.stop(now + 0.35 + idx * 0.06);
-        });
       } else if (type === 'footstep') {
-        const osc = ctx.createOscillator();
-        const gain = ctx.createGain();
-        osc.type = 'triangle';
-        osc.frequency.setValueAtTime(160, now);
-        osc.frequency.exponentialRampToValueAtTime(80, now + 0.1);
-        gain.gain.setValueAtTime(0.09, now);
-        gain.gain.linearRampToValueAtTime(0.001, now + 0.1);
-        osc.connect(gain);
-        gain.connect(ctx.destination);
-        osc.start(now);
-        osc.stop(now + 0.11);
+        bearStep(ctx, now, options.surface);
       } else if (type === 'turtleStep') {
-        const osc = ctx.createOscillator();
-        const gain = ctx.createGain();
-        osc.type = 'sine';
-        osc.frequency.setValueAtTime(240, now);
-        osc.frequency.exponentialRampToValueAtTime(120, now + 0.09);
-        gain.gain.setValueAtTime(0.08, now);
-        gain.gain.linearRampToValueAtTime(0.001, now + 0.09);
-        osc.connect(gain);
-        gain.connect(ctx.destination);
-        osc.start(now);
-        osc.stop(now + 0.1);
+        turtleStep(ctx, now, options.surface);
       } else if (type === 'doorCreak') {
         const osc = ctx.createOscillator();
         const gain = ctx.createGain();

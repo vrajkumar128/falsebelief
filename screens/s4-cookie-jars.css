@@ -104,43 +104,6 @@
   }
 }
 
-/* Walking waddle of the legs */
-@keyframes walkLegLeft {
-
-  0%,
-  100% {
-    transform: translateY(0) rotate(0deg);
-  }
-
-  50% {
-    transform: translateY(-12px) rotate(-6deg);
-  }
-}
-
-@keyframes walkLegRight {
-
-  0%,
-  100% {
-    transform: translateY(0) rotate(0deg);
-  }
-
-  50% {
-    transform: translateY(-12px) rotate(6deg);
-  }
-}
-
-@keyframes walkBodyBob {
-
-  0%,
-  100% {
-    transform: translateY(0);
-  }
-
-  50% {
-    transform: translateY(-5px);
-  }
-}
-
 /* Walk path poses through the 200px doorways (left doorway X 35-235, right 765-965, threshold Y 450).
    Characters' feet sit at local Y 565 and scale about (500, 440), so world feet Y = 440 + 125*scale + ty.
      DOORWAY  turtle: scale 0.70, centre X 865; bear (wider, paws +/-143.5): scale 0.64, centre X 141, so he
@@ -208,19 +171,20 @@
   }
 }
 
-/* Left Door Swing (Bear Exit, 7.5s): open by 63%, bear behind door at 70%, closes 73-84% */
+/* Left Door Swing (Bear Exit, 7.5s): opened from 56.5% (4.24 s), as Mr. Bear's paw gets to the handle; open by
+   66%, bear behind door at 70%, closes 73-84% */
 @keyframes doorLeftOpenClose {
 
   0%,
-  52% {
+  56.5% {
     transform: scaleX(1);
   }
 
-  58% {
+  60% {
     transform: scaleX(0.18) skewY(-5deg);
   }
 
-  63%,
+  66%,
   73% {
     transform: scaleX(0.05) skewY(-8deg);
   }
@@ -235,20 +199,21 @@
   }
 }
 
-/* Left Door Swing (Bear Re-entrance, 5.5s, starts 0.5s before bear): open by 20%, closes 46-62%
+/* Left Door Swing (Bear Re-entrance, 5.5s, starts 0.5s before bear): stays shut while he walks down the path
+   behind it, is pushed open as he reaches it (30-38%, just before he steps through at 39%), closes 46-62%
    after the bear is back inside */
 @keyframes doorLeftReturnSwing {
 
   0%,
-  5% {
+  30% {
     transform: scaleX(1);
   }
 
-  14% {
+  33% {
     transform: scaleX(0.18) skewY(-5deg);
   }
 
-  20%,
+  38%,
   46% {
     transform: scaleX(0.05) skewY(-8deg);
   }
@@ -263,20 +228,21 @@
   }
 }
 
-/* Right Door Swing (Turtle Entrance, 4.5s, starts 0.6s before turtle): open by 36%, closes 78-90%
+/* Right Door Swing (Turtle Entrance, 4.5s, starts 0.6s before turtle): stays shut while he walks down the path
+   behind it, is pushed open as he reaches it (62-72%, just before he steps through at 73%), closes 78-90%
    after the turtle is inside */
 @keyframes doorRightOpenClose {
 
   0%,
-  15% {
+  62% {
     transform: scaleX(1);
   }
 
-  26% {
+  66% {
     transform: scaleX(0.18) skewY(5deg);
   }
 
-  36%,
+  72%,
   78% {
     transform: scaleX(0.05) skewY(8deg);
   }
@@ -291,20 +257,20 @@
   }
 }
 
-/* Right Door Swing (Turtle Exit, 4.5s, starts 0.8s before turtle): open by 28%, closes 50-64%
-   after the turtle is behind it */
+/* Right Door Swing (Turtle Exit, 4.5s, starts 0.8s before turtle): opened as his flipper gets to the handle
+   (19.5% = 24.08 s, open by 33%), closes 50-64% after the turtle is behind it */
 @keyframes doorRightExitSwing {
 
   0%,
-  8% {
+  19.5% {
     transform: scaleX(1);
   }
 
-  20% {
+  23% {
     transform: scaleX(0.18) skewY(5deg);
   }
 
-  28%,
+  33%,
   50% {
     transform: scaleX(0.05) skewY(8deg);
   }
@@ -386,10 +352,12 @@
    Stops shared between turtleMoveCookieAction, turtleStretch and the arm pivots must stay identical so the
    flipper paths stay straight; wrist timings live in TURTLE_WRIST_KEYS in the script.
 */
-/* While a flipper is over or in a jar the turtle stands right up (ty -8 here plus turtleStretch -49: shoulder
-   at Y 283, well above the rim at Y 350), so his arm goes down into the opening over the back of the rim and
-   never through the front lip. The flipper moves straight up and down at X 335 through four poses:
-     IN    flipper (335,368) in the jar, arm hanging straight down from a shoulder right above it
+/* While a flipper is over or in a jar the turtle stands right up (turtleStretch -57 lifts his body, not his
+   legs, so his feet stay on the floor: shoulder at Y 283, well above the rim at Y 350), so his arm goes down
+   into the opening over the back of the rim and never through the front lip. The flipper moves straight up and
+   down at X 335 through four poses:
+     IN    flipper (335,368) in the jar, reached at a slant from a shoulder at (375, 293): he bends a little
+           (stretch -47) instead of sliding right over the jar, so his body only moves 29 between LOW and IN
      LOW   flipper (335,333)        MID  flipper (335,297), just above the rim
      TOP   flipper (335,260), cookie hanging clear of the rim
    13% MID (arm reaches over the rim), 15% LOW, 17-19% IN (pinches the cookie), 23% LOW, 27% MID, 31-36% TOP;
@@ -402,29 +370,29 @@
   }
 
   13% {
-    transform: translate(-26.2px, -8px);
+    transform: translate(-26.2px, 0px);
   }
 
   15% {
-    transform: translate(-41.3px, -8px);
+    transform: translate(-41.3px, 0px);
   }
 
   17%,
   19% {
-    transform: translate(-110px, -8px);
+    transform: translate(-70px, 0px);
   }
 
   23% {
-    transform: translate(-41.3px, -8px);
+    transform: translate(-41.3px, 0px);
   }
 
   27% {
-    transform: translate(-26.2px, -8px);
+    transform: translate(-26.2px, 0px);
   }
 
   31%,
   36% {
-    transform: translate(-28.2px, -8px);
+    transform: translate(-28.2px, 0px);
   }
 
   47%,
@@ -434,28 +402,28 @@
 
   65%,
   70% {
-    transform: translate(28.2px, -8px);
+    transform: translate(28.2px, 0px);
   }
 
   74% {
-    transform: translate(26.2px, -8px);
+    transform: translate(26.2px, 0px);
   }
 
   78% {
-    transform: translate(41.3px, -8px);
+    transform: translate(41.3px, 0px);
   }
 
   82%,
   84% {
-    transform: translate(110px, -8px);
+    transform: translate(70px, 0px);
   }
 
   86% {
-    transform: translate(41.3px, -8px);
+    transform: translate(41.3px, 0px);
   }
 
   88% {
-    transform: translate(26.2px, -8px);
+    transform: translate(26.2px, 0px);
   }
 
   100% {
@@ -463,7 +431,8 @@
   }
 }
 
-/* Turtle stands up taller on his legs (body only; the gap above his legs stays hidden behind the table) */
+/* Turtle stands up taller on his legs (body only; the gap above his legs stays hidden behind the table), and
+   bends slightly at the bottom of each reach into a jar */
 @keyframes turtleStretch {
 
   0%,
@@ -472,8 +441,18 @@
   }
 
   13%,
+  15% {
+    transform: translateY(-57px);
+  }
+
+  17%,
+  19% {
+    transform: translateY(-47px);
+  }
+
+  23%,
   36% {
-    transform: translateY(-49px);
+    transform: translateY(-57px);
   }
 
   47%,
@@ -482,8 +461,18 @@
   }
 
   65%,
+  78% {
+    transform: translateY(-57px);
+  }
+
+  82%,
+  84% {
+    transform: translateY(-47px);
+  }
+
+  86%,
   88% {
-    transform: translateY(-49px);
+    transform: translateY(-57px);
   }
 
   100% {
@@ -513,8 +502,8 @@
 
   17%,
   19% {
-    /* IN: arm straight down into the opening, pinching the cookie */
-    transform: rotate(-26.57deg);
+    /* IN: arm reaching down into the opening at a slant, pinching the cookie */
+    transform: rotate(1.5deg);
   }
 
   23% {
@@ -571,8 +560,8 @@
 
   82%,
   84% {
-    /* IN: arm straight down into the opening, cookie at the bottom of the right jar */
-    transform: rotate(26.57deg);
+    /* IN: arm reaching down into the opening at a slant, cookie at the bottom of the right jar */
+    transform: rotate(-1.5deg);
   }
 
   86% {
@@ -689,33 +678,122 @@
   }
 }
 
-/* Walking animation toggle classes */
-.bear-walking .anim-leg-l {
-  animation: walkLegLeft 0.35s ease-in-out infinite;
-  transform-origin: 440px 440px;
+/* Walking (leg cycle and --step are in shared/base.css): the body bobs once per footstep, leans into the
+   direction of travel (.walk-left / .walk-right / .shuffle-*), and the eyes look where they're going (.look-*). */
+#bear-character-wrapper,
+#turtle-character-wrapper {
+  transition: --step 0.4s ease-out;
 }
 
-.bear-walking .anim-leg-r {
-  animation: walkLegRight 0.35s ease-in-out infinite 0.175s;
-  transform-origin: 560px 440px;
+#bear-lean-grp {
+  transform-origin: 500px 470px;
+  transition: rotate 0.4s ease-in-out;
+}
+
+#turtle-body-grp {
+  transform-origin: 845px 470px;
+  transition: rotate 0.4s ease-in-out;
 }
 
 .bear-walking #bear-lean-grp {
   animation: walkBodyBob 0.35s ease-in-out infinite;
 }
 
-.turtle-walking .anim-turtle-leg-l {
-  animation: walkLegLeft 0.38s ease-in-out infinite;
-  transform-origin: 805px 450px;
-}
-
-.turtle-walking .anim-turtle-leg-r {
-  animation: walkLegRight 0.38s ease-in-out infinite 0.19s;
-  transform-origin: 885px 450px;
-}
-
 .turtle-walking #turtle-body-grp {
-  animation: walkBodyBob 0.38s ease-in-out infinite;
+  animation: walkBodyBob 0.4s ease-in-out infinite;
+}
+
+.walk-left #bear-lean-grp,
+.walk-left #turtle-body-grp {
+  rotate: -3deg;
+}
+
+.walk-right #bear-lean-grp,
+.walk-right #turtle-body-grp {
+  rotate: 3deg;
+}
+
+#bear-pupils,
+#turtle-eyes {
+  transition: translate 0.3s ease-in-out;
+}
+
+.look-left #bear-pupils,
+.look-left #turtle-eyes {
+  translate: -6px 1px;
+}
+
+.look-right #bear-pupils,
+.look-right #turtle-eyes {
+  translate: 6px 1px;
+}
+
+/* Reaching for a door handle as the door opens: Mr. Bear's right arm (screen left) toward the left door,
+   Mr. Turtle's right flipper (screen right) toward the right door */
+#bear-lowering-arm,
+#turtle-arm-r {
+  transition: rotate 0.45s ease-in-out;
+}
+
+.reach-door #bear-lowering-arm {
+  rotate: 108deg;
+}
+
+.reach-door #turtle-arm-r {
+  rotate: -102deg;
+}
+
+/* Mr. Turtle's eyes follow the cookie (same 10 s timeline as turtleMoveCookieAction): down into the left jar as
+   his flipper goes in, up as he lifts the cookie out, down at it while he holds it in front of him, across and
+   down into the right jar, then back to the front. */
+@keyframes turtleGazeFollow {
+
+  0%,
+  4% {
+    transform: translate(0px, 0px);
+  }
+
+  11% {
+    transform: translate(-5px, 4px);
+  }
+
+  14%,
+  24% {
+    transform: translate(-3px, 7px);
+  }
+
+  31%,
+  36% {
+    transform: translate(-6px, 1px);
+  }
+
+  45%,
+  55% {
+    transform: translate(0px, 5px);
+  }
+
+  62% {
+    transform: translate(4px, 2px);
+  }
+
+  66%,
+  71% {
+    transform: translate(6px, 1px);
+  }
+
+  76%,
+  86% {
+    transform: translate(3px, 7px);
+  }
+
+  94%,
+  100% {
+    transform: translate(0px, 0px);
+  }
+}
+
+.turtle-gaze-active {
+  animation: turtleGazeFollow 10s ease-in-out forwards;
 }
 
 .intro-arm {

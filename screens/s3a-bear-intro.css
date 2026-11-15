@@ -4,28 +4,25 @@
   transform-origin: 500px 567px;
 }
 
+/* Walks toward us down the path from the far side to the fork, growing as he comes closer (his legs step
+   with the shared walk cycle while .bear-walking is on); 1.75 s = BEAR_INTRO.walkInMs */
 .s3-bear.is-entering {
-  animation: s3BearPop 0.7s ease-out both;
+  animation: s3BearWalkIn 1.75s cubic-bezier(0.25, 0.1, 0.45, 1) both;
 }
 
-@keyframes s3BearPop {
+@keyframes s3BearWalkIn {
   0% {
     opacity: 0;
-    transform: translateY(70px) scale(0.55);
+    transform: translate(0px, -228px) scale(0.5);
   }
 
-  55% {
+  10% {
     opacity: 1;
-    transform: translateY(-12px) scale(1.04, 0.97);
-  }
-
-  78% {
-    transform: translateY(0) scale(0.97, 1.03);
   }
 
   100% {
     opacity: 1;
-    transform: translateY(0) scale(1);
+    transform: translate(0px, 0px) scale(1);
   }
 }
 

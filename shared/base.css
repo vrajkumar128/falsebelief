@@ -67,6 +67,130 @@ body {
   transform-origin: 570px 170px;
 }
 
+/* ================= WALKING (Mr. Bear: .bear-walking, Mr. Turtle: .turtle-walking) =================
+   Each leg spends the first half of its cycle planted and the second half stepping forward; the two legs are half
+   a cycle apart, so one foot is always on the ground. A planted foot slides back under the body by 2 x --step,
+   which a screen sets for the direction of travel (negative when walking left), so it stays put on the floor
+   while the body moves on. --step eases in and out, so the first and last steps are shorter. A foot lands at the
+   start of each cycle: every half cycle (350 ms for Mr. Bear, 400 ms for Mr. Turtle) is one footstep sound.
+   Coordinates are the shared character art's. */
+@property --step {
+  syntax: '<length>';
+  inherits: true;
+  initial-value: 0px;
+}
+
+@keyframes walkLeg {
+  0% {
+    transform: translate(var(--step), 0px) rotate(0deg);
+    animation-timing-function: linear;
+  }
+
+  50% {
+    transform: translate(calc(var(--step) * -1), 0px) rotate(0deg);
+    animation-timing-function: ease-out;
+  }
+
+  75% {
+    transform: translate(0px, -12px) rotate(var(--leg-tilt, 0deg));
+    animation-timing-function: ease-in;
+  }
+
+  100% {
+    transform: translate(var(--step), 0px) rotate(0deg);
+  }
+}
+
+/* The body dips as each foot lands */
+@keyframes walkBodyBob {
+
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-5px);
+  }
+}
+
+.bear-walking .anim-leg-l {
+  --leg-tilt: -6deg;
+  animation: walkLeg 0.7s infinite;
+  transform-origin: 440px 440px;
+}
+
+.bear-walking .anim-leg-r {
+  --leg-tilt: 6deg;
+  animation: walkLeg 0.7s infinite -0.35s;
+  transform-origin: 560px 440px;
+}
+
+.turtle-walking .anim-turtle-leg-l {
+  --leg-tilt: -6deg;
+  animation: walkLeg 0.8s infinite;
+  transform-origin: 805px 450px;
+}
+
+.turtle-walking .anim-turtle-leg-r {
+  --leg-tilt: 6deg;
+  animation: walkLeg 0.8s infinite -0.4s;
+  transform-origin: 885px 450px;
+}
+
+/* Arms swing out a little as the opposite leg steps (around .arm-swing-l / .arm-swing-r, wrappers pivoting at
+   each shoulder), on while a screen sets .arms-swinging. An arm reaching for a door (.door-arm) holds still. */
+.bear-walking {
+  --walk-cycle: 0.7s;
+}
+
+.turtle-walking {
+  --walk-cycle: 0.8s;
+}
+
+@keyframes armSwingOut {
+
+  0%,
+  100% {
+    transform: rotate(0deg);
+  }
+
+  50% {
+    transform: rotate(var(--swing-out));
+  }
+}
+
+.arms-swinging .arm-swing-l {
+  --swing-out: 9deg;
+  animation: armSwingOut var(--walk-cycle) ease-in-out infinite calc(var(--walk-cycle) * -0.25);
+}
+
+.arms-swinging .arm-swing-r {
+  --swing-out: -9deg;
+  animation: armSwingOut var(--walk-cycle) ease-in-out infinite calc(var(--walk-cycle) * -0.75);
+}
+
+.arms-swinging.reach-door .door-arm {
+  animation: none;
+}
+
+.walk-left {
+  --step: -22px;
+}
+
+.walk-right {
+  --step: 22px;
+}
+
+/* Small sideways steps, e.g. Mr. Turtle shuffling along behind the table */
+.shuffle-left {
+  --step: -9px;
+}
+
+.shuffle-right {
+  --step: 9px;
+}
+
 /* ================= SCREENS =================
    Each screen fills the stage; only the current one is shown (see shared/storyline.js). */
 .screen {

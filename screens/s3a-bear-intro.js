@@ -1,4 +1,5 @@
-// S3a. INTRODUCE MR. BEAR + ATTENTION CHECK: Mr. Bear pops up between a red school and a blue school and waves.
+// S3a. INTRODUCE MR. BEAR + ATTENTION CHECK: Mr. Bear walks down a path between a red school and a blue school
+// and waves.
 // The voiceover (not recorded yet) will say "Mr. Bear goes to the red school.", then ask "Which school does
 // Mr. Bear attend?". There's no text on screen because the children can't read yet. Tapping either school or its
 // button answers. The first answer is reported as an 'attentionCheckAnswered' event (with no right/wrong feedback
@@ -10,9 +11,10 @@
     statement: 'Mr. Bear goes to the red school.',
     question: 'Which school does Mr. Bear attend?',
     correctChoice: 'red',
-    waveAt: 650,                // he has popped up and waves hello
-    statementAt: 900,
-    questionAt: 4400,           // the schools and their buttons can be chosen from here on
+    walkInMs: 1750,             // he walks down the path to where it forks
+    waveAt: 1900,               // then waves hello
+    statementAt: 2100,
+    questionAt: 5600,           // the schools and their buttons can be chosen from here on
     nextScreenAfterAnswer: 1400,
   };
 
@@ -134,9 +136,10 @@
           <circle cx="966" cy="440" fill="#15803d" r="21"></circle>
           <circle cx="942" cy="447" fill="#16a34a" r="16"></circle>
           <circle cx="972" cy="434" fill="#f43f5e" r="4.5"></circle>
-          <!-- path forking from where Mr. Bear stands to each school's door -->
+          <!-- path: comes from the far side between the schools (Mr. Bear walks down it), then forks to each
+               school's door -->
           <path
-            d="M 404 650 C 396 560, 250 512, 164 440 L 216 440 C 300 496, 468 520, 500 548 C 532 520, 700 496, 784 440 L 836 440 C 750 512, 604 560, 596 650 Z"
+            d="M 404 650 C 396 560, 250 512, 164 440 L 216 440 C 300 496, 440 510, 474 522 L 488 424 L 512 424 L 526 522 C 560 510, 700 496, 784 440 L 836 440 C 750 512, 604 560, 596 650 Z"
             fill="url(#s3PathGrad)" stroke="#d97706" stroke-linejoin="round" stroke-width="3"></path>
         </g>
 
@@ -157,28 +160,33 @@
           </g>
         </g>
 
-        <!-- MR. BEAR: the S4 bear art (same coordinates), scaled down to stand where the path forks -->
+        <!-- MR. BEAR: the S4 bear art (same coordinates), scaled down to stand where the path forks; he walks
+             there down the path from the far side -->
         <g aria-hidden="true" pointer-events="none" transform="translate(190 238.5) scale(0.62)">
           <g class="s3-bear" id="s3a-bear">
             <!-- legs -->
             <ellipse cx="440" cy="565" fill="#000000" opacity="0.2" rx="35" ry="12"></ellipse>
             <ellipse cx="560" cy="565" fill="#000000" opacity="0.2" rx="35" ry="12"></ellipse>
-            <path d="M420 440 L415 540 C415 558, 465 558, 465 540 L460 440 Z" fill="url(#s3BearBodyGrad)"
-              stroke="#2c1e14" stroke-linejoin="round" stroke-width="5.5"></path>
-            <ellipse cx="438" cy="552" fill="url(#s3BearBodyGrad)" rx="32" ry="15" stroke="#2c1e14" stroke-width="5">
-            </ellipse>
-            <ellipse cx="438" cy="553" fill="#f8bbd0" rx="15" ry="9" stroke="#2c1e14" stroke-width="1.5"></ellipse>
-            <circle cx="423" cy="544" fill="#f8bbd0" r="4.5" stroke="#2c1e14" stroke-width="1.2"></circle>
-            <circle cx="436" cy="541" fill="#f8bbd0" r="4.5" stroke="#2c1e14" stroke-width="1.2"></circle>
-            <circle cx="449" cy="544" fill="#f8bbd0" r="4.5" stroke="#2c1e14" stroke-width="1.2"></circle>
-            <path d="M540 440 L535 540 C535 558, 585 558, 585 540 L580 440 Z" fill="url(#s3BearBodyGrad)"
-              stroke="#2c1e14" stroke-linejoin="round" stroke-width="5.5"></path>
-            <ellipse cx="562" cy="552" fill="url(#s3BearBodyGrad)" rx="32" ry="15" stroke="#2c1e14" stroke-width="5">
-            </ellipse>
-            <ellipse cx="562" cy="553" fill="#f8bbd0" rx="15" ry="9" stroke="#2c1e14" stroke-width="1.5"></ellipse>
-            <circle cx="551" cy="544" fill="#f8bbd0" r="4.5" stroke="#2c1e14" stroke-width="1.2"></circle>
-            <circle cx="564" cy="541" fill="#f8bbd0" r="4.5" stroke="#2c1e14" stroke-width="1.2"></circle>
-            <circle cx="577" cy="544" fill="#f8bbd0" r="4.5" stroke="#2c1e14" stroke-width="1.2"></circle>
+            <g class="anim-leg-l">
+              <path d="M420 440 L415 540 C415 558, 465 558, 465 540 L460 440 Z" fill="url(#s3BearBodyGrad)"
+                stroke="#2c1e14" stroke-linejoin="round" stroke-width="5.5"></path>
+              <ellipse cx="438" cy="552" fill="url(#s3BearBodyGrad)" rx="32" ry="15" stroke="#2c1e14" stroke-width="5">
+              </ellipse>
+              <ellipse cx="438" cy="553" fill="#f8bbd0" rx="15" ry="9" stroke="#2c1e14" stroke-width="1.5"></ellipse>
+              <circle cx="423" cy="544" fill="#f8bbd0" r="4.5" stroke="#2c1e14" stroke-width="1.2"></circle>
+              <circle cx="436" cy="541" fill="#f8bbd0" r="4.5" stroke="#2c1e14" stroke-width="1.2"></circle>
+              <circle cx="449" cy="544" fill="#f8bbd0" r="4.5" stroke="#2c1e14" stroke-width="1.2"></circle>
+            </g>
+            <g class="anim-leg-r">
+              <path d="M540 440 L535 540 C535 558, 585 558, 585 540 L580 440 Z" fill="url(#s3BearBodyGrad)"
+                stroke="#2c1e14" stroke-linejoin="round" stroke-width="5.5"></path>
+              <ellipse cx="562" cy="552" fill="url(#s3BearBodyGrad)" rx="32" ry="15" stroke="#2c1e14" stroke-width="5">
+              </ellipse>
+              <ellipse cx="562" cy="553" fill="#f8bbd0" rx="15" ry="9" stroke="#2c1e14" stroke-width="1.5"></ellipse>
+              <circle cx="551" cy="544" fill="#f8bbd0" r="4.5" stroke="#2c1e14" stroke-width="1.2"></circle>
+              <circle cx="564" cy="541" fill="#f8bbd0" r="4.5" stroke="#2c1e14" stroke-width="1.2"></circle>
+              <circle cx="577" cy="544" fill="#f8bbd0" r="4.5" stroke="#2c1e14" stroke-width="1.2"></circle>
+            </g>
             <!-- ears -->
             <g class="anim-ear-l">
               <circle cx="430" cy="180" fill="url(#s3BearBodyGrad)" r="34" stroke="#2c1e14" stroke-width="5"></circle>
@@ -219,15 +227,18 @@
             <path d="M492 154 Q500 138 506 153 Q512 142 516 156" fill="url(#s3BearBodyGrad)" stroke="#2c1e14"
               stroke-width="4"></path>
             <!-- his left arm (screen right), resting -->
-            <path
-              d="M 557.6 341.5 A 27 27 0 0 1 606.4 318.5 C 617 345, 632 368, 638.7 393.7 L 595.3 414.3 C 586 390, 570 365, 557.6 341.5 Z"
-              fill="url(#s3BearBodyGrad)" stroke="#2c1e14" stroke-linejoin="round" stroke-width="5"></path>
-            <circle cx="617" cy="404" fill="url(#s3BearBodyGrad)" r="24" stroke="#2c1e14" stroke-width="5"></circle>
-            <ellipse cx="617" cy="404" fill="#f8bbd0" rx="13" ry="11"></ellipse>
-            <circle cx="634" cy="391" fill="#f8bbd0" r="5" stroke="#2c1e14" stroke-width="1.2"></circle>
-            <circle cx="626" cy="382" fill="#f8bbd0" r="5" stroke="#2c1e14" stroke-width="1.2"></circle>
-            <circle cx="612" cy="381" fill="#f8bbd0" r="5" stroke="#2c1e14" stroke-width="1.2"></circle>
+            <g class="arm-swing-r" style="transform-origin: 582px 330px;">
+              <path
+                d="M 557.6 341.5 A 27 27 0 0 1 606.4 318.5 C 617 345, 632 368, 638.7 393.7 L 595.3 414.3 C 586 390, 570 365, 557.6 341.5 Z"
+                fill="url(#s3BearBodyGrad)" stroke="#2c1e14" stroke-linejoin="round" stroke-width="5"></path>
+              <circle cx="617" cy="404" fill="url(#s3BearBodyGrad)" r="24" stroke="#2c1e14" stroke-width="5"></circle>
+              <ellipse cx="617" cy="404" fill="#f8bbd0" rx="13" ry="11"></ellipse>
+              <circle cx="634" cy="391" fill="#f8bbd0" r="5" stroke="#2c1e14" stroke-width="1.2"></circle>
+              <circle cx="626" cy="382" fill="#f8bbd0" r="5" stroke="#2c1e14" stroke-width="1.2"></circle>
+              <circle cx="612" cy="381" fill="#f8bbd0" r="5" stroke="#2c1e14" stroke-width="1.2"></circle>
+            </g>
             <!-- his right arm (screen left), waving -->
+            <g class="arm-swing-l" style="transform-origin: 418px 330px;">
             <g class="s3-wave-arm">
               <path
                 d="M 442.4 341.5 A 27 27 0 0 0 393.6 318.5 C 383 345, 368 368, 361.3 393.7 L 404.7 414.3 C 414 390, 430 365, 442.4 341.5 Z"
@@ -239,6 +250,7 @@
                 <circle cx="374" cy="382" fill="#f8bbd0" r="5" stroke="#2c1e14" stroke-width="1.2"></circle>
                 <circle cx="388" cy="381" fill="#f8bbd0" r="5" stroke="#2c1e14" stroke-width="1.2"></circle>
               </g>
+            </g>
             </g>
           </g>
         </g>
@@ -320,12 +332,16 @@
     document.getElementById('s3a-answers').classList.remove('is-shown');
     sayLine('');
 
-    // Mr. Bear pops up where the path forks (not from either side, so neither school is hinted), then waves
+    // Mr. Bear walks down the path from the far side, between the schools (so neither school is hinted), to where
+    // it forks, with a footstep on the path as each foot lands; then he waves
     const bear = document.getElementById('s3a-bear');
-    bear.classList.remove('is-entering', 'is-waving');
+    bear.classList.remove('is-entering', 'is-waving', 'bear-walking', 'arms-swinging');
     void bear.getBoundingClientRect();
-    bear.classList.add('is-entering');
-    Sounds.play('cookieLift');
+    bear.classList.add('is-entering', 'bear-walking', 'arms-swinging');
+    for (let t = 0; t < BEAR_INTRO.walkInMs - 100; t += 350) {
+      introSchedule(() => Sounds.play('footstep', { surface: 'path' }), t);
+    }
+    introSchedule(() => bear.classList.remove('bear-walking', 'arms-swinging'), BEAR_INTRO.walkInMs);
     introSchedule(() => bear.classList.add('is-waving'), BEAR_INTRO.waveAt);
     introSchedule(() => sayLine(BEAR_INTRO.statement), BEAR_INTRO.statementAt);
     introSchedule(askIntroQuestion, BEAR_INTRO.questionAt);

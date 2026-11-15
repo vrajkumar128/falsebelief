@@ -335,14 +335,16 @@
           <!-- Arms & Paws: mirror images about X=500. Each arm is a chunky tapered limb whose rounded shoulder is a
                semicircle centred on its pivot (his right 418,330 / his left 582,330), so rotating keeps it attached -->
           <!-- Bear's Right Arm & Paw (screen left): holds the cookie -->
+          <g class="arm-swing-l door-arm" style="transform-origin: 418px 330px;">
           <g class="intro-arm" id="bear-lowering-arm">
             <use href="#bear-arm-r-art"></use>
             <g id="bear-paw-grip">
               <use href="#bear-paw-r-pad-symbol"></use>
             </g>
           </g>
+          </g>
           <!-- Bear's Left Arm & Paw (screen right) -->
-          <g>
+          <g class="arm-swing-r" style="transform-origin: 582px 330px;">
             <path d="M 557.6 341.5 A 27 27 0 0 1 606.4 318.5 C 617 345, 632 368, 638.7 393.7 L 595.3 414.3 C 586 390, 570 365, 557.6 341.5 Z"
               fill="url(#bearBodyGrad)" stroke="#2c1e14" stroke-linejoin="round" stroke-width="5"></path>
             <circle cx="617" cy="404" fill="url(#bearBodyGrad)" r="24" stroke="#2c1e14" stroke-width="5"></circle>
@@ -362,6 +364,8 @@
           <!-- Base coords centered around X=500 -->
           <g transform="translate(-345, 0)">
             <g id="turtle-legs-group">
+              <!-- Body shadow: in the legs group so it stays on the floor when he stands up taller -->
+              <ellipse cx="845" cy="465" fill="#000000" opacity="0.18" rx="115" ry="20"></ellipse>
               <ellipse cx="805" cy="565" fill="#000000" opacity="0.22" rx="28" ry="10"></ellipse>
               <ellipse cx="885" cy="565" fill="#000000" opacity="0.22" rx="28" ry="10"></ellipse>
               <g class="anim-turtle-leg-l">
@@ -384,7 +388,6 @@
             <!-- Stretch group: lifts the body (not the legs) when the turtle stands up taller to reach -->
             <g id="turtle-stretch-grp">
             <g id="turtle-body-grp">
-              <ellipse cx="845" cy="465" fill="#000000" opacity="0.18" rx="115" ry="20"></ellipse>
               <!-- Back Carapace (Behind arms and torso) -->
               <ellipse cx="845" cy="375" fill="url(#turtleShellGrad)" rx="112" ry="105" stroke="#2c1e14"
                 stroke-width="6"></ellipse>
@@ -437,12 +440,16 @@
                    both flippers can hold the cookie up together -->
               <g id="turtle-arms-pair">
                 <!-- Left Arm anchored to left shoulder at (790, 340) -->
+                <g class="arm-swing-l" style="transform-origin: 790px 340px;">
                 <g id="turtle-arm-l" style="transform-origin: 790px 340px;">
                   <use href="#turtle-arm-l-art"></use>
                 </g>
+                </g>
                 <!-- Right Arm anchored to right shoulder at (900, 340) -->
+                <g class="arm-swing-r door-arm" style="transform-origin: 900px 340px;">
                 <g id="turtle-arm-r" style="transform-origin: 900px 340px;">
                   <use href="#turtle-arm-r-art"></use>
+                </g>
                 </g>
               </g>
             </g>
@@ -986,11 +993,23 @@
   };
   const DOOR_ANIMATION_CLASSES = ['anim-door-swing', 'anim-door-left-return', 'anim-door-right-active', 'anim-door-right-exit'];
 
+  const outdoors = {}; // door slot id -> whether that character is out on the path
+
   function setCharacterOutside(slotId, side, outside) {
+    outdoors[slotId] = outside;
     const slot = document.getElementById(slotId);
     if (outside) slot.setAttribute('clip-path', `url(#${DOORWAYS[side].clip})`);
     else slot.removeAttribute('clip-path');
     document.getElementById(DOORWAYS[side].frontLeaf).setAttribute('visibility', outside ? 'visible' : 'hidden');
+  }
+
+  // Footsteps sound like the ground underfoot: the tiled floor indoors, the sandy path once through a doorway
+  function playBearStep() {
+    Sounds.play('footstep', { surface: outdoors['bear-door-slot'] ? 'path' : 'tile' });
+  }
+
+  function playTurtleStep() {
+    Sounds.play('turtleStep', { surface: outdoors['turtle-door-slot'] ? 'path' : 'tile' });
   }
 
   // Applies a swing animation to both copies of a door leaf at once so they stay in lockstep
@@ -1013,6 +1032,7 @@
     const turtleArmL = document.getElementById('turtle-arm-l');
     const turtleArmR = document.getElementById('turtle-arm-r');
     const turtleStretch = document.getElementById('turtle-stretch-grp');
+    const turtleEyes = document.getElementById('turtle-eyes');
     const leftJar = document.getElementById('jar-left-group');
     const leftStarsLift = document.getElementById('drop-stars-left-lift');
     const rightJar = document.getElementById('jar-right-group');
@@ -1021,10 +1041,13 @@
     // Reset highlights & state classes
     document.getElementById('jar-left-glow').setAttribute('opacity', '0');
     document.getElementById('jar-right-glow').setAttribute('opacity', '0');
-    bear.classList.remove('bear-walking', 'anim-bear-return', 'anim-bear-departure');
+    const MOVE_CLASSES = ['walk-left', 'walk-right', 'shuffle-left', 'shuffle-right', 'look-left', 'look-right',
+      'reach-door', 'arms-swinging'];
+    bear.classList.remove('bear-walking', 'anim-bear-return', 'anim-bear-departure', ...MOVE_CLASSES);
     bear.style.transform = '';
     bear.style.opacity = '1';
-    turtle.classList.remove('turtle-walking', 'anim-turtle-active', 'anim-turtle-exit-active');
+    turtle.classList.remove('turtle-walking', 'anim-turtle-active', 'anim-turtle-exit-active', ...MOVE_CLASSES);
+    turtleEyes.classList.remove('turtle-gaze-active');
     turtleChoreo.classList.remove('turtle-move-cookie');
     turtleStretch.classList.remove('turtle-stretch-active');
     turtleArmL.classList.remove('turtle-left-arm-active');
@@ -1078,48 +1101,71 @@
 
     // 3. Bear starts walking directly towards the left door (t = 2650ms)
     schedule(() => {
-      bear.classList.add('bear-walking');
-      Sounds.play('footstep');
+      bear.classList.add('bear-walking', 'walk-left', 'look-left', 'arms-swinging');
+      playBearStep();
     }, 2650);
 
     // Bear footsteps along path to door
     [3000, 3350, 3700, 4050, 4400, 4750, 5100, 5450, 5800, 6100].forEach(t => {
       schedule(() => {
-        Sounds.play('footstep');
+        playBearStep();
       }, t);
     });
 
-    // 4. Left Door opens smoothly as the bear approaches the doorway (~3900ms)
+    // 4. Bear reaches for the handle as he walks up (~3650ms), opens the left door when his paw gets to it
+    //    (~4240ms; door opens 4240-4950), then lowers his arm before stepping through (~4700ms)
+    schedule(() => {
+      bear.classList.add('reach-door');
+    }, 3650);
     schedule(() => {
       Sounds.play('doorCreak');
-    }, 3900);
+    }, 4240);
+    schedule(() => {
+      bear.classList.remove('reach-door');
+    }, 4700);
 
     // Bear is passing through the doorway (departure 70% = 5250ms): from here on he is outside, behind the door
     schedule(() => {
       setCharacterOutside('bear-door-slot', 'left', true);
     }, 5310);
 
-    // 5. Left Door swings shut behind the bear as he walks off up the path (~6300ms)
+    // 5. Once through, the bear reaches back and pulls the left door shut behind him as he walks off up the path
+    //    (arm out ~5350-6150ms; door closes 5475-6300)
+    schedule(() => {
+      bear.classList.add('reach-door');
+    }, 5350);
+    schedule(() => {
+      bear.classList.remove('reach-door');
+    }, 6150);
     schedule(() => {
       Sounds.play('doorShut');
     }, 6300);
 
     schedule(() => {
-      bear.classList.remove('bear-walking');
+      bear.classList.remove('bear-walking', 'walk-left', 'look-left', 'arms-swinging');
     }, 7500);
 
-    // 6. Right door begins swinging open for Turtle entrance (~6500ms)
+    // 6. Right door's entrance swing is set up (~6500ms); it stays shut until the turtle pushes it open (~9300ms)
     schedule(() => {
-      Sounds.play('doorCreak');
       setDoorAnimation('door-right-leaf', 'anim-door-right-active');
     }, 6500);
+    schedule(() => {
+      Sounds.play('doorCreak');
+    }, 9300);
+    // He pushes it open with his flipper out (~9050-9650ms; door opens 9290-9740), then lowers it to step in
+    schedule(() => {
+      turtle.classList.add('reach-door');
+    }, 9050);
+    schedule(() => {
+      turtle.classList.remove('reach-door');
+    }, 9650);
 
-    // Legs step (with a footstep sound every 400ms) exactly while the body is moving: windows match the walk and
-    // choreography keyframes
-    const walkWindow = (character, walkingClass, sound, from, to) => {
-      schedule(() => { character.classList.add(walkingClass); Sounds.play(sound); }, from);
-      for (let t = from + 400; t < to - 100; t += 400) schedule(() => Sounds.play(sound), t);
-      schedule(() => character.classList.remove(walkingClass), to);
+    // Legs step (with a footstep sound every 400ms, as each foot lands) exactly while the body is moving: windows
+    // match the walk and choreography keyframes. moveClasses set the direction of travel (stride, lean, gaze).
+    const walkWindow = (character, walkingClass, step, from, to, moveClasses = []) => {
+      schedule(() => { character.classList.add(walkingClass, ...moveClasses); step(); }, from);
+      for (let t = from + 400; t < to - 100; t += 400) schedule(step, t);
+      schedule(() => character.classList.remove(walkingClass, ...moveClasses), to);
     };
 
     // 7. Turtle waits up the outdoor path while the door opens (~7100ms), then walks down it, through the right
@@ -1127,7 +1173,7 @@
     schedule(() => {
       turtle.classList.add('anim-turtle-active');
     }, 7100);
-    walkWindow(turtle, 'turtle-walking', 'turtleStep', 8200, 11700);
+    walkWindow(turtle, 'turtle-walking', playTurtleStep, 8200, 11700, ['walk-left', 'look-left', 'arms-swinging']);
 
     // Turtle is passing through the doorway (entrance 52% = 9804ms): from here on he is inside the room
     schedule(() => {
@@ -1148,6 +1194,7 @@
       turtleStretch.classList.add('turtle-stretch-active');
       turtleArmL.classList.add('turtle-left-arm-active');
       turtleArmR.classList.add('turtle-right-arm-active');
+      turtleEyes.classList.add('turtle-gaze-active');
       leftJar.classList.add('left-jar-lift-pop-active');
       leftStarsLift.classList.add('left-lift-stars-active');
       rightJar.classList.add('right-jar-pop-active');
@@ -1155,14 +1202,14 @@
     }, 12000);
 
     // Turtle sidesteps behind the left jar as his flipper rises over the rim and dips in (~12450-13700ms)
-    walkWindow(turtle, 'turtle-walking', 'turtleStep', 12450, 13700);
+    walkWindow(turtle, 'turtle-walking', playTurtleStep, 12450, 13700, ['shuffle-left']);
 
     // 11. Flipper pinches the cookie at the bottom of the jar (~13750ms); turtle lifts it straight up, stepping
     //     back out from behind the jar (~13900-14700ms)
     schedule(() => {
       Sounds.play('liftSwish');
     }, 13900);
-    walkWindow(turtle, 'turtle-walking', 'turtleStep', 13900, 14700);
+    walkWindow(turtle, 'turtle-walking', playTurtleStep, 13900, 14700, ['shuffle-right']);
 
     // Cookie is clear of the rim (~15100ms)
     schedule(() => {
@@ -1174,18 +1221,18 @@
     schedule(() => {
       Sounds.play('carryGlide');
     }, 15600);
-    walkWindow(turtle, 'turtle-walking', 'turtleStep', 15700, 16625);
+    walkWindow(turtle, 'turtle-walking', playTurtleStep, 15700, 16625, ['shuffle-right']);
 
     // 13. Left flipper lets go; the right flipper carries the cookie over to the right jar (~17400ms)
     schedule(() => {
       Sounds.play('carryGlide');
     }, 17400);
-    walkWindow(turtle, 'turtle-walking', 'turtleStep', 17500, 18425);
+    walkWindow(turtle, 'turtle-walking', playTurtleStep, 17500, 18425, ['shuffle-right']);
 
     // Turtle sidesteps behind the right jar as he lowers the cookie in (~19450-20200ms), then steps back out and
     // returns to center as his flipper comes back up (~20400-21900ms)
-    walkWindow(turtle, 'turtle-walking', 'turtleStep', 19450, 20200);
-    walkWindow(turtle, 'turtle-walking', 'turtleStep', 20400, 21900);
+    walkWindow(turtle, 'turtle-walking', playTurtleStep, 19450, 20200, ['shuffle-right']);
+    walkWindow(turtle, 'turtle-walking', playTurtleStep, 20400, 21900, ['shuffle-left']);
 
     // 14. Right flipper lowers the cookie straight down into the right jar, plop + sparkle as it goes in
     schedule(() => {
@@ -1206,6 +1253,7 @@
       turtleStretch.classList.remove('turtle-stretch-active');
       turtleArmL.classList.remove('turtle-left-arm-active');
       turtleArmR.classList.remove('turtle-right-arm-active');
+      turtleEyes.classList.remove('turtle-gaze-active');
     }, 22000);
 
     // ================= EXIT SEQUENCE FOR MR. TURTLE =================
@@ -1213,50 +1261,76 @@
     schedule(() => {
       turtle.classList.remove('anim-turtle-active');
       void turtle.offsetWidth;
-      turtle.classList.add('anim-turtle-exit-active', 'turtle-walking');
-      Sounds.play('turtleStep');
+      turtle.classList.add('anim-turtle-exit-active', 'turtle-walking', 'walk-right', 'look-right', 'arms-swinging');
+      playTurtleStep();
     }, 22400);
 
     // Footsteps during exit walk back towards the right door
     [22800, 23200, 23600, 24000, 24400, 24800, 25200, 25600, 26000].forEach(t => {
       schedule(() => {
-        Sounds.play('turtleStep');
+        playTurtleStep();
       }, t);
     });
 
-    // 17. Right door swings open as Turtle approaches (~23200ms)
+    // 17. Right door's exit swing is set up (~23200ms); the turtle reaches for the handle as he walks up
+    //     (~23650-24450ms) and opens the door when his flipper gets to it (door opens 24080-24690)
     schedule(() => {
-      Sounds.play('doorCreak');
       setDoorAnimation('door-right-leaf', 'anim-door-right-exit');
     }, 23200);
+    schedule(() => {
+      turtle.classList.add('reach-door');
+    }, 23650);
+    schedule(() => {
+      Sounds.play('doorCreak');
+    }, 24080);
+    schedule(() => {
+      turtle.classList.remove('reach-door');
+    }, 24450);
 
     // Turtle is passing through the doorway (exit 48% = 24896ms): from here on he is outside, behind the door
     schedule(() => {
       setCharacterOutside('turtle-door-slot', 'right', true);
     }, 24960);
 
-    // 18. Right door clicks shut behind Turtle as he walks off up the path (~26080ms)
+    // 18. Once through, the turtle reaches back and pulls the right door shut behind him as he walks off up the
+    //     path (flipper out ~25300-26000ms; door closes 25450-26080)
+    schedule(() => {
+      turtle.classList.add('reach-door');
+    }, 25300);
+    schedule(() => {
+      turtle.classList.remove('reach-door');
+    }, 26000);
     schedule(() => {
       Sounds.play('doorShut');
     }, 26080);
 
     schedule(() => {
-      turtle.classList.remove('turtle-walking');
+      turtle.classList.remove('turtle-walking', 'walk-right', 'look-right', 'arms-swinging');
     }, 26800);
 
     // ================= MR. BEAR RE-ENTRANCE SEQUENCE =================
-    // 20. Left door begins swinging open for Mr. Bear's return (~28200ms)
+    // 20. Left door's return swing is set up (~28200ms); it stays shut until Mr. Bear pushes it open (~29850ms)
     schedule(() => {
-      Sounds.play('doorCreak');
       setDoorAnimation('door-left-leaf', 'anim-door-left-return');
     }, 28200);
+    schedule(() => {
+      Sounds.play('doorCreak');
+    }, 29850);
+    // He pushes it open with his paw out (~29600-30200ms; door opens 29850-30290), then lowers it to step in
+    schedule(() => {
+      bear.classList.add('reach-door');
+    }, 29600);
+    schedule(() => {
+      bear.classList.remove('reach-door');
+    }, 30200);
 
     // 21. Mr. Bear walks back down the outdoor path toward the left doorway (~28700ms)
     schedule(() => {
       bear.classList.remove('anim-bear-departure');
       void bear.offsetWidth;
-      bear.classList.add('anim-bear-return', 'bear-walking');
-      Sounds.play('footstep');
+      // Looks straight ahead (no .look-*): a glance toward either jar would hint at the answer
+      bear.classList.add('anim-bear-return', 'bear-walking', 'walk-right', 'arms-swinging');
+      playBearStep();
     }, 28700);
 
     // Bear is passing through the doorway (return 32% = 30364ms): from here on he is inside the room
@@ -1264,10 +1338,10 @@
       setCharacterOutside('bear-door-slot', 'left', false);
     }, 30300);
 
-    // Bear footsteps mirroring his walk back from left door to center table
-    [29100, 29500, 29900, 30300, 30700, 31100, 31500, 31900, 32300, 32700].forEach(t => {
+    // Bear footsteps on his walk back from the left door to center table, one per footfall (every 350ms)
+    [29050, 29400, 29750, 30100, 30450, 30800, 31150, 31500, 31850, 32200, 32550, 32900].forEach(t => {
       schedule(() => {
-        Sounds.play('footstep');
+        playBearStep();
       }, t);
     });
 
@@ -1278,7 +1352,7 @@
 
     // 23. Mr. Bear arrives back at his original position behind the table and stops walking (return 88% = 33276ms)
     schedule(() => {
-      bear.classList.remove('bear-walking');
+      bear.classList.remove('bear-walking', 'walk-right', 'arms-swinging');
     }, 33150);
 
     // ================= 24. ONLY ONCE MR. BEAR IS FIRMLY IN POSITION: JARS BECOME CLICKABLE (~34400ms) =================
