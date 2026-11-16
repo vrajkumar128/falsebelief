@@ -716,16 +716,19 @@
       [0, () => grabCookie('bear', BEAR_WRIST_KEYS, 'bear')],
       [1150, () => { reaching.bear = LEFT_JAR_LAYER; }], // paw over the mouth, about to go in
       [1600, () => dropCookie()],             // cookie down inside the opening: let go
+      [1600 + COOKIE_FALL_MS, () => Sounds.play('drop', LEFT_JAR_PLACE)], // ...and it lands on the bottom of the jar
       [2050, () => { reaching.bear = null; }], // paw lifted back out above the rim
     ],
     turtle: [
       [1200, () => { reaching.l = LEFT_JAR_LAYER; }],                   // flipper raised high above the left rim
       [1750, () => grabCookie('l', TURTLE_WRIST_KEYS.l, 'turtle')],     // pinch the cookie at the bottom
+      [1800, () => Sounds.play('cookiePickup', LEFT_JAR_PLACE)],         // it scrapes off the bottom
       [3100, () => { reaching.l = null; }],                             // cookie lifted clear of the rim
       [4700, () => holdCookieWithBothFlippers()],
       [5400, () => takeCookieWith('r', TURTLE_WRIST_KEYS.r, 'turtle')], // left flipper lets go
       [6500, () => { reaching.r = RIGHT_JAR_LAYER; }],                  // flipper up above the right rim
-      [8250, () => hideCookie()],                                       // cookie at the bottom: let go
+      [8200, () => Sounds.play('drop', { soft: true, ...RIGHT_JAR_PLACE })], // cookie set down on the bottom
+      [8250, () => hideCookie()],                                       // ...and let go
       [8900, () => { reaching.r = null; }],                             // flipper raised high above the right rim
     ],
   };
@@ -959,6 +962,13 @@
       }, 16);
     }
   }
+  function stopSceneTicks() {
+    if (sceneFrame) cancelAnimationFrame(sceneFrame);
+    sceneFrame = null;
+    if (sceneTimer) clearInterval(sceneTimer);
+    sceneTimer = null;
+  }
+
 
   // clock: which CLOCKS entry the wrist keys are timed against
   function grabCookie(handKey, keys, clock) {
@@ -1027,12 +1037,47 @@
   }
 
   // Footsteps sound like the ground underfoot: the tiled floor indoors, the sandy path once through a doorway
+  // Where a sound comes from: left/right from its place across the scene, and quieter the further away it is
+  // (a character far up the path is drawn smaller)
+  function placeAtX(x, distanceScale = 1) {
+    return { pan: Math.max(-1, Math.min(1, (x - 500) / 500 * 0.7)), gain: Math.max(0.3, Math.min(1, distanceScale)) };
+  }
+
+  function placeOf(characterEl) {
+    const svg = document.getElementById('scene-svg');
+    const r = characterEl.getBoundingClientRect();
+    const centre = new DOMPoint(r.x + r.width / 2, r.y + r.height / 2).matrixTransform(svg.getScreenCTM().inverse());
+    const scale = new DOMMatrix(getComputedStyle(characterEl).transform).a || 1;
+    return placeAtX(centre.x, scale);
+  }
+
+  const LEFT_DOOR_PLACE = placeAtX(135);
+  const RIGHT_DOOR_PLACE = placeAtX(865);
+  const LEFT_JAR_PLACE = placeAtX(300);
+  const RIGHT_JAR_PLACE = placeAtX(700);
+
+  // A door counts as shut while its leaf is (nearly) flat in the frame
+  function doorShut(side) {
+    const leaf = document.querySelector(`.door-${side}-leaf`);
+    return !leaf || new DOMMatrix(getComputedStyle(leaf).transform).a > 0.95;
+  }
+
+  // Outside, footsteps land on the sandy path; with the door shut they're heard through it, muffled
+  function stepOptions(slotId, side, characterId) {
+    const outside = !!outdoors[slotId];
+    return {
+      surface: outside ? 'path' : 'tile',
+      muffled: outside && doorShut(side),
+      ...placeOf(document.getElementById(characterId)),
+    };
+  }
+
   function playBearStep() {
-    Sounds.play('footstep', { surface: outdoors['bear-door-slot'] ? 'path' : 'tile' });
+    Sounds.play('footstep', stepOptions('bear-door-slot', 'left', 'bear-character-wrapper'));
   }
 
   function playTurtleStep() {
-    Sounds.play('turtleStep', { surface: outdoors['turtle-door-slot'] ? 'path' : 'tile' });
+    Sounds.play('turtleStep', stepOptions('turtle-door-slot', 'right', 'turtle-character-wrapper'));
   }
 
   // Applies a swing animation to both copies of a door leaf at once so they stay in lockstep
@@ -1114,15 +1159,7 @@
     //    jars follow the arm animations' own clocks (CLOCK_EVENTS); this timeline handles sounds and classes.
     startSceneTicks();
 
-    // 1. Swish sound as the bear lowers the cookie into the left jar
-    schedule(() => {
-      Sounds.play('swish');
-    }, 1200);
-
-    // 2. Plop & stars chime as the cookie sinks out of sight
-    schedule(() => {
-      Sounds.play('drop');
-    }, 1750);
+    // 1. The bear lowers the cookie into the left jar and lets go; it lands with a clunk (see CLOCK_EVENTS)
 
     // He's back down from rising a little to reach into the jar (bearReachRise ends at 2.45s)
     schedule(() => {
@@ -1135,12 +1172,8 @@
       playBearStep();
     }, 2650);
 
-    // Bear footsteps along path to door
-    [3000, 3350, 3700, 4050, 4400, 4750, 5100, 5450, 5800, 6100].forEach(t => {
-      schedule(() => {
-        playBearStep();
-      }, t);
-    });
+    // Bear footsteps, one per footfall (every 350ms), all the way to where he stops far up the path (7.5s)
+    for (let t = 3000; t < 7500; t += 350) schedule(playBearStep, t);
 
     // 4. Bear reaches for the handle as he walks up (~3650ms), opens the left door when his paw gets to it
     //    (~4240ms; door opens 4240-4950), then lowers his arm before stepping through (~4700ms)
@@ -1148,7 +1181,7 @@
       bear.classList.add('reach-door');
     }, 3650);
     schedule(() => {
-      Sounds.play('doorCreak');
+      Sounds.play('doorOpen', LEFT_DOOR_PLACE);
     }, 4240);
     schedule(() => {
       bear.classList.remove('reach-door');
@@ -1174,7 +1207,7 @@
       bear.classList.remove('reach-door');
     }, 6150);
     schedule(() => {
-      Sounds.play('doorShut');
+      Sounds.play('doorClose', LEFT_DOOR_PLACE);
     }, 6300);
 
     schedule(() => {
@@ -1186,7 +1219,7 @@
       setDoorAnimation('door-right-leaf', 'anim-door-right-active');
     }, 6500);
     schedule(() => {
-      Sounds.play('doorCreak');
+      Sounds.play('doorOpen', RIGHT_DOOR_PLACE);
     }, 9300);
     // He pushes it open with his flipper out (~9050-9650ms; door opens 9290-9740), then lowers it to step in
     schedule(() => {
@@ -1226,7 +1259,7 @@
 
     // 8. Right door shuts behind turtle (~10550ms)
     schedule(() => {
-      Sounds.play('doorShut');
+      Sounds.play('doorClose', RIGHT_DOOR_PLACE);
     }, 10550);
 
     // 9. Turtle reaches center behind table (~11700ms) and pauses
@@ -1250,41 +1283,21 @@
     walkWindow(turtle, 'turtle-walking', playTurtleStep, 12400, 13200, ['shuffle-left']);
 
     // 11. Flipper pinches the cookie at the bottom of the jar (~13750ms) and swings it back up out of the mouth
-    //     (~13900-15100ms)
-    schedule(() => {
-      Sounds.play('liftSwish');
-    }, 13900);
-
-    // Cookie is clear of the rim (~15100ms)
-    schedule(() => {
-      Sounds.play('cookieLift');
-    }, 15100);
+    //     (~13900-15100ms); it scrapes off the bottom as he picks it up (see CLOCK_EVENTS)
 
     // 12. Turtle steps back to center bringing the cookie in front of him; right flipper rises to meet it; both
     //     flippers then pinch it (~16700ms)
-    schedule(() => {
-      Sounds.play('carryGlide');
-    }, 15600);
     walkWindow(turtle, 'turtle-walking', playTurtleStep, 15700, 16625, ['shuffle-right']);
 
     // 13. Left flipper lets go; the right flipper carries the cookie over to the right jar (~17400ms)
-    schedule(() => {
-      Sounds.play('carryGlide');
-    }, 17400);
     walkWindow(turtle, 'turtle-walking', playTurtleStep, 17500, 18425, ['shuffle-right']);
 
     // He stands still at the right jar while he swings the cookie down into it and his flipper back up high
     // (~19000-20900ms), then sidesteps back to center as the arm lowers behind the jar (~20900-21900ms)
     walkWindow(turtle, 'turtle-walking', playTurtleStep, 20900, 21900, ['shuffle-left']);
 
-    // 14. Right flipper lowers the cookie straight down into the right jar, plop + sparkle as it goes in
-    schedule(() => {
-      Sounds.play('swish');
-    }, 19000);
-
-    schedule(() => {
-      Sounds.play('drop');
-    }, 19300);
+    // 14. Right flipper swings the cookie down into the right jar (19000-20200ms); it's set down on the bottom
+    //     with a soft clunk (see CLOCK_EVENTS)
 
     // Cookie is at the bottom of the right jar (~20250ms); the flipper lets go and swings back up high (~20900ms),
     // then the arm drops behind the jar to rest
@@ -1308,12 +1321,9 @@
       playTurtleStep();
     }, 22400);
 
-    // Footsteps during exit walk back towards the right door
-    [22800, 23200, 23600, 24000, 24400, 24800, 25200, 25600, 26000].forEach(t => {
-      schedule(() => {
-        playTurtleStep();
-      }, t);
-    });
+    // Turtle footsteps, one per footfall (every 400ms), all the way to where he stops far up the path (exit 85% =
+    // 26820ms)
+    for (let t = 22800; t < 26820; t += 400) schedule(playTurtleStep, t);
 
     // 17. Right door's exit swing is set up (~23200ms); the turtle reaches for the handle as he walks up
     //     (~23650-24450ms) and opens the door when his flipper gets to it (door opens 24080-24690)
@@ -1324,7 +1334,7 @@
       turtle.classList.add('reach-door');
     }, 23650);
     schedule(() => {
-      Sounds.play('doorCreak');
+      Sounds.play('doorOpen', RIGHT_DOOR_PLACE);
     }, 24080);
     schedule(() => {
       turtle.classList.remove('reach-door');
@@ -1350,7 +1360,7 @@
       turtle.classList.remove('reach-door');
     }, 26000);
     schedule(() => {
-      Sounds.play('doorShut');
+      Sounds.play('doorClose', RIGHT_DOOR_PLACE);
     }, 26080);
 
     schedule(() => {
@@ -1363,7 +1373,7 @@
       setDoorAnimation('door-left-leaf', 'anim-door-left-return');
     }, 28200);
     schedule(() => {
-      Sounds.play('doorCreak');
+      Sounds.play('doorOpen', LEFT_DOOR_PLACE);
     }, 29850);
     // He pushes it open with his paw out (~29600-30200ms; door opens 29850-30290), then lowers it to step in
     schedule(() => {
@@ -1394,15 +1404,11 @@
     }, 30300);
 
     // Bear footsteps on his walk back from the left door to center table, one per footfall (every 350ms)
-    [29050, 29400, 29750, 30100, 30450, 30800, 31150, 31500, 31850, 32200, 32550, 32900].forEach(t => {
-      schedule(() => {
-        playBearStep();
-      }, t);
-    });
+    for (let t = 29050; t < 33150; t += 350) schedule(playBearStep, t);
 
     // 22. Left door shuts behind Mr. Bear (~31600ms)
     schedule(() => {
-      Sounds.play('doorShut');
+      Sounds.play('doorClose', LEFT_DOOR_PLACE);
     }, 31600);
 
     // 23. Mr. Bear arrives back at his original position behind the table and stops walking (return 88% = 33276ms)
@@ -1433,7 +1439,8 @@
     if (!canClick) return;
 
     selectedSide = side;
-    Sounds.play('select');
+    // The child taps the jar itself: a tap on glazed ceramic, from that jar's side
+    Sounds.play('jarTap', side === 'left' ? LEFT_JAR_PLACE : RIGHT_JAR_PLACE);
 
     // Neutral selection outline highlight on the chosen jar
     document.getElementById('jar-left-glow').setAttribute('opacity', side === 'left' ? '0.85' : '0');
@@ -1451,5 +1458,12 @@
     });
   }
 
-  Storyline.addScreen({ id: 's4', markup, setup, enter: startSequence });
+  // Moving on: nothing still scheduled here (footsteps, doors, the chime) may play over the next screen
+  function leave() {
+    clearAllTimeouts();
+    stopSceneTicks();
+    canClick = false;
+  }
+
+  Storyline.addScreen({ id: 's4', markup, setup, enter: startSequence, leave });
 })();

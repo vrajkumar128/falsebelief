@@ -19,7 +19,12 @@
   `;
 
   function setup(screen) {
-    screen.querySelector('#go-button').addEventListener('click', pressGoButton);
+    const button = screen.querySelector('#go-button');
+    button.addEventListener('click', pressGoButton);
+    // The same soft tick as pointing at a choice in S3a and S4
+    button.addEventListener('mouseenter', () => {
+      if (!button.disabled) Sounds.play('hover');
+    });
   }
 
   function enter() {

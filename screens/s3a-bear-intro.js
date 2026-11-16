@@ -339,7 +339,11 @@
     void bear.getBoundingClientRect();
     bear.classList.add('is-entering', 'bear-walking', 'arms-swinging');
     for (let t = 0; t < BEAR_INTRO.walkInMs - 100; t += 350) {
-      introSchedule(() => Sounds.play('footstep', { surface: 'path' }), t);
+      // quieter while he's still far up the path (drawn smaller), louder as he gets close
+      introSchedule(() => Sounds.play('footstep', {
+        surface: 'path',
+        gain: Math.max(0.3, new DOMMatrix(getComputedStyle(bear).transform).a || 1),
+      }), t);
     }
     introSchedule(() => bear.classList.remove('bear-walking', 'arms-swinging'), BEAR_INTRO.walkInMs);
     introSchedule(() => bear.classList.add('is-waving'), BEAR_INTRO.waveAt);

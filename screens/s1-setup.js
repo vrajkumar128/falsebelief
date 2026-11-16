@@ -20,7 +20,7 @@
                 class="material-symbols-rounded">volume_up</span></span>
             <div class="setup-text">
               <h2>Turn the sound on</h2>
-              <p>Play the test sound, then set a volume your child can hear clearly.</p>
+              <p>Play the test sound (a chime, footsteps and a door), then set a volume your child can hear clearly.</p>
             </div>
             <button class="toy-button" id="test-sound-button" type="button">Play test sound</button>
           </li>
@@ -52,8 +52,16 @@
     return document.fullscreenElement || document.webkitFullscreenElement || null;
   }
 
+  // A short sample of the story's sounds (the "your turn" chime, a few footsteps, a door closing), so the volume
+  // can be set for the quietest and loudest of them
+  let testSoundTimers = [];
   function playTestSound() {
+    testSoundTimers.forEach(clearTimeout);
     Sounds.play('prompt');
+    testSoundTimers = [
+      ...[1100, 1450, 1800].map(t => setTimeout(() => Sounds.play('footstep', { surface: 'tile' }), t)),
+      setTimeout(() => Sounds.play('doorClose'), 2350),
+    ];
   }
 
   function toggleFullscreen() {
@@ -84,5 +92,11 @@
     updateFullscreenButton();
   }
 
-  Storyline.addScreen({ id: 's1', markup, setup, enter });
+  // Don't let the rest of the test sample play over the next screen
+  function leave() {
+    testSoundTimers.forEach(clearTimeout);
+    testSoundTimers = [];
+  }
+
+  Storyline.addScreen({ id: 's1', markup, setup, enter, leave });
 })();

@@ -31,50 +31,53 @@
   }
 }
 
+/* Left jar bounces as Mr. Bear's cookie lands on its bottom (1.9s of 3.6s = 52.8%, with the clunk). Its upward
+   stretch stays small: his arm is only just out of it */
 @keyframes jarPopImpact {
 
   0%,
-  48% {
+  52.8% {
     transform: scale(1, 1);
   }
 
-  52% {
+  56.5% {
     transform: scale(1.06, 0.94) translateY(4px);
   }
 
-  56% {
-    transform: scale(0.96, 1.04) translateY(-3px);
+  60.5% {
+    transform: scale(0.98, 1.02);
   }
 
-  60% {
+  64.5% {
     transform: scale(1.02, 0.98) translateY(1px);
   }
 
-  65%,
+  69%,
   100% {
     transform: scale(1, 1);
   }
 }
 
+/* Sparkles over the left jar as Mr. Bear's cookie lands */
 @keyframes starBurstAction {
 
   0%,
-  48% {
+  52.8% {
     opacity: 0;
     transform: scale(0);
   }
 
-  52% {
+  56.5% {
     opacity: 1;
     transform: scale(1.2) translateY(-6px);
   }
 
-  60% {
+  64.5% {
     opacity: 0.9;
     transform: scale(1.45) translateY(-20px);
   }
 
-  70%,
+  74%,
   100% {
     opacity: 0;
     transform: scale(1.8) translateY(-30px);
@@ -483,100 +486,101 @@
   }
 }
 
-/* Left Jar pop impact when cookie is lifted out */
+/* Left jar bounces as the cookie comes up clear of its rim (2.9s of the turtle's 10s) */
 @keyframes leftJarLiftPop {
 
   0%,
-  27.5% {
+  29% {
     transform: scale(1, 1);
   }
 
-  30% {
+  31.5% {
     transform: scale(0.97, 1.03) translateY(-2px);
   }
 
-  33% {
+  34.5% {
     transform: scale(1.03, 0.97) translateY(2px);
   }
 
-  36.5%,
+  38%,
   100% {
     transform: scale(1, 1);
   }
 }
 
-/* Left Jar Sparkles on lift out */
+/* Left Jar Sparkles as the cookie comes up clear of the rim */
 @keyframes leftJarLiftStarsAction {
 
   0%,
-  27% {
+  29% {
     opacity: 0;
     transform: scale(0);
   }
 
-  29.5% {
+  31.5% {
     opacity: 1;
     transform: scale(1.15) translateY(-4px);
   }
 
-  34% {
+  36% {
     opacity: 0.85;
     transform: scale(1.35) translateY(-14px);
   }
 
-  39.5%,
+  41.5%,
   100% {
     opacity: 0;
     transform: scale(1.6) translateY(-24px);
   }
 }
 
-/* Right Jar pop impact when cookie lands (its upward stretch stays small: Mr. Turtle's arm is still in it) */
+/* Right jar bounces as the cookie is set down on its bottom (8.2s of the turtle's 10s, with the soft clunk), not
+   as it starts going in. Its upward stretch stays small: Mr. Turtle's arm is still in it */
 @keyframes rightJarReceivePop {
 
   0%,
-  72% {
+  82% {
     transform: scale(1, 1);
   }
 
-  74.5% {
+  84.5% {
     transform: scale(1.06, 0.94) translateY(4px);
   }
 
-  77% {
+  87% {
     transform: scale(0.98, 1.02);
   }
 
-  80% {
+  90% {
     transform: scale(1.02, 0.98) translateY(1px);
   }
 
-  83%,
+  93%,
   100% {
     transform: scale(1, 1);
   }
 }
 
-/* Right Jar Sparkles on placement */
+/* Right Jar Sparkles as the cookie is set down inside */
 @keyframes rightJarStarsAction {
 
   0%,
-  72% {
+  82% {
     opacity: 0;
     transform: scale(0);
   }
 
-  74.5% {
+  84.5% {
     opacity: 1;
     transform: scale(1.2) translateY(-6px);
   }
 
-  79% {
+  89% {
     opacity: 0.9;
     transform: scale(1.45) translateY(-20px);
   }
 
-  86%,
+  96%,
   100% {
     opacity: 0;
     transform: scale(1.8) translateY(-30px);
