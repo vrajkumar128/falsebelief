@@ -1,194 +1,56 @@
-/* Shared by every screen: the page and stage, how screens are shown, the toy buttons, and the characters'
-   blinking and ear wiggles. Each screen's own styles are in screens/, next to its script. */
+/* Every screen's styles: the page and stage, the paper grain, how screens are shown, the answer buttons the
+   story screens draw, the grown-up pages (setup, end, script) and the ready button. The story scenes themselves
+   are drawn and animated by the scripts in shared/ and screens/, so they need almost nothing here. */
 
-* {
-  margin: 0;
-  padding: 0;
+*,
+*::before,
+*::after {
   box-sizing: border-box;
 }
 
 html,
 body {
-  width: 100%;
   height: 100%;
+  margin: 0;
+}
+
+body {
+  display: grid;
+  place-items: center;
   overflow: hidden;
-  background: #0f172a;
-  font-family: 'Comfortaa', 'Nunito', sans-serif;
+  background: #26221c;
+  color: #3a281e;
+  font-family: 'Nunito', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  -webkit-user-select: none;
   user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
 }
 
-/* Ambient character subtle facial animations */
-@keyframes charBlink {
-
-  0%,
-  46%,
-  50%,
-  96%,
-  100% {
-    transform: scaleY(1);
-  }
-
-  48%,
-  98% {
-    transform: scaleY(0.08);
-  }
+/* ================= STAGE =================
+   Always 1000 x 650 in shape, as large as the window allows. */
+#game-stage {
+  position: relative;
+  width: min(100vw, calc(100vh * 1000 / 650));
+  height: min(100vh, calc(100vw * 650 / 1000));
+  width: min(100vw, calc(100dvh * 1000 / 650));
+  height: min(100dvh, calc(100vw * 650 / 1000));
+  overflow: hidden;
+  background: #f5eee0;
+  border-radius: clamp(0px, 1.4vw, 20px);
 }
 
-@keyframes earWiggle {
-
-  0%,
-  80%,
-  100% {
-    transform: rotate(0deg);
-  }
-
-  85% {
-    transform: rotate(-4deg);
-  }
-
-  90% {
-    transform: rotate(2deg);
-  }
-}
-
-/* Blink and ear wiggle, in the character art's own coordinates (head centred at 500, 240) */
-.anim-blink {
-  animation: charBlink 3.8s ease-in-out infinite;
-  transform-origin: 500px 240px;
-}
-
-.anim-ear-l {
-  animation: earWiggle 5s ease-in-out infinite;
-  transform-origin: 430px 170px;
-}
-
-.anim-ear-r {
-  animation: earWiggle 5s ease-in-out infinite 0.4s;
-  transform-origin: 570px 170px;
-}
-
-/* ================= WALKING (Mr. Bear: .bear-walking, Mr. Turtle: .turtle-walking) =================
-   Each leg spends the first half of its cycle planted and the second half stepping forward; the two legs are half
-   a cycle apart, so one foot is always on the ground. A planted foot slides back under the body by 2 x --step,
-   which a screen sets for the direction of travel (negative when walking left), so it stays put on the floor
-   while the body moves on. --step eases in and out, so the first and last steps are shorter. A foot lands at the
-   start of each cycle: every half cycle (350 ms for Mr. Bear, 400 ms for Mr. Turtle) is one footstep sound.
-   Coordinates are the shared character art's. */
-@property --step {
-  syntax: '<length>';
-  inherits: true;
-  initial-value: 0px;
-}
-
-@keyframes walkLeg {
-  0% {
-    transform: translate(var(--step), 0px) rotate(0deg);
-    animation-timing-function: linear;
-  }
-
-  50% {
-    transform: translate(calc(var(--step) * -1), 0px) rotate(0deg);
-    animation-timing-function: ease-out;
-  }
-
-  75% {
-    transform: translate(0px, -12px) rotate(var(--leg-tilt, 0deg));
-    animation-timing-function: ease-in;
-  }
-
-  100% {
-    transform: translate(var(--step), 0px) rotate(0deg);
-  }
-}
-
-/* The body dips as each foot lands */
-@keyframes walkBodyBob {
-
-  0%,
-  100% {
-    transform: translateY(0);
-  }
-
-  50% {
-    transform: translateY(-5px);
-  }
-}
-
-.bear-walking .anim-leg-l {
-  --leg-tilt: -6deg;
-  animation: walkLeg 0.7s infinite;
-  transform-origin: 440px 440px;
-}
-
-.bear-walking .anim-leg-r {
-  --leg-tilt: 6deg;
-  animation: walkLeg 0.7s infinite -0.35s;
-  transform-origin: 560px 440px;
-}
-
-.turtle-walking .anim-turtle-leg-l {
-  --leg-tilt: -6deg;
-  animation: walkLeg 0.8s infinite;
-  transform-origin: 805px 450px;
-}
-
-.turtle-walking .anim-turtle-leg-r {
-  --leg-tilt: 6deg;
-  animation: walkLeg 0.8s infinite -0.4s;
-  transform-origin: 885px 450px;
-}
-
-/* Arms swing out a little as the opposite leg steps (around .arm-swing-l / .arm-swing-r, wrappers pivoting at
-   each shoulder), on while a screen sets .arms-swinging. An arm reaching for a door (.door-arm) holds still. */
-.bear-walking {
-  --walk-cycle: 0.7s;
-}
-
-.turtle-walking {
-  --walk-cycle: 0.8s;
-}
-
-@keyframes armSwingOut {
-
-  0%,
-  100% {
-    transform: rotate(0deg);
-  }
-
-  50% {
-    transform: rotate(var(--swing-out));
-  }
-}
-
-.arms-swinging .arm-swing-l {
-  --swing-out: 9deg;
-  animation: armSwingOut var(--walk-cycle) ease-in-out infinite calc(var(--walk-cycle) * -0.25);
-}
-
-.arms-swinging .arm-swing-r {
-  --swing-out: -9deg;
-  animation: armSwingOut var(--walk-cycle) ease-in-out infinite calc(var(--walk-cycle) * -0.75);
-}
-
-.arms-swinging.reach-door .door-arm {
-  animation: none;
-}
-
-.walk-left {
-  --step: -22px;
-}
-
-.walk-right {
-  --step: 22px;
-}
-
-/* Small sideways steps, e.g. Mr. Turtle shuffling along behind the table */
-.shuffle-left {
-  --step: -9px;
-}
-
-.shuffle-right {
-  --step: 9px;
+/* A fine paper grain over everything on the stage (one small tile, drawn once) */
+#game-stage::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n' x='0' y='0' width='100%25' height='100%25'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='2' seed='11' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .35  0 0 0 0 .27  0 0 0 0 .18  1.5 0 0 0 -.55'/%3E%3C/filter%3E%3Crect width='240' height='240' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 240px 240px;
+  mix-blend-mode: multiply;
+  opacity: 0.2;
 }
 
 /* ================= SCREENS =================
@@ -196,83 +58,418 @@ body {
 .screen {
   position: absolute;
   inset: 0;
+  opacity: 1;
+  transition: opacity 0.35s ease;
 }
 
 .screen[hidden] {
   display: none;
 }
 
-.screen:not([hidden]) {
-  animation: screenFadeIn 0.35s ease-out both;
+.screen.is-entering {
+  opacity: 0;
 }
 
-@keyframes screenFadeIn {
+/* Grown-up pages have text to read, so they use the whole window, not just the stage */
+.screen--page {
+  position: fixed;
+  z-index: 10;
+  overflow-y: auto;
+  background: #f5eee0;
+  -webkit-user-select: text;
+  user-select: text;
+}
+
+.scene-svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+/* ================= ANSWER BUTTONS (drawn inside a scene by shared/question.js) =================
+   Two picture cards, or two things in the scene itself. Both always behave identically, so nothing about them
+   hints at an answer: they wait (.is-waiting) until the question has been asked, then can be tapped; the one
+   that was tapped keeps a ring (.is-chosen) and the other fades (.is-dim). */
+.opt {
+  cursor: pointer;
+  outline: none;
+  transform-box: fill-box;
+  transform-origin: 50% 50%;
+  transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.3s ease;
+}
+
+.opt.is-in {
+  animation: optIn 0.42s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+.opt.is-waiting,
+.opt.is-done {
+  pointer-events: none;
+  cursor: default;
+}
+
+@media (hover: hover) {
+  .opt:hover {
+    transform: translateY(-7px) scale(1.04);
+  }
+}
+
+.opt:active {
+  transform: scale(0.96);
+}
+
+.opt.is-nudge {
+  animation: optNudge 0.7s ease-in-out;
+}
+
+.opt.is-dim {
+  opacity: 0.32;
+}
+
+.opt-ring {
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.opt:focus-visible .opt-ring {
+  opacity: 0.55;
+}
+
+.opt.is-chosen .opt-ring {
+  opacity: 1;
+}
+
+/* Things in the scene: a halo shows on both when it's time to choose */
+.opt--thing .opt-halo {
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.opt--thing.is-nudge .opt-halo {
+  animation: haloPulse 0.9s ease-in-out;
+}
+
+@media (hover: hover) {
+  .opt--thing:hover .opt-halo {
+    opacity: 0.45;
+  }
+}
+
+.opt--thing.is-chosen .opt-halo {
+  opacity: 0;
+}
+
+@keyframes optIn {
   from {
+    transform: scale(0.55);
     opacity: 0;
   }
 
   to {
+    transform: scale(1);
     opacity: 1;
   }
 }
 
-/* Chunky outlined buttons that sit on a dark ledge, drawn like the props in the scenes */
-.toy-button {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  padding: 10px 18px;
-  font-family: 'Nunito', sans-serif;
+@keyframes optNudge {
+
+  0%,
+  100% {
+    transform: scale(1);
+  }
+
+  40% {
+    transform: scale(1.07);
+  }
+}
+
+@keyframes haloPulse {
+
+  0%,
+  100% {
+    opacity: 0;
+  }
+
+  40% {
+    opacity: 0.6;
+  }
+}
+
+/* ================= GROWN-UP PAGES ================= */
+.sheet {
+  width: 100%;
+  max-width: 680px;
+  margin: 0 auto;
+  padding: clamp(20px, 5vw, 44px) clamp(16px, 4vw, 28px) 48px;
+  line-height: 1.45;
+}
+
+.sheet h1 {
+  margin: 0;
+  font-size: clamp(26px, 4.2vw, 36px);
+  font-weight: 900;
+  line-height: 1.15;
+}
+
+.sheet .lead {
+  margin: 10px 0 0;
+  font-size: 17px;
+  font-weight: 700;
+  color: #7a5a3c;
+}
+
+.paper-button {
+  padding: 0.62em 1.25em;
+  border: 0;
+  border-radius: 999px;
+  background: #e6d9c0;
+  box-shadow: 0 3px 0 rgba(90, 69, 46, 0.28);
+  color: #3a281e;
+  font: inherit;
   font-size: 16px;
   font-weight: 800;
-  line-height: 1;
-  white-space: nowrap;
-  color: #2c1e14;
-  background: #fffaf2;
-  border: 3px solid #2c1e14;
-  border-radius: 999px;
-  box-shadow: 0 4px 0 #2c1e14;
   cursor: pointer;
-  transition: transform 0.12s ease, box-shadow 0.12s ease, background-color 0.15s ease;
+  transition: transform 0.12s ease, box-shadow 0.12s ease, background 0.15s ease;
 }
 
-.toy-button:hover {
-  background: #ffffff;
+.paper-button:hover {
+  background: #dccdb0;
 }
 
-.toy-button:active {
-  transform: translateY(3px);
-  box-shadow: 0 1px 0 #2c1e14;
+.paper-button:active {
+  transform: translateY(2px);
+  box-shadow: 0 1px 0 rgba(90, 69, 46, 0.28);
 }
 
-.toy-button:focus-visible {
-  outline: 3px solid #1e88e5;
+.paper-button:focus-visible,
+.go-button:focus-visible {
+  outline: 4px solid #2f6db5;
   outline-offset: 3px;
 }
 
-.toy-button .material-symbols-rounded {
-  font-size: 20px;
+.paper-button--primary {
+  background: #4c9a4e;
+  box-shadow: 0 3px 0 #356d37;
+  color: #fffdf7;
+  font-size: 18px;
 }
 
-.toy-button--primary {
-  padding: 14px 30px;
-  font-size: 19px;
-  background: #e89b4f;
-  box-shadow: 0 5px 0 #2c1e14;
+.paper-button--primary:hover {
+  background: #448d46;
 }
 
-.toy-button--primary:hover {
-  background: #efa862;
+/* ---------- S1: setup checklist ---------- */
+.setup-list {
+  margin: 24px 0 30px;
+  padding: 0;
+  list-style: none;
 }
 
-.toy-button--primary:active {
-  transform: translateY(4px);
-  box-shadow: 0 1px 0 #2c1e14;
+.setup-item {
+  display: grid;
+  grid-template-columns: 54px 1fr auto;
+  align-items: center;
+  gap: 10px 16px;
+  margin-top: 12px;
+  padding: 14px 16px;
+  border-radius: 16px;
+  background: #fffdf7;
+  box-shadow: 0 3px 0 rgba(90, 69, 46, 0.14);
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .screen:not([hidden]) {
-    animation: none;
+.setup-item[hidden] {
+  display: none;
+}
+
+.setup-icon {
+  display: grid;
+  place-items: center;
+  width: 54px;
+  height: 54px;
+  border-radius: 50%;
+  background: var(--badge);
+}
+
+.setup-icon svg {
+  width: 30px;
+  height: 30px;
+}
+
+.setup-text h2 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 800;
+  line-height: 1.25;
+}
+
+.setup-text p {
+  margin: 2px 0 0;
+  font-size: 15.5px;
+  font-weight: 600;
+  color: #7a5a3c;
+}
+
+@media (max-width: 560px) {
+  .setup-item {
+    grid-template-columns: 44px 1fr;
   }
+
+  .setup-icon {
+    width: 44px;
+    height: 44px;
+  }
+
+  .setup-item > .paper-button {
+    grid-column: 2;
+    justify-self: start;
+  }
+}
+
+/* ---------- S2: the big green button, alone in the middle of the stage ---------- */
+.ready-screen {
+  display: grid;
+  place-items: center;
+}
+
+.go-button {
+  width: 34%;
+  aspect-ratio: 1;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: none;
+  cursor: pointer;
+  transition: transform 0.18s cubic-bezier(0.34, 1.56, 0.64, 1);
+  animation: goBreathe 2.4s ease-in-out infinite;
+}
+
+.go-button svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.go-button:hover {
+  transform: scale(1.05);
+}
+
+.go-button:active,
+.go-button.is-pressed {
+  transform: scale(0.93);
+  animation: none;
+}
+
+@keyframes goBreathe {
+
+  0%,
+  100% {
+    scale: 1;
+  }
+
+  50% {
+    scale: 1.045;
+  }
+}
+
+/* ---------- End: thank-you for the grown-up, under the picture for the child ---------- */
+.end-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 22px;
+}
+
+.end-picture {
+  width: 100%;
+  max-width: 520px;
+  margin: 0 auto 8px;
+  border-radius: 18px;
+  overflow: hidden;
+}
+
+.end-note {
+  margin-top: 18px;
+  font-size: 14.5px;
+  font-weight: 600;
+  color: #7a5a3c;
+}
+
+/* ---------- Script page: every narration line, for recording the voiceover ---------- */
+.script-table {
+  width: 100%;
+  margin-top: 22px;
+  border-collapse: collapse;
+  font-size: 15.5px;
+  font-weight: 600;
+}
+
+.script-table th,
+.script-table td {
+  padding: 7px 10px;
+  border-bottom: 1px solid rgba(90, 69, 46, 0.18);
+  text-align: left;
+  vertical-align: top;
+}
+
+.script-table th {
+  font-weight: 800;
+}
+
+.script-table code {
+  font-size: 13.5px;
+  white-space: nowrap;
+}
+
+.script-table tr.script-screen td {
+  padding-top: 22px;
+  border-bottom: 2px solid rgba(90, 69, 46, 0.4);
+  font-size: 17px;
+  font-weight: 900;
+}
+
+/* ================= REVIEW TOOLS (only with ?dev or ?captions in the address) ================= */
+.caption {
+  position: absolute;
+  left: 50%;
+  bottom: 2.2%;
+  z-index: 6;
+  max-width: 86%;
+  margin: 0;
+  padding: 0.3em 0.8em;
+  transform: translateX(-50%);
+  border-radius: 10px;
+  background: rgba(38, 34, 28, 0.82);
+  color: #fffdf7;
+  font-size: clamp(12px, 2vw, 20px);
+  font-weight: 700;
+  text-align: center;
+  pointer-events: none;
+}
+
+.caption[hidden] {
+  display: none;
+}
+
+#dev-hud {
+  position: fixed;
+  left: 8px;
+  top: 8px;
+  z-index: 50;
+  padding: 3px 8px;
+  border-radius: 6px;
+  background: rgba(0, 0, 0, 0.7);
+  color: #fff;
+  font: 12px/1.4 ui-monospace, Consolas, monospace;
+  pointer-events: none;
 }

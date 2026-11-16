@@ -6,39 +6,51 @@
   <meta charset="utf-8" />
   <meta content="width=device-width, initial-scale=1.0" name="viewport" />
   <title>false belief</title>
-  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <!-- The only outside file is the font for the grown-up pages; everything falls back to system fonts without it -->
   <link href="https://fonts.googleapis.com" rel="preconnect" />
   <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
-  <link
-    href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@600;700;900&amp;family=Nunito:wght@600;700;800;900&amp;display=swap"
-    rel="stylesheet" />
-  <!-- Icons for the grown-up setup screen (S1) only -->
-  <link
-    href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,600,1,0&amp;icon_names=chair,front_hand,fullscreen,volume_up&amp;display=block"
-    rel="stylesheet" />
-  <!-- Styles shared by every screen, then each screen's own -->
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@600;700;800;900&amp;display=swap" rel="stylesheet" />
   <link href="shared/base.css" rel="stylesheet" />
-  <link href="screens/s1-setup.css" rel="stylesheet" />
-  <link href="screens/s2-ready.css" rel="stylesheet" />
-  <link href="screens/s3a-bear-intro.css" rel="stylesheet" />
-  <link href="screens/s4-cookie-jars.css" rel="stylesheet" />
 </head>
 
-<body class="relative flex items-center justify-center min-h-screen bg-slate-950 select-none overflow-hidden">
-  <!-- The stage every screen plays on (sized for the scenes' 1000 x 650 drawings). shared/storyline.js puts the
-       screens from screens/ on it and shows one at a time. -->
-  <div
-    class="relative w-full max-w-[1200px] h-[95vh] max-h-[780px] rounded-3xl overflow-hidden shadow-2xl bg-[#fcefdc] border-4 border-amber-900/20 flex flex-col justify-center items-center"
-    id="game-stage"></div>
+<body>
+  <!-- The stage every screen plays on (the scenes are drawn 1000 x 650). shared/storyline.js puts the screens
+       from screens/ on it and shows one at a time. -->
+  <div id="game-stage"></div>
 
+  <!-- Shared code: sounds, the study's settings and answer log, the narration script, the storyline (screen
+       order), then the animation engine and what it draws with. README.md explains how they fit together. -->
   <script src="shared/sounds.js"></script>
+  <script src="shared/study.js"></script>
+  <script src="shared/narration.js"></script>
   <script src="shared/storyline.js"></script>
-  <!-- One script per screen (its styles are linked above). The order they play in is SCREEN_ORDER in
-       shared/storyline.js. -->
+  <script src="shared/engine.js"></script>
+  <script src="shared/cast.js"></script>
+  <script src="shared/kit.js"></script>
+  <script src="shared/question.js"></script>
+
+  <!-- One script per screen. The order they play in is SCREEN_ORDER in shared/storyline.js.
+       a = attention check, t = test trial. -->
   <script src="screens/s1-setup.js"></script>
   <script src="screens/s2-ready.js"></script>
-  <script src="screens/s3a-bear-intro.js"></script>
-  <script src="screens/s4-cookie-jars.js"></script>
+  <script src="screens/a1-school.js"></script>
+  <script src="screens/t1-cookie.js"></script>
+  <script src="screens/a2-playground.js"></script>
+  <script src="screens/t2-drawing.js"></script>
+  <script src="screens/a3-cereal.js"></script>
+  <script src="screens/t3-crayons.js"></script>
+  <script src="screens/a4-bedroom.js"></script>
+  <script src="screens/t4-pizza.js"></script>
+  <script src="screens/a5-tv.js"></script>
+  <script src="screens/t5-candies.js"></script>
+  <script src="screens/a6-scooter.js"></script>
+  <script src="screens/t6-water.js"></script>
+  <script src="screens/a7-gym.js"></script>
+  <script src="screens/t7-book.js"></script>
+  <script src="screens/a8-teacher.js"></script>
+  <script src="screens/t8-balloon.js"></script>
+  <script src="screens/end.js"></script>
+  <script src="screens/script.js"></script>
 </body>
 
 </html>

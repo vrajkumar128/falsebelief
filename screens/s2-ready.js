@@ -1,29 +1,27 @@
 // S2. READY: just the big green button, with no text on screen because the children can't read yet. The
-// voiceover (not recorded yet) will say "We're going to tell you a story today! Press the green button when
-// you're ready!". Pressing the button starts the story (S3a).
+// narrator says line s2.1 ("We're going to tell you a story today! Press the green button when you're ready!").
+// Pressing the button starts the story.
 (() => {
   const markup = /* html */ `
     <section aria-label="Ready to start the story" class="screen ready-screen" data-screen="s2" id="screen-s2">
       <button aria-label="I'm ready" class="go-button" data-autofocus id="go-button" type="button">
-        <span class="go-button__base"></span>
-        <span class="go-button__face">
-          <svg aria-hidden="true" viewBox="0 0 100 100">
-            <path d="M 21 45 A 30 30 0 0 1 40 22" fill="none" opacity="0.75" stroke="#e8f5e9"
-              stroke-linecap="round" stroke-width="6"></path>
-            <path d="M 40 31 L 71 50 L 40 69 Z" fill="#ffffff" stroke="#2c1e14" stroke-linejoin="round"
-              stroke-width="6"></path>
-          </svg>
-        </span>
+        <svg aria-hidden="true" viewBox="-112 -108 224 228">
+          <circle cx="0" cy="10" fill="#356d37" r="100"></circle>
+          <circle cx="0" cy="0" fill="#4c9a4e" r="100"></circle>
+          <path d="M-24 -42L50 0L-24 42Z" fill="#fffdf7" stroke="#fffdf7" stroke-linejoin="round" stroke-width="12"></path>
+        </svg>
       </button>
     </section>
   `;
 
+  let sayTimer = null;
+
   function setup(screen) {
     const button = screen.querySelector('#go-button');
     button.addEventListener('click', pressGoButton);
-    // The same soft tick as pointing at a choice in S3a and S4
-    button.addEventListener('mouseenter', () => {
-      if (!button.disabled) Sounds.play('hover');
+    // The same soft tick as pointing at an answer later on
+    button.addEventListener('pointerenter', event => {
+      if (event.pointerType === 'mouse' && !button.disabled) Sounds.play('hover');
     });
   }
 
@@ -31,6 +29,12 @@
     const button = document.getElementById('go-button');
     button.disabled = false;
     button.classList.remove('is-pressed');
+    sayTimer = setTimeout(() => Narration.play('s2.1'), 500);
+  }
+
+  function leave() {
+    clearTimeout(sayTimer);
+    Narration.stop();
   }
 
   function pressGoButton() {
@@ -39,8 +43,9 @@
     button.disabled = true;
     button.classList.add('is-pressed');
     Sounds.play('select');
-    setTimeout(() => Storyline.next(), 280);
+    Narration.unlock();
+    setTimeout(() => Storyline.next(), 320);
   }
 
-  Storyline.addScreen({ id: 's2', markup, setup, enter });
+  Storyline.addScreen({ id: 's2', markup, setup, enter, leave });
 })();
