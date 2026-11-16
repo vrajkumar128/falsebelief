@@ -3,7 +3,7 @@
 
 /* Bear's right arm (screen left) during intro (3.6s), pivoting only at the shoulder (418, 330); rest
    direction 115.3deg. Holds the cookie up beside his head (12%), reaches over the left jar's rim (32%), lowers
-   the cookie into the opening (42%), lets go at 44.4% (1.6s), lifts his paw back out above the rim (56%), then
+   the cookie into the mouth with his paw at (347, 354) (42%), lets go at 44.4% (1.6s), lifts his paw back out above the rim (56%), then
    lowers the arm behind the jar to rest. Stops at 12/32/42% must match BEAR_WRIST_KEYS in the script. */
 @keyframes bearArmLowering {
 
@@ -18,7 +18,7 @@
 
   42%,
   44.4% {
-    transform: rotate(59.7deg);
+    transform: rotate(34.22deg);
   }
 
   56% {
@@ -342,26 +342,24 @@
   }
 }
 
-/* Turtle Choreography after arriving at center (Duration: 10s), mirrored left/right about X=500:
-   left flipper rises behind the left jar to above its rim (0.4-1.3s), dips over the rim into the opening
-   (1.3-1.7s), pinches the cookie (1.75s), lifts it straight up out of the opening (1.9-3.1s), turns its wrist
-   so the cookie swings up clear of the rim (3.1-3.6s), brings it to center while the right flipper rises to meet
-   it (3.6-4.7s), both hold it (4.7-5.4s), right flipper carries it above the right jar (5.4-6.5s), turns its
-   wrist so it hangs over the opening (6.5-7.0s), lowers it straight down inside (7.0-8.2s), lets go (8.25s),
-   lifts out above the rim (8.4-8.8s) and drops back behind the jar to rest (8.8-10s).
-   Stops shared between turtleMoveCookieAction, turtleStretch and the arm pivots must stay identical so the
-   flipper paths stay straight; wrist timings live in TURTLE_WRIST_KEYS in the script.
+/* Turtle Choreography after arriving at center (Duration: 10s), mirrored left/right about X=500. He only walks
+   when he needs to get somewhere: over to the left jar (0.4-1.2s), back to center (3.6-4.7s), over to the right
+   jar (5.4-6.5s) and back to center (8.9-10s). At each jar he stands still (a little taller, 23) and just swings
+   his arm round his shoulder:
+     left jar   raises his flipper high above the rim as he arrives (1.2s), swings it down into the mouth
+                (1.2-1.7s), pinches the cookie (1.75s), swings it back up and out (1.9-3.1s) and turns his wrist so
+                the cookie comes up clear of the rim (3.1-3.6s);
+     center     both flippers hold it (4.7-5.4s), then the right one takes it;
+     right jar  arrives with it held high (6.5s), turns his wrist so it hangs over the mouth (6.5-7.0s), swings it
+                down inside (7.0-8.2s), lets go (8.25s), swings his flipper back up high (8.4-8.9s) and lowers it
+                behind the jar to rest as he walks back.
+   Standing at X 383.6 / 616.4 (shoulder), Y 317 his shoulder stays above the back of the mouth and his arm never
+   touches the sides; the flipper's arc runs (330, 252) high, (299, 318) at the back of the mouth, (330, 383) at
+   the bottom, where the cookie sits below the front lip, out of sight. The arm copies inside the jars switch
+   on/off at the high pose (CLOCK_EVENTS), when nothing overlaps the mouth.
+   Stops shared between turtleMoveCookieAction, turtleStretch and the arm pivots must stay identical; wrist
+   timings live in TURTLE_WRIST_KEYS in the script.
 */
-/* While a flipper is over or in a jar the turtle stands right up (turtleStretch -57 lifts his body, not his
-   legs, so his feet stay on the floor: shoulder at Y 283, well above the rim at Y 350), so his arm goes down
-   into the opening over the back of the rim and never through the front lip. The flipper moves straight up and
-   down at X 335 through four poses:
-     IN    flipper (335,368) in the jar, reached at a slant from a shoulder at (375, 293): he bends a little
-           (stretch -47) instead of sliding right over the jar, so his body only moves 29 between LOW and IN
-     LOW   flipper (335,333)        MID  flipper (335,297), just above the rim
-     TOP   flipper (335,260), cookie hanging clear of the rim
-   13% MID (arm reaches over the rim), 15% LOW, 17-19% IN (pinches the cookie), 23% LOW, 27% MID, 31-36% TOP;
-   65-88% are the mirror image at the right jar (TOP, MID, LOW, IN, LOW, MID). */
 @keyframes turtleMoveCookieAction {
 
   0%,
@@ -369,30 +367,9 @@
     transform: translate(0px, 0px);
   }
 
-  13% {
-    transform: translate(-26.2px, 0px);
-  }
-
-  15% {
-    transform: translate(-41.3px, 0px);
-  }
-
-  17%,
-  19% {
-    transform: translate(-70px, 0px);
-  }
-
-  23% {
-    transform: translate(-41.3px, 0px);
-  }
-
-  27% {
-    transform: translate(-26.2px, 0px);
-  }
-
-  31%,
+  12%,
   36% {
-    transform: translate(-28.2px, 0px);
+    transform: translate(-61.4px, 0px);
   }
 
   47%,
@@ -401,29 +378,8 @@
   }
 
   65%,
-  70% {
-    transform: translate(28.2px, 0px);
-  }
-
-  74% {
-    transform: translate(26.2px, 0px);
-  }
-
-  78% {
-    transform: translate(41.3px, 0px);
-  }
-
-  82%,
-  84% {
-    transform: translate(70px, 0px);
-  }
-
-  86% {
-    transform: translate(41.3px, 0px);
-  }
-
-  88% {
-    transform: translate(26.2px, 0px);
+  89% {
+    transform: translate(61.4px, 0px);
   }
 
   100% {
@@ -440,19 +396,9 @@
     transform: translateY(0px);
   }
 
-  13%,
-  15% {
-    transform: translateY(-57px);
-  }
-
-  17%,
-  19% {
-    transform: translateY(-47px);
-  }
-
-  23%,
+  12%,
   36% {
-    transform: translateY(-57px);
+    transform: translateY(-23px);
   }
 
   47%,
@@ -461,18 +407,8 @@
   }
 
   65%,
-  78% {
-    transform: translateY(-57px);
-  }
-
-  82%,
-  84% {
-    transform: translateY(-47px);
-  }
-
-  86%,
-  88% {
-    transform: translateY(-57px);
+  89% {
+    transform: translateY(-23px);
   }
 
   100% {
@@ -491,38 +427,22 @@
     transform: rotate(0deg);
   }
 
-  13% {
-    /* MID: flipper just above the left jar's rim */
-    transform: rotate(53.9deg);
-  }
-
-  15% {
-    transform: rotate(27.4deg);
+  12% {
+    transform: rotate(113.32deg);
   }
 
   17%,
   19% {
-    /* IN: arm reaching down into the opening at a slant, pinching the cookie */
-    transform: rotate(1.5deg);
-  }
-
-  23% {
-    transform: rotate(27.4deg);
-  }
-
-  27% {
-    transform: rotate(53.9deg);
+    transform: rotate(12.5deg);
   }
 
   31%,
   36% {
-    /* TOP: cookie lifted clear of the left jar */
-    transform: rotate(79.1deg);
+    transform: rotate(113.32deg);
   }
 
   47%,
   54% {
-    /* Both flippers holding the cookie up in front of the chin */
     transform: rotate(171.95deg);
   }
 
@@ -546,31 +466,16 @@
 
   65%,
   70% {
-    /* TOP: cookie held above the right jar */
-    transform: rotate(-79.1deg);
-  }
-
-  74% {
-    transform: rotate(-53.9deg);
-  }
-
-  78% {
-    transform: rotate(-27.4deg);
+    transform: rotate(-113.32deg);
   }
 
   82%,
   84% {
-    /* IN: arm reaching down into the opening at a slant, cookie at the bottom of the right jar */
-    transform: rotate(-1.5deg);
+    transform: rotate(-12.5deg);
   }
 
-  86% {
-    transform: rotate(-27.4deg);
-  }
-
-  88% {
-    /* MID: flipper lifted back out above the rim */
-    transform: rotate(-53.9deg);
+  89% {
+    transform: rotate(-113.32deg);
   }
 
   100% {
@@ -626,7 +531,7 @@
   }
 }
 
-/* Right Jar pop impact when cookie lands */
+/* Right Jar pop impact when cookie lands (its upward stretch stays small: Mr. Turtle's arm is still in it) */
 @keyframes rightJarReceivePop {
 
   0%,
@@ -639,7 +544,7 @@
   }
 
   77% {
-    transform: scale(0.96, 1.04) translateY(-3px);
+    transform: scale(0.98, 1.02);
   }
 
   80% {
@@ -679,7 +584,9 @@
 }
 
 /* Walking (leg cycle and --step are in shared/base.css): the body bobs once per footstep, leans into the
-   direction of travel (.walk-left / .walk-right / .shuffle-*), and the eyes look where they're going (.look-*). */
+   direction of travel (.walk-left / .walk-right / .shuffle-*), and the eyes look where they're going (.look-*).
+   Walking straight up or down the outdoor path (toward or away from us) has none of these: no sideways stride,
+   no lean, eyes ahead. */
 #bear-character-wrapper,
 #turtle-character-wrapper {
   transition: --step 0.4s ease-out;
@@ -796,6 +703,31 @@
   animation: turtleGazeFollow 10s ease-in-out forwards;
 }
 
+/* While his paw is in the jar (about 0.9-2.2 s) Mr. Bear rises a little (21), so the rounded top of his arm stays
+   above the back of the jar's mouth; he's back down before he walks off (2.65 s). The script removes the class
+   once he's back down, so it can't replay when his walking animation ends. */
+@keyframes bearReachRise {
+
+  0%,
+  25% {
+    transform: translateY(0px);
+  }
+
+  33%,
+  58% {
+    transform: translateY(-21px);
+  }
+
+  68%,
+  100% {
+    transform: translateY(0px);
+  }
+}
+
+.intro-rise {
+  animation: bearReachRise 3.6s ease-in-out forwards;
+}
+
 .intro-arm {
   animation: bearArmLowering 3.6s ease-in-out forwards;
   transform-origin: 418px 330px;
@@ -895,24 +827,54 @@
 /* Squash/hover pivots are fixed at each jar's centre: the jar groups also hold the arm, cookie and hand copies
    placed by script, so their bounding box (fill-box) would put the pivot somewhere off to the side */
 .jar-interactive {
-  cursor: pointer;
   transform-box: view-box;
-  transition: transform 0.25s ease, filter 0.25s ease;
 }
 
 #jar-left-group {
-  transform-origin: 330px 395px;
+  transform-origin: 300px 400px;
 }
 
 #jar-right-group {
-  transform-origin: 670px 395px;
+  transform-origin: 700px 400px;
 }
 
-.jar-interactive:hover {
-  filter: drop-shadow(0 10px 18px rgba(30, 136, 229, 0.6));
-  transform: translateY(-8px) scale(1.03);
+/* Hover/press feedback lives on an inner group (.jar-hover), because the jars' pop animations hold the outer
+   group's transform; it only switches on once the jars can be chosen (.jars-clickable on the scene) */
+.jar-hover {
+  transform-box: view-box;
+  transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), filter 0.25s ease;
 }
 
-.jar-interactive:active {
-  transform: translateY(-2px) scale(0.98);
+#jar-left-group .jar-hover {
+  transform-origin: 300px 446px;
+}
+
+#jar-right-group .jar-hover {
+  transform-origin: 700px 446px;
+}
+
+.jars-clickable .jar-interactive {
+  cursor: pointer;
+}
+
+.jars-clickable .jar-interactive:hover .jar-hover {
+  transform: translateY(-12px) scale(1.06);
+}
+
+/* A glow in each jar's own colour */
+.jars-clickable #jar-left-group:hover .jar-hover {
+  filter: drop-shadow(0 12px 16px rgba(30, 136, 229, 0.55));
+}
+
+.jars-clickable #jar-right-group:hover .jar-hover {
+  filter: drop-shadow(0 12px 16px rgba(229, 57, 53, 0.55));
+}
+
+.jars-clickable .jar-interactive:hover #jar-left-glow,
+.jars-clickable .jar-interactive:hover #jar-right-glow {
+  opacity: 0.85;
+}
+
+.jars-clickable .jar-interactive:active .jar-hover {
+  transform: translateY(-2px) scale(0.97);
 }

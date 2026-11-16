@@ -30,6 +30,11 @@
           <stop offset="35%" stop-color="#1e88e5"></stop>
           <stop offset="100%" stop-color="#0d47a1"></stop>
         </lineargradient>
+        <lineargradient id="jarUniformRedGrad" x1="0%" x2="100%" y1="0%" y2="0%">
+          <stop offset="0%" stop-color="#ef9a9a"></stop>
+          <stop offset="35%" stop-color="#e53935"></stop>
+          <stop offset="100%" stop-color="#b71c1c"></stop>
+        </lineargradient>
         <filter height="130%" id="dropShadow" width="130%" x="-10%" y="-10%">
           <fedropshadow dx="0" dy="8" flood-opacity="0.18" stddeviation="6"></fedropshadow>
         </filter>
@@ -39,14 +44,15 @@
         <filter height="140%" id="sparkleGlow" width="140%" x="-20%" y="-20%">
           <fedropshadow dx="0" dy="0" flood-color="#ffd54f" flood-opacity="0.9" stddeviation="3"></fedropshadow>
         </filter>
-        <!-- Clipping Path for Left Jar (rim at Y 350): what sits inside the opening or reaches over the rim is
-             clipped to everything above the rim plus the opening; the front lip and wall are drawn over it -->
+        <!-- Clipping Path for Left Jar (mouth centred at 300, 353, 270 x 40): what sits inside the mouth or reaches
+             over the rim is clipped to everything above the mouth's centre line plus the front half of the mouth;
+             the front lip and wall are drawn over it -->
         <clippath id="jarCookieClip">
-          <path d="M 150 -100 L 550 -100 L 550 350 A 46 13 0 0 1 284 350 L 150 350 Z"></path>
+          <path d="M 80 -100 L 500 -100 L 500 353 L 435 353 A 135 20 0 0 1 165 353 L 80 353 Z"></path>
         </clippath>
         <!-- Clipping Path for Right Jar: mirror image of the left jar clip about X=500 -->
         <clippath id="jarRightCookieClip">
-          <path d="M 850 -100 L 450 -100 L 450 350 A 46 13 0 0 0 716 350 L 850 350 Z"></path>
+          <path d="M 920 -100 L 500 -100 L 500 353 L 565 353 A 135 20 0 0 0 835 353 L 920 353 Z"></path>
         </clippath>
         <!-- Doorway openings (200 x 385): outdoor scenery and characters who have stepped outside are clipped to these -->
         <clippath id="left-door-clip">
@@ -494,43 +500,51 @@
         <rect fill="#fff9c4" height="14" rx="4" stroke="#2c1e14" stroke-width="3" width="520" x="240" y="430"></rect>
       </g>
       <!-- ================= 5. TWO JARS & JUMBO COOKIES ================= -->
-      <!-- 1. LEFT JAR (CENTERED AT X: 330) -->
+      <!-- 1. LEFT JAR (CENTERED AT X: 300, out near the table's left end): wide-mouthed crock, X 160-441, mouth X 165-435 -->
       <g class="jar-interactive intro-jar1" id="jar-left-group">
-        <!-- Hover / Tap focus indicator ring -->
-        <ellipse class="transition-opacity duration-300" cx="330" cy="396" fill="none" id="jar-left-glow" opacity="0"
-          rx="76" ry="62" stroke="#ffeb3b" stroke-width="8"></ellipse>
-        <ellipse cx="330" cy="442" fill="#000000" opacity="0.25" rx="72" ry="14"></ellipse>
-        <!-- Jar Back Cavity (opening at rim Y 350, below both characters' shoulders) -->
-        <ellipse cx="330" cy="350" fill="#0d47a1" rx="46" ry="13" stroke="#2c1e14" stroke-width="5"></ellipse>
-        <ellipse cx="330" cy="350" fill="#061838" rx="40" ry="10"></ellipse>
-        <g clip-path="url(#jarCookieClip)">
-          <!-- INSIDE LEFT JAR: arms reaching over the rim, then the cookie, then the hands holding it (all placed by
-               script); in front of the back rim, behind the front lip and wall -->
-          <g id="anim-turtle-lift-cookie">
-            <use class="held-arm-bear" href="#bear-arm-r-art" visibility="hidden"></use>
-            <use class="held-pad-bear" href="#bear-paw-r-pad-symbol" visibility="hidden"></use>
-            <use class="held-arm-l" href="#turtle-arm-l-art" visibility="hidden"></use>
-            <use class="held-arm-r" href="#turtle-arm-r-art" visibility="hidden"></use>
-            <use class="held-cookie" href="#cookie-art-symbol" visibility="hidden"></use>
-            <use class="held-grip-bear" href="#bear-paw-circle-symbol" visibility="hidden"></use>
-            <use class="held-grip-bear-pad" href="#bear-paw-r-pad-symbol" visibility="hidden"></use>
-            <use class="held-grip-l" href="#turtle-grip-l-symbol" visibility="hidden"></use>
-            <use class="held-grip-r" href="#turtle-grip-r-symbol" visibility="hidden"></use>
+        <!-- Hover lift (only once the jars can be chosen; see .jars-clickable) -->
+        <g class="jar-hover">
+          <!-- Tap area well beyond the jar, so small fingers don't have to be exact -->
+          <ellipse cx="300" cy="377.4" fill="#000000" fill-opacity="0" rx="175" ry="100"></ellipse>
+          <!-- Hover / Tap focus indicator ring -->
+          <ellipse class="transition-opacity duration-300" cx="300" cy="391.9" fill="none" id="jar-left-glow"
+            opacity="0" rx="173" ry="80" stroke="#ffeb3b" stroke-width="8"></ellipse>
+          <ellipse cx="300" cy="446.3" fill="#000000" opacity="0.25" rx="146" ry="12"></ellipse>
+          <!-- Mouth (centre Y 353, 270 x 40): its back edge stays below the characters' shoulders when they rise a
+               little to reach, and it's nearly as wide as the jar, so a reaching arm always goes in over the back of
+               the rim -->
+          <ellipse cx="300" cy="353" fill="#0d47a1" rx="135" ry="20" stroke="#2c1e14" stroke-width="5"></ellipse>
+          <ellipse cx="300" cy="355.2" fill="#061838" rx="124" ry="14.4"></ellipse>
+          <g clip-path="url(#jarCookieClip)">
+            <!-- INSIDE THE JAR: arms reaching in, the cookie, the hands holding it (placed by script); in front of the
+                 back of the mouth, behind the front lip and wall -->
+              <g id="anim-turtle-lift-cookie">
+              <use class="held-arm-bear" href="#bear-arm-r-art" visibility="hidden"></use>
+              <use class="held-pad-bear" href="#bear-paw-r-pad-symbol" visibility="hidden"></use>
+              <use class="held-arm-l" href="#turtle-arm-l-art" visibility="hidden"></use>
+              <use class="held-arm-r" href="#turtle-arm-r-art" visibility="hidden"></use>
+              <use class="held-cookie" href="#cookie-art-symbol" visibility="hidden"></use>
+              <use class="held-grip-bear" href="#bear-paw-circle-symbol" visibility="hidden"></use>
+              <use class="held-grip-bear-pad" href="#bear-paw-r-pad-symbol" visibility="hidden"></use>
+              <use class="held-grip-l" href="#turtle-grip-l-symbol" visibility="hidden"></use>
+              <use class="held-grip-r" href="#turtle-grip-r-symbol" visibility="hidden"></use>
+              </g>
           </g>
+          <!-- Body: a sturdy ceramic crock with nearly straight sides. Its top edge curves
+               like the rim, so the rim band always covers it -->
+          <path d="M 167.7 360.8 A 132.3 20 0 0 0 432.3 360.8 C 440.4 389.7, 440.4 423, 426.9 443 C 391.8 453, 208.2 453, 173.1 443 C 159.6 423, 159.6 389.7, 167.7 360.8 Z"
+            fill="url(#jarUniformBlueGrad)" stroke="#2c1e14" stroke-linejoin="round" stroke-width="5.5"></path>
+          <path d="M 186.6 378.6 C 179.8 391.9, 181.2 423, 194.7 436.3" fill="none" opacity="0.65"
+            stroke="#e1f5fe" stroke-linecap="round" stroke-width="6"></path>
+          <!-- Rolled rim: a band whose top edge is the front edge of the mouth, so the whole mouth stays open -->
+          <path d="M 165 353 A 135 20 0 0 0 435 353 L 435 368.6 A 135 20 0 0 1 165 368.6 Z"
+            fill="#1e88e5" stroke="#2c1e14" stroke-linejoin="round" stroke-width="4.5"></path>
+          <path d="M 165 353 A 135 20 0 0 0 435 353" fill="none" stroke="#2c1e14" stroke-linecap="round"
+            stroke-width="5"></path>
         </g>
-        <!-- Front Jar Wall & Front Rim Lip (Layered over the descending and emerging cookie) -->
-        <path d="M264 438 C258 408, 266 378, 288 364 L372 364 C394 378, 402 408, 396 438 C392 450, 268 450, 264 438 Z"
-          fill="url(#jarUniformBlueGrad)" stroke="#2c1e14" stroke-linejoin="round" stroke-width="5.5"></path>
-        <path d="M280 384 C275 402, 278 420, 285 432" fill="none" opacity="0.65" stroke="#e1f5fe" stroke-linecap="round"
-          stroke-width="6"></path>
-        <!-- Rim lip: a curved band whose top edge follows the front edge of the opening, so the whole opening stays open -->
-        <path d="M 284 350 A 46 13 0 0 0 376 350 L 376 368 A 46 13 0 0 1 284 368 Z" fill="#1e88e5" stroke="#2c1e14"
-          stroke-linejoin="round" stroke-width="4.5"></path>
-        <path d="M 284 350 A 46 13 0 0 0 376 350" fill="none" stroke="#2c1e14" stroke-linecap="round" stroke-width="5">
-        </path>
       </g>
-      <!-- Star Sparkles on Left Jar (Intro), moved down to the rim at Y 350 -->
-      <g transform="translate(0 54)">
+      <!-- Star Sparkles on Left Jar (Intro), placed over the mouth -->
+      <g transform="translate(300 353) scale(1.6) translate(-330 -296)">
       <g class="intro-stars" filter="url(#sparkleGlow)" id="drop-stars" opacity="0" pointer-events="none">
         <path d="M330 258 L334 274 L350 278 L334 282 L330 298 L326 282 L310 278 L326 274 Z" fill="#ffe082"
           stroke="#ffb300" stroke-width="1.5"></path>
@@ -545,7 +559,7 @@
       </g>
       </g>
       <!-- Star Sparkles on Left Jar (Turtle Lift-Out) -->
-      <g transform="translate(0 54)">
+      <g transform="translate(300 353) scale(1.6) translate(-330 -296)">
       <g class="left-lift-stars-active" filter="url(#sparkleGlow)" id="drop-stars-left-lift" opacity="0"
         pointer-events="none">
         <path d="M330 258 L334 274 L350 278 L334 282 L330 298 L326 282 L310 278 L326 274 Z" fill="#ffe082"
@@ -560,40 +574,49 @@
         <circle cx="378" cy="286" fill="#ffe082" r="3.2"></circle>
       </g>
       </g>
-      <!-- 2. RIGHT JAR (CENTERED AT X: 670) WITH IDENTICAL RIM LAYERING AS LEFT JAR -->
+      <!-- 2. RIGHT JAR (CENTERED AT X: 700, out near the table's right end): red mirror image of the left (blue) jar -->
       <g class="jar-interactive" id="jar-right-group">
-        <!-- Hover / Tap focus indicator ring -->
-        <ellipse class="transition-opacity duration-300" cx="670" cy="396" fill="none" id="jar-right-glow" opacity="0"
-          rx="76" ry="62" stroke="#ffeb3b" stroke-width="8"></ellipse>
-        <ellipse cx="670" cy="442" fill="#000000" opacity="0.25" rx="72" ry="14"></ellipse>
-        <!-- Jar Back Cavity (Behind descending cookie) -->
-        <ellipse cx="670" cy="350" fill="#0d47a1" rx="46" ry="13" stroke="#2c1e14" stroke-width="5"></ellipse>
-        <ellipse cx="670" cy="350" fill="#061838" rx="40" ry="10"></ellipse>
-        <!-- INSIDE RIGHT JAR: arms reaching over the rim, the cookie, the hands holding it (placed by script) -->
-        <g clip-path="url(#jarRightCookieClip)">
-          <g id="anim-right-jar-cookie">
-            <use class="held-arm-l" href="#turtle-arm-l-art" visibility="hidden"></use>
-            <use class="held-arm-r" href="#turtle-arm-r-art" visibility="hidden"></use>
-            <use class="held-cookie" href="#cookie-art-symbol" visibility="hidden"></use>
-            <use class="held-grip-bear" href="#bear-paw-circle-symbol" visibility="hidden"></use>
-            <use class="held-grip-bear-pad" href="#bear-paw-r-pad-symbol" visibility="hidden"></use>
-            <use class="held-grip-l" href="#turtle-grip-l-symbol" visibility="hidden"></use>
-            <use class="held-grip-r" href="#turtle-grip-r-symbol" visibility="hidden"></use>
+        <!-- Hover lift (only once the jars can be chosen; see .jars-clickable) -->
+        <g class="jar-hover">
+          <!-- Tap area well beyond the jar, so small fingers don't have to be exact -->
+          <ellipse cx="700" cy="377.4" fill="#000000" fill-opacity="0" rx="175" ry="100"></ellipse>
+          <!-- Hover / Tap focus indicator ring -->
+          <ellipse class="transition-opacity duration-300" cx="700" cy="391.9" fill="none" id="jar-right-glow"
+            opacity="0" rx="173" ry="80" stroke="#ffeb3b" stroke-width="8"></ellipse>
+          <ellipse cx="700" cy="446.3" fill="#000000" opacity="0.25" rx="146" ry="12"></ellipse>
+          <!-- Mouth (centre Y 353, 270 x 40): its back edge stays below the characters' shoulders when they rise a
+               little to reach, and it's nearly as wide as the jar, so a reaching arm always goes in over the back of
+               the rim -->
+          <ellipse cx="700" cy="353" fill="#b71c1c" rx="135" ry="20" stroke="#2c1e14" stroke-width="5"></ellipse>
+          <ellipse cx="700" cy="355.2" fill="#3e0a0a" rx="124" ry="14.4"></ellipse>
+          <g clip-path="url(#jarRightCookieClip)">
+            <!-- INSIDE THE JAR: arms reaching in, the cookie, the hands holding it (placed by script); in front of the
+                 back of the mouth, behind the front lip and wall -->
+              <g id="anim-right-jar-cookie">
+              <use class="held-arm-l" href="#turtle-arm-l-art" visibility="hidden"></use>
+              <use class="held-arm-r" href="#turtle-arm-r-art" visibility="hidden"></use>
+              <use class="held-cookie" href="#cookie-art-symbol" visibility="hidden"></use>
+              <use class="held-grip-bear" href="#bear-paw-circle-symbol" visibility="hidden"></use>
+              <use class="held-grip-bear-pad" href="#bear-paw-r-pad-symbol" visibility="hidden"></use>
+              <use class="held-grip-l" href="#turtle-grip-l-symbol" visibility="hidden"></use>
+              <use class="held-grip-r" href="#turtle-grip-r-symbol" visibility="hidden"></use>
+              </g>
           </g>
+          <!-- Body: a sturdy ceramic crock with nearly straight sides. Its top edge curves
+               like the rim, so the rim band always covers it -->
+          <path d="M 832.3 360.8 A 132.3 20 0 0 1 567.7 360.8 C 559.6 389.7, 559.6 423, 573.1 443 C 608.2 453, 791.8 453, 826.9 443 C 840.4 423, 840.4 389.7, 832.3 360.8 Z"
+            fill="url(#jarUniformRedGrad)" stroke="#2c1e14" stroke-linejoin="round" stroke-width="5.5"></path>
+          <path d="M 813.4 378.6 C 820.1 391.9, 818.8 423, 805.3 436.3" fill="none" opacity="0.65"
+            stroke="#ffebee" stroke-linecap="round" stroke-width="6"></path>
+          <!-- Rolled rim: a band whose top edge is the front edge of the mouth, so the whole mouth stays open -->
+          <path d="M 835 353 A 135 20 0 0 1 565 353 L 565 368.6 A 135 20 0 0 0 835 368.6 Z"
+            fill="#e53935" stroke="#2c1e14" stroke-linejoin="round" stroke-width="4.5"></path>
+          <path d="M 835 353 A 135 20 0 0 1 565 353" fill="none" stroke="#2c1e14" stroke-linecap="round"
+            stroke-width="5"></path>
         </g>
-        <!-- Front Jar Wall & Front Rim Lip (Layered strictly over interior clipped cookie) -->
-        <path d="M604 438 C598 408, 606 378, 628 364 L712 364 C734 378, 742 408, 736 438 C732 450, 608 450, 604 438 Z"
-          fill="url(#jarUniformBlueGrad)" stroke="#2c1e14" stroke-linejoin="round" stroke-width="5.5"></path>
-        <path d="M620 384 C615 402, 618 420, 625 432" fill="none" opacity="0.65" stroke="#e1f5fe" stroke-linecap="round"
-          stroke-width="6"></path>
-        <!-- Rim lip: a curved band whose top edge follows the front edge of the opening, so the whole opening stays open -->
-        <path d="M 624 350 A 46 13 0 0 0 716 350 L 716 368 A 46 13 0 0 1 624 368 Z" fill="#1e88e5" stroke="#2c1e14"
-          stroke-linejoin="round" stroke-width="4.5"></path>
-        <path d="M 624 350 A 46 13 0 0 0 716 350" fill="none" stroke="#2c1e14" stroke-linecap="round" stroke-width="5">
-        </path>
       </g>
-      <!-- Star Sparkles on Right Jar (when turtle puts cookie into right jar), moved down to the rim at Y 350 -->
-      <g transform="translate(0 54)">
+      <!-- Star Sparkles on Right Jar (when turtle puts cookie into right jar), placed over the mouth -->
+      <g transform="translate(700 353) scale(1.6) translate(-670 -296)">
       <g class="right-stars-active" filter="url(#sparkleGlow)" id="drop-stars-right" opacity="0" pointer-events="none">
         <path d="M670 258 L674 274 L690 278 L674 282 L670 298 L666 282 L650 278 L666 274 Z" fill="#ffe082"
           stroke="#ffb300" stroke-width="1.5"></path>
@@ -671,9 +694,9 @@
   const RIGHT_JAR_LAYER = 'anim-right-jar-cookie';
   const COOKIE_LAYER_IDS = [LEFT_JAR_LAYER, FREE_LAYER, RIGHT_JAR_LAYER];
   const COOKIE_RADIUS = 41;
-  const FREE_LAYER_MAX_Y = 290; // above this the cookie clears both jar rims (back rim top at Y 337)
-  const LEFT_JAR_RIGHT_EDGE = 401;
-  const RIGHT_JAR_LEFT_EDGE = 599;
+  const FREE_LAYER_MAX_Y = 288; // above this the cookie clears both jar mouths (back of the mouth at Y 333)
+  const LEFT_JAR_RIGHT_EDGE = 441;
+  const RIGHT_JAR_LEFT_EDGE = 559;
   const TWO_HAND_BLEND_MS = 150;
   const COOKIE_FALL_MS = 300;
   const COOKIE_FALL_DEPTH = 100;
@@ -690,19 +713,20 @@
   // [clock ms, action]; times match the poses in bearArmLowering / turtleMoveCookieAction
   const CLOCK_EVENTS = {
     bear: [
-      [0, () => { grabCookie('bear', BEAR_WRIST_KEYS, 'bear'); reaching.bear = LEFT_JAR_LAYER; }],
+      [0, () => grabCookie('bear', BEAR_WRIST_KEYS, 'bear')],
+      [1150, () => { reaching.bear = LEFT_JAR_LAYER; }], // paw over the mouth, about to go in
       [1600, () => dropCookie()],             // cookie down inside the opening: let go
-      [2000, () => { reaching.bear = null; }], // paw lifted back out above the rim
+      [2050, () => { reaching.bear = null; }], // paw lifted back out above the rim
     ],
     turtle: [
-      [1300, () => { reaching.l = LEFT_JAR_LAYER; }],                   // flipper up above the left rim
+      [1200, () => { reaching.l = LEFT_JAR_LAYER; }],                   // flipper raised high above the left rim
       [1750, () => grabCookie('l', TURTLE_WRIST_KEYS.l, 'turtle')],     // pinch the cookie at the bottom
       [3100, () => { reaching.l = null; }],                             // cookie lifted clear of the rim
       [4700, () => holdCookieWithBothFlippers()],
       [5400, () => takeCookieWith('r', TURTLE_WRIST_KEYS.r, 'turtle')], // left flipper lets go
       [6500, () => { reaching.r = RIGHT_JAR_LAYER; }],                  // flipper up above the right rim
       [8250, () => hideCookie()],                                       // cookie at the bottom: let go
-      [8800, () => { reaching.r = null; }],                             // flipper lifted back out
+      [8900, () => { reaching.r = null; }],                             // flipper raised high above the right rim
     ],
   };
   let clockMs = { bear: null, turtle: null };
@@ -875,10 +899,9 @@
         Object.values(grips).flat().forEach(hide);
         return;
       }
+      // Placed with the layer's whole transform, so the cookie stays the same size inside a scaled jar
       const svgToLayer = matrixFromTo(svg, layer);
-      const p = new DOMPoint(c.x, c.y).matrixTransform(svgToLayer);
-      cookie.setAttribute('transform', `translate(${p.x} ${p.y}) rotate(${heldCookie.rot})`);
-      cookie.setAttribute('visibility', 'visible');
+      setMatrix(cookie, svgToLayer.multiply(svg.createSVGMatrix().translate(c.x, c.y).rotate(heldCookie.rot)));
 
       Object.entries(grips).forEach(([key, els]) => {
         const h = holders.includes(key) && handPoint(key, armToSvg);
@@ -1041,6 +1064,7 @@
     // Reset highlights & state classes
     document.getElementById('jar-left-glow').setAttribute('opacity', '0');
     document.getElementById('jar-right-glow').setAttribute('opacity', '0');
+    document.getElementById('scene-svg').classList.remove('jars-clickable');
     const MOVE_CLASSES = ['walk-left', 'walk-right', 'shuffle-left', 'shuffle-right', 'look-left', 'look-right',
       'reach-door', 'arms-swinging'];
     bear.classList.remove('bear-walking', 'anim-bear-return', 'anim-bear-departure', ...MOVE_CLASSES);
@@ -1069,6 +1093,7 @@
     // Restart intro & bear animation classes cleanly by triggering reflow
     const elementsToRestart = [
       { id: 'bear-lowering-arm', cls: 'intro-arm' },
+      { id: 'bear-lean-grp', cls: 'intro-rise' },
       { id: 'jar-left-group', cls: 'intro-jar1' },
       { id: 'drop-stars', cls: 'intro-stars' },
       { id: 'bear-pupils', cls: 'intro-gaze' },
@@ -1099,6 +1124,11 @@
       Sounds.play('drop');
     }, 1750);
 
+    // He's back down from rising a little to reach into the jar (bearReachRise ends at 2.45s)
+    schedule(() => {
+      document.getElementById('bear-lean-grp').classList.remove('intro-rise');
+    }, 2600);
+
     // 3. Bear starts walking directly towards the left door (t = 2650ms)
     schedule(() => {
       bear.classList.add('bear-walking', 'walk-left', 'look-left', 'arms-swinging');
@@ -1123,6 +1153,12 @@
     schedule(() => {
       bear.classList.remove('reach-door');
     }, 4700);
+
+    // From the doorway (departure 70% = 5250ms) he walks straight up the path, away from us: no sideways stride,
+    // lean or glance. The lean eases out over 0.4s, so it starts just before he turns the corner.
+    schedule(() => {
+      bear.classList.remove('walk-left', 'look-left');
+    }, 5050);
 
     // Bear is passing through the doorway (departure 70% = 5250ms): from here on he is outside, behind the door
     schedule(() => {
@@ -1173,7 +1209,15 @@
     schedule(() => {
       turtle.classList.add('anim-turtle-active');
     }, 7100);
-    walkWindow(turtle, 'turtle-walking', playTurtleStep, 8200, 11700, ['walk-left', 'look-left', 'arms-swinging']);
+    // Straight down the path toward us (no sideways stride or lean), then, from the doorway (entrance 52% =
+    // 9804ms), across the room to the left: stride, lean and gaze turn left just before the corner
+    walkWindow(turtle, 'turtle-walking', playTurtleStep, 8200, 11700, ['arms-swinging']);
+    schedule(() => {
+      turtle.classList.add('walk-left', 'look-left');
+    }, 9600);
+    schedule(() => {
+      turtle.classList.remove('walk-left', 'look-left');
+    }, 11700);
 
     // Turtle is passing through the doorway (entrance 52% = 9804ms): from here on he is inside the room
     schedule(() => {
@@ -1201,15 +1245,15 @@
       rightStars.classList.add('right-stars-active');
     }, 12000);
 
-    // Turtle sidesteps behind the left jar as his flipper rises over the rim and dips in (~12450-13700ms)
-    walkWindow(turtle, 'turtle-walking', playTurtleStep, 12450, 13700, ['shuffle-left']);
+    // Turtle sidesteps over behind the left jar, raising his flipper high above it (~12400-13200ms); from there
+    // he stands still and just swings his arm in and out
+    walkWindow(turtle, 'turtle-walking', playTurtleStep, 12400, 13200, ['shuffle-left']);
 
-    // 11. Flipper pinches the cookie at the bottom of the jar (~13750ms); turtle lifts it straight up, stepping
-    //     back out from behind the jar (~13900-14700ms)
+    // 11. Flipper pinches the cookie at the bottom of the jar (~13750ms) and swings it back up out of the mouth
+    //     (~13900-15100ms)
     schedule(() => {
       Sounds.play('liftSwish');
     }, 13900);
-    walkWindow(turtle, 'turtle-walking', playTurtleStep, 13900, 14700, ['shuffle-right']);
 
     // Cookie is clear of the rim (~15100ms)
     schedule(() => {
@@ -1229,10 +1273,9 @@
     }, 17400);
     walkWindow(turtle, 'turtle-walking', playTurtleStep, 17500, 18425, ['shuffle-right']);
 
-    // Turtle sidesteps behind the right jar as he lowers the cookie in (~19450-20200ms), then steps back out and
-    // returns to center as his flipper comes back up (~20400-21900ms)
-    walkWindow(turtle, 'turtle-walking', playTurtleStep, 19450, 20200, ['shuffle-right']);
-    walkWindow(turtle, 'turtle-walking', playTurtleStep, 20400, 21900, ['shuffle-left']);
+    // He stands still at the right jar while he swings the cookie down into it and his flipper back up high
+    // (~19000-20900ms), then sidesteps back to center as the arm lowers behind the jar (~20900-21900ms)
+    walkWindow(turtle, 'turtle-walking', playTurtleStep, 20900, 21900, ['shuffle-left']);
 
     // 14. Right flipper lowers the cookie straight down into the right jar, plop + sparkle as it goes in
     schedule(() => {
@@ -1243,8 +1286,8 @@
       Sounds.play('drop');
     }, 19300);
 
-    // Cookie is at the bottom of the right jar (~20250ms); the flipper lets go and lifts back out, then the arm
-    // drops behind the jar to rest (~20800ms)
+    // Cookie is at the bottom of the right jar (~20250ms); the flipper lets go and swings back up high (~20900ms),
+    // then the arm drops behind the jar to rest
 
     // 15. Turtle is back at center pose with arms at rest (~22000ms)
     schedule(() => {
@@ -1287,6 +1330,12 @@
       turtle.classList.remove('reach-door');
     }, 24450);
 
+    // From the doorway (exit 48% = 24896ms) he walks straight up the path, away from us: no sideways stride,
+    // lean or glance
+    schedule(() => {
+      turtle.classList.remove('walk-right', 'look-right');
+    }, 24700);
+
     // Turtle is passing through the doorway (exit 48% = 24896ms): from here on he is outside, behind the door
     schedule(() => {
       setCharacterOutside('turtle-door-slot', 'right', true);
@@ -1328,10 +1377,16 @@
     schedule(() => {
       bear.classList.remove('anim-bear-departure');
       void bear.offsetWidth;
-      // Looks straight ahead (no .look-*): a glance toward either jar would hint at the answer
-      bear.classList.add('anim-bear-return', 'bear-walking', 'walk-right', 'arms-swinging');
+      // Straight down the path toward us first: no sideways stride or lean yet. Looks straight ahead the whole
+      // way (no .look-*): a glance toward either jar would hint at the answer
+      bear.classList.add('anim-bear-return', 'bear-walking', 'arms-swinging');
       playBearStep();
     }, 28700);
+    // From the doorway (return 32% = 30364ms) he heads across the room to the right: stride and lean turn right
+    // just before the corner
+    schedule(() => {
+      bear.classList.add('walk-right');
+    }, 30150);
 
     // Bear is passing through the doorway (return 32% = 30364ms): from here on he is inside the room
     schedule(() => {
@@ -1358,6 +1413,7 @@
     // ================= 24. ONLY ONCE MR. BEAR IS FIRMLY IN POSITION: JARS BECOME CLICKABLE (~34400ms) =================
     schedule(() => {
       canClick = true;
+      document.getElementById('scene-svg').classList.add('jars-clickable');
 
       // Gentle guide ring pulse to invite child's choice without revealing answer
       document.getElementById('jar-left-glow').setAttribute('opacity', '0.6');
