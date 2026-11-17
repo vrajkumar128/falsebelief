@@ -1,6 +1,7 @@
 // S4. TEST 1: WHICH JAR HAS THE COOKIE? Mr. Bear puts his cookie in the left jar and goes out; Mr. Turtle comes
 // in, moves the cookie to the right jar and goes out; Mr. Bear comes back, and then the child picks a jar. The
-// choice is reported as a 'jarSelected' event. The animations themselves are in s4-cookie-jars.css.
+// choice is reported as a 'jarSelected' event (shared/study.js writes it in the answer log and moves the story on
+// to S5). The animations themselves are in s4-cookie-jars.css.
 (() => {
   const markup = /* html */ `
     <section aria-label="Which jar has the cookie?" class="screen" data-screen="s4" id="screen-s4">
@@ -644,6 +645,7 @@
   `;
 
   let canClick = false;
+  let clickableAt = 0;
   let selectedSide = null;
   let sequenceTimeouts = [];
 
@@ -1419,6 +1421,7 @@
     // ================= 24. ONLY ONCE MR. BEAR IS FIRMLY IN POSITION: JARS BECOME CLICKABLE (~34400ms) =================
     schedule(() => {
       canClick = true;
+      clickableAt = performance.now();
       document.getElementById('scene-svg').classList.add('jars-clickable');
 
       // Gentle guide ring pulse to invite child's choice without revealing answer
@@ -1437,6 +1440,9 @@
 
   function handleJarChoice(side) {
     if (!canClick) return;
+    // First answer only (as in S3a): the story goes on from here, so the choice can't be changed afterwards
+    canClick = false;
+    document.getElementById('scene-svg').classList.remove('jars-clickable');
 
     selectedSide = side;
     // The child taps the jar itself: a tap on glazed ceramic, from that jar's side
@@ -1447,7 +1453,9 @@
     document.getElementById('jar-right-glow').setAttribute('opacity', side === 'right' ? '0.85' : '0');
 
     // Dispatch neutral event for parent or external tracking
-    window.dispatchEvent(new CustomEvent('jarSelected', { detail: { side: side } }));
+    window.dispatchEvent(new CustomEvent('jarSelected', {
+      detail: { side: side, responseTimeMs: Math.round(performance.now() - clickableAt) },
+    }));
   }
 
   function setup(screen) {

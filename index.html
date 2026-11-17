@@ -22,6 +22,8 @@
   <link href="screens/s2-ready.css" rel="stylesheet" />
   <link href="screens/s3a-bear-intro.css" rel="stylesheet" />
   <link href="screens/s4-cookie-jars.css" rel="stylesheet" />
+  <!-- The screens after S4 are drawn by shared/engine.js; this is the little styling they need -->
+  <link href="shared/story.css" rel="stylesheet" />
 </head>
 
 <body class="relative flex items-center justify-center min-h-screen bg-slate-950 select-none overflow-hidden">
@@ -32,13 +34,41 @@
     id="game-stage"></div>
 
   <script src="shared/sounds.js"></script>
+  <script src="shared/sounds-more.js"></script>
+  <!-- The study's settings and answer log, the narration script, and the storyline (screen order) -->
+  <script src="shared/study.js"></script>
+  <script src="shared/narration.js"></script>
   <script src="shared/storyline.js"></script>
-  <!-- One script per screen (its styles are linked above). The order they play in is SCREEN_ORDER in
-       shared/storyline.js. -->
+  <!-- What the screens after S4 are made with: the look, the animation engine, the drawings they share with S3a
+       and S4, the characters as puppets, the room kit, and the questions. README.md explains how they fit. -->
+  <script src="shared/look.js"></script>
+  <script src="shared/engine.js"></script>
+  <script src="shared/art.js"></script>
+  <script src="shared/cast.js"></script>
+  <script src="shared/kit.js"></script>
+  <script src="shared/question.js"></script>
+  <!-- One script per screen (S1 to S4 have styles of their own, linked above). The order they play in is
+       SCREEN_ORDER in shared/storyline.js. -->
   <script src="screens/s1-setup.js"></script>
   <script src="screens/s2-ready.js"></script>
   <script src="screens/s3a-bear-intro.js"></script>
   <script src="screens/s4-cookie-jars.js"></script>
+  <script src="screens/s5-playground.js"></script>
+  <script src="screens/s6-drawing.js"></script>
+  <script src="screens/s7-cereal.js"></script>
+  <script src="screens/s8-crayons.js"></script>
+  <script src="screens/s9-bedroom.js"></script>
+  <script src="screens/s10-pizza.js"></script>
+  <script src="screens/s11-tv.js"></script>
+  <script src="screens/s12-candies.js"></script>
+  <script src="screens/s13-scooter.js"></script>
+  <script src="screens/s14-water.js"></script>
+  <script src="screens/s15-gym.js"></script>
+  <script src="screens/s16-book.js"></script>
+  <script src="screens/s17-teacher.js"></script>
+  <script src="screens/s18-balloon.js"></script>
+  <script src="screens/s19-goodbye.js"></script>
+  <script src="screens/script.js"></script>
 </body>
 
 </html>

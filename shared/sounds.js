@@ -288,6 +288,13 @@ const Sounds = (() => {
     });
   }
 
+  // More sounds can be added from another file, made from the same building blocks as the ones above
+  // (shared/sounds-more.js adds the ones the screens after S4 need)
+  const EXTRA = {};
+  function add(define) {
+    Object.assign(EXTRA, define({ noise, vary, noiseBurst, thump, ring }));
+  }
+
   // Builds one sound into `out` at time `when` (also used to measure sounds with an OfflineAudioContext)
   function build(ctx, out, when, type, options = {}) {
     switch (type) {
@@ -301,7 +308,9 @@ const Sounds = (() => {
       case 'hover': return hoverTick(ctx, out, when);
       case 'select': return selectTok(ctx, out, when);
       case 'prompt': return bellChime(ctx, out, when);
-      default: console.warn('Unknown sound: ' + type);
+      default:
+        if (EXTRA[type]) return EXTRA[type](ctx, out, when, options);
+        console.warn('Unknown sound: ' + type);
     }
   }
 
@@ -343,5 +352,5 @@ const Sounds = (() => {
 
   document.addEventListener('click', unlock);
 
-  return { play, unlock, build };
+  return { play, unlock, build, add };
 })();
